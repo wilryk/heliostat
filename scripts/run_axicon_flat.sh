@@ -8,9 +8,13 @@
 #     form double-charged overlapping losses, 0.338% low annually; union
 #     is 0.114%). Scalars stay invalid for low-sun instantaneous power
 #     and per-mirror claims -- annual comparisons only.
-#   - 7 declination-spaced dates, not 12 monthly ones: 5 of the monthly
-#     dates are declination duplicates (full8 measured the pairs equal to
-#     <=0.04%), so the efficiency surface is identical either way.
+#   - 7 EXPLICIT dates = the 7 distinct declinations of the 12 monthly
+#     dates (5 are declination duplicates; full8 measured the pairs equal
+#     to <=0.04%), so the efficiency surface is identical at half the
+#     tracing. NOT --suggest-dates: that flag ADDS N declination-spaced
+#     dates on top of config.toml's list (must_include in cli.py) -- the
+#     first launch of this run went out with 16 dates / 214 timesteps that
+#     way and was killed two minutes in.
 #   - 120,000 rays (single-heliostat SNR decision), one traceRays call
 #     per heliostat (--rays-per-trace equal to --rays; chunking measured
 #     as pure loss at this scale).
@@ -41,11 +45,11 @@ fi
 trap 'rm -rf "$LOCKDIR"' EXIT   # rm -rf, not rmdir: the lock holds a pid file
 echo "$$" > "$LOCKDIR/pid"
 
-say "starting $NAME (7 declination dates, flat mirrors, scalar occlusion), pid $$"
+say "starting $NAME (7 distinct declinations, flat mirrors, scalar occlusion), pid $$"
 python -u -m beamdown sweep \
     --flat-mirrors \
     --all-heliostats \
-    --suggest-dates 7 \
+    --dates 2026-12-21 2026-01-21 2026-02-20 2026-03-20 2026-04-21 2026-05-21 2026-06-21 \
     --rays 120000 \
     --rays-per-trace 120000 \
     --workers 1 \
