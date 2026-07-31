@@ -1,0 +1,12 @@
+# Run data: 34 GB of traced rays and flux maps. Runs are reproducible from
+# config + manifest; their vetted numbers get promoted into README sections.
+analysis_output/
+
+# 2.2 GB of pre-package ray-trace CSVs kept for the legacy parity tests' inputs
+# only; the parity tests read legacy/heliostat*/ code, not these outputs.
+legacy/old_output/
+
+__pycache__/
+*.pyc
+nohup.out
+.claude/

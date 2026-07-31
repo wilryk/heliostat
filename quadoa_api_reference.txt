@@ -1,0 +1,3099 @@
+addApertureToSurface
+--------------------
+addApertureToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.apertureType) -> bool
+
+Adds an aperture to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the aperture is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the aperture object
+
+addCoatingToSurface
+-------------------
+addCoatingToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.coatingType) -> bool
+
+Adds a coating element to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the coating is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the coating object
+
+addFormToSurface
+----------------
+addFormToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.formType) -> bool
+
+Adds a form to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the form is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the form object
+
+addObscurationToSurface
+-----------------------
+addObscurationToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.obscurationType) -> bool
+
+Adds an obscuration to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the obscuration is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the obscuration object
+
+addPhaseToSurface
+-----------------
+addPhaseToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.phaseType) -> bool
+
+Adds a phase to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the phase is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the phase object
+
+addPolarizationToSurface
+------------------------
+addPolarizationToSurface(self: quadoa.quadoa.QuadoaCore, row_nr: int, type: quadoa.quadoa.polarizationType) -> bool
+
+Adds a polarization element to the surface specified by the row-nr. If the item at the row is not a surface
+the method returns false. The type of the polarization element is specified by type.
+
+Args:
+    row_nr: row index of the item in the tree
+    type: type of the polarization object
+
+applyChangesAndInitModel
+------------------------
+applyChangesAndInitModel(self: quadoa.quadoa.QuadoaCore) -> bool
+
+Needs to be called after new parameters have been set so the model gets actually updated
+
+If traceRays() is called this is not necessary since it will automaticall update before tracing
+
+clearAllLensCatalogs
+--------------------
+clearAllLensCatalogs(self: quadoa.quadoa.QuadoaCore) -> None
+
+Clears any lens catalogs that have been loaded by loadLensCatalogFile().
+
+clearAllMaterialCatalogs
+------------------------
+clearAllMaterialCatalogs(self: quadoa.quadoa.QuadoaCore) -> None
+
+Clears any materials that have been loaded by loadMaterialFile().
+
+clearErrorsAndWarnings
+----------------------
+clearErrorsAndWarnings(self: quadoa.quadoa.QuadoaCore) -> None
+
+Clears any errors or warnings.
+
+exportCADSTL
+------------
+exportCADSTL(self: quadoa.quadoa.QuadoaCore, filename: str, radial: int, angular: int) -> bool
+
+Exports the currently loaded model as STL CAD file.
+
+Args:
+    filename: the filename to be exported
+    radial: count of radial segments for the meshing
+    angular: count of radial segments for the meshing)
+
+Returns:
+    true if success
+
+exportSequenceAsCodeV
+---------------------
+exportSequenceAsCodeV(self: quadoa.quadoa.QuadoaCore, filename: str, seq_nr: int) -> bool
+
+Exports a sequence to a SEQ file.
+
+Args:
+    filename: the filename to be exported
+    seq_nr: index of the sequence to export
+
+Returns:
+    true if success
+
+exportSequenceAsList
+--------------------
+exportSequenceAsList(self: quadoa.quadoa.QuadoaCore, filename: str, seq_nr: int) -> bool
+
+Exports a sequence in the model to a csv clear text file.
+
+The content will hold following information:
+
+Surf Nr, Comment, Radius, Thickness, Material
+
+Note that the file will not contain any data
+about decentered or tilted objects and only
+and no information about more complex surface forms or features.
+
+Args:
+    filename: the filename to be exported (e.g. list.txt or list.csv)
+    seq_nr: index of the sequence to export)
+
+Returns:
+    true if success
+
+exportSequenceAsZMX
+-------------------
+exportSequenceAsZMX(self: quadoa.quadoa.QuadoaCore, filename: str, seq_nr: int) -> bool
+
+Exports a sequence to a ZMX file.
+Args:
+    filename: the filename to be exported
+    seq_nr: index of the sequence to export
+
+Returns:
+    true if success
+
+generateDiffractiveGhostSequences
+---------------------------------
+generateDiffractiveGhostSequences(self: quadoa.quadoa.QuadoaCore, seq_nr: int, ghost_order: int, hide: bool, convert_stop: bool, gt: quadoa.quadoa.ghostGenRayType) -> bool
+
+Generates diffractive ghost sequences out of a given sequence.
+If more than one diffractive elements are in the sequence
+any combination of diffraction orders will be generated.
+
+Args:
+    seq_nr: index of the sequence
+    ghost_order: diffraction order up to which to generate ghosts (e.g. 3 will generate ghosts up to +-3 order)
+    hide: hide the sequence (when model is opened in gui)
+    convert_stop: move the stopsurface to the first surface to ensure equal illumination
+    gt: ghost ray generation type)
+
+generateGhostSequences
+----------------------
+generateGhostSequences(self: quadoa.quadoa.QuadoaCore, seq_nr: int, ghost_order: int, hide: bool, convert_stop: bool, gt: quadoa.quadoa.ghostGenRayType, f_w_type: quadoa.quadoa.ghostGenFieldWaveType, keep_type: quadoa.quadoa.ghostKeepType, n_keep: int) -> bool
+
+Generates ghost sequences out of a given sequence.
+
+Args:
+    seq_nr: index of the sequence
+    ghost_order: 1 for single bounce, 2 for double bounce
+    hide: hide the sequence (when model is opened in gui)
+    convert_stop: move the stopsurface to the first surface to ensure equal illumination
+    gt: ghost ray generation type
+    f_w_type: ghost filed and wavelenght selection type
+    keep_type: ghost pre-filter type
+    n_keep: maximim number of ghost sequences to keep
+
+getActiveVariables
+------------------
+getActiveVariables(self: quadoa.quadoa.QuadoaCore, merit_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the values of all active variables
+
+Args:
+    merit_nr: index of the merit function
+
+getAiryDiskDiameter
+-------------------
+getAiryDiskDiameter(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the airy disk diameter for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getAmplitude
+------------
+getAmplitude(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the amplitude of the rays.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getApertureHullByRow
+--------------------
+getApertureHullByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, aperture_nr: int, grid_size: int) -> quadoa.quadoa.DataObject2D
+
+Returns a DataObject2D containing the (x, y) coordinate of the hull
+around a specific aperture in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    aperture_nr: index nr of the aperture
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getApertureHullBySequence
+-------------------------
+getApertureHullBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int, aperture_nr: int, grid_size: int) -> quadoa.quadoa.DataObject2D
+
+Returns a DataObject2D containing the (x, y) coordinate of the hull
+around a specific aperture in the local surface coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+    aperture_nr: index nr of the aperture
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getApertureType
+---------------
+getApertureType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceApertureType
+
+Returns the type of the aperture definition for a sequence specified by seq_nr.
+
+The aperture type type can be changed by setApertureType()
+Args:
+    seq_nr: index of the sequence
+
+getApertureValue
+----------------
+getApertureValue(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the value set for the aperture of a sequence specified by seq_nr.
+Depending on the setting of the aperture type this value may be the NA, the aperture diameter.
+
+In case of a sequence with floating aperture, where the aperture is defined by the stop surface,
+the returned value has no meaning"
+
+If the aperture type is not a floating aperture the value can be changed by setApertureValue()
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationExponent
+----------------------
+getApodizationExponent(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the exponent of a super gaussian apodization for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationExponentX
+-----------------------
+getApodizationExponentX(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the exponent of an elliptic super gaussian apodization in X-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationExponentY
+-----------------------
+getApodizationExponentY(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the exponent of an elliptic super gaussian apodization in Y-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationSigma
+-------------------
+getApodizationSigma(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the standard deviation of a gaussian apodization for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationSigmaX
+--------------------
+getApodizationSigmaX(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the standard deviation of an elliptic gaussian apodization in X-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationSigmaY
+--------------------
+getApodizationSigmaY(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the standard deviation in of an elliptic gaussian apodization Y-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationTotalPower
+------------------------
+getApodizationTotalPower(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> float
+
+Returns the total power of the apodization in W definition for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getApodizationType
+------------------
+getApodizationType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceApodizationType
+
+Returns the type of the apodization definition for a sequence specified by seq_nr.
+
+The apodization type can be changed by setApodizationType()
+
+Args:
+    seq_nr: index of the sequence
+
+getBeamletPropagationInterferogram
+----------------------------------
+getBeamletPropagationInterferogram(self: quadoa.quadoa.QuadoaCore, seq_nr_1: int, field_nr_1: int, wavelength_nr_1: int, conf_1: int, seq_nr_2: int, field_nr_2: int, wavelength_nr_2: int, conf_2: int, prop_start_surf_1: int, prop_start_surf_2: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the intensity of the interference of two sequences where the field is for each sequence is propagated via beamlet propagation.
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr_1: index of the first squence
+    field_nr_1: index of the first field
+    wavelength_nr_1: index of the first wavelength (needs to match)
+    conf_1: configuration of multiconfig lookup table of the first sequence
+    seq_nr_2: index of the second squence
+    field_nr_2: index of the second field
+    wavelength_nr_2: index of the second wavelength (needs to match)
+    conf_2: configuration of multiconfig lookup table of the second sequence
+    prop_start_surf_1: if 0 the propagation for the first sequence will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    prop_start_surf_2: if 0 the propagation for the second sequence will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+
+getBeamletPropagationPSFComplex
+-------------------------------
+getBeamletPropagationPSFComplex(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float) -> quadoa.quadoa.ImageObjectC
+
+Returns an ImageObjectC containing the complex amplitude of the point spread function computed via GBD.
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+
+getBeamletPropagationPSFIntensity
+---------------------------------
+getBeamletPropagationPSFIntensity(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the point spread function computed via GBD.
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+
+getBeamletPropagationThroughFocusPSFComplex
+-------------------------------------------
+getBeamletPropagationThroughFocusPSFComplex(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float) -> quadoa.quadoa.ImageObjectC
+
+Returns an ImageObjectC containing the complex amplitude of the through focus point spread function in the Y-Z plane computed via GBD.
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+
+getBeamletPropagationThroughFocusPSFIntensity
+---------------------------------------------
+getBeamletPropagationThroughFocusPSFIntensity(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the through focus point spread function in the Y-Z plane computed via GBD.
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+
+getComplexAmplitude
+-------------------
+getComplexAmplitude(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject1C
+
+Returns a DataObject1C containing the complex amplitude of the rays.
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the phase is not the absolute OPL but the corrected OPL in the exit pupil location.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getCurrentConfig
+----------------
+getCurrentConfig(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the current active realisation value the multiconfig lookuptable
+is set to in the model.
+
+getCurrentFileName
+------------------
+getCurrentFileName(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns the filename of the currently opend Quadoa model file
+
+getCurrentFolderName
+--------------------
+getCurrentFolderName(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns the path to the folder where the currently opend Quadoa model file is located
+
+getCurrentMulticonfParam
+------------------------
+getCurrentMulticonfParam(self: quadoa.quadoa.QuadoaCore, param_name: str) -> float
+
+Returns the value of a parameter inside the multiconfig lookuptable
+for the current active realisation specified by the name.
+
+Args:
+    param_name: name of the multiconfig parameter
+
+getEField
+---------
+getEField(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, type: quadoa.quadoa.polarInteractionType) -> quadoa.quadoa.DataObject3C
+
+Returns a DataObject3C containing the 3D complex electric field at a surface.
+
+A polarization raytrace needs to be performed prior to calling this method.
+Also polarization needs to be enabled for the source of the sequence.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index nr of the surface
+    type: interaction type where to obtain the polarization state
+
+getEffectiveFNumber
+-------------------
+getEffectiveFNumber(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int) -> float
+
+Returns the effective F-Number for a given sequence / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getEffectiveFocalLength
+-----------------------
+getEffectiveFocalLength(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int) -> float
+
+Returns the effective focal length for a given sequence / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getEntrancePupilDiameter
+------------------------
+getEntrancePupilDiameter(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the entrance pupil diameter for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getEnvironmentWavelength
+------------------------
+getEnvironmentWavelength(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int) -> float
+
+Returns the environment wavelength for a specific sequence / wavelength combination.
+The environment wavelengt is the wavelengh that is entered in the source definition.
+It is always defined in the environment defined in the environment definition for a temperature and pressure.
+
+The wavelength can be changed with setWaveLength()
+
+Args:
+    seq_nr: index of the sequence
+    wavelength_nr: index of the wavelength
+
+getExitPupilDiameter
+--------------------
+getExitPupilDiameter(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the entrance pupil diameter for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getFFTMTF
+---------
+getFFTMTF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int, image_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns an DataObject4D containing the modulation transfer function computed via FFT.
+
+Each row in the DataObject represents the values of the MTF for the following directions:
+Row 0: linepairs in mm in radial direction
+Row 1: modulation transfer value in radial direction
+Row 2: linepairs in mm in tangential direction
+Row 3: modulation transfer value in tangential direction
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+
+getFFTPSF
+---------
+getFFTPSF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int, image_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the point spread function computed via FFT.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr index of the wavelength:
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+
+getFFTPSFPolychrom
+------------------
+getFFTPSFPolychrom(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, grid_size: int, image_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the polychromatic point spread function computed via FFT.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+
+getFiberCouplingEfficiencyBeamletPropagationPSFGaussianModeByMFD
+----------------------------------------------------------------
+getFiberCouplingEfficiencyBeamletPropagationPSFGaussianModeByMFD(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_MFD: float, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its mode field diameter (MFD) and the overlap integral is evaluated on the fiber surface
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_MFD: 1/e^2 mode field diameter (MFD) of the fiber
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyBeamletPropagationPSFGaussianModeByNA
+---------------------------------------------------------------
+getFiberCouplingEfficiencyBeamletPropagationPSFGaussianModeByNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_NA: float, prop_start_surf: int, objSampling: int, imageSampling: int, imageScale: float, oversample: float, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its numerical aperture and the overlap integral is evaluated on the fiber surface
+(This function requires a licens for the Quadoa Wave Optics Toolbox)
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_NA: 1/e^2 numerical aperture of the fiber
+    prop_start_surf: if 0 the propagation will directly start at the object surface, if > 0 the rays will be traced to this surface and then propagated from there
+    objSampling: grid sampling / number of beamlets in x and y direction
+    imageSampling: grid sampling / number of pixels in x and y direction in image space
+    imageScale: scale of the area in the image space to evaluate (in mm)
+    oversample: oversampling of the beamlets
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyHuyPSFGaussianModeByMFD
+-------------------------------------------------
+getFiberCouplingEfficiencyHuyPSFGaussianModeByMFD(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_MFD: float, pupilSampling: int, imageSampling: int, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its mode field diameter (MFD) and the overlap integral is evaluated on the fiber surface
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_MFD: 1/e^2 mode field diameter (MFD) of the fiber
+    pupilSampling: sampling of rays in the pupil in x and y direction
+    imageSampling: sampling of pixels on the fiber surface in x and y direction
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyHuyPSFGaussianModeByNA
+------------------------------------------------
+getFiberCouplingEfficiencyHuyPSFGaussianModeByNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_NA: float, pupilSampling: int, imageSampling: int, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its numerical aperture and the overlap integral is evaluated on the fiber surface
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_NA: 1/e^2 numerical aperture of the fiber
+    pupilSampling: sampling of rays in the pupil in x and y direction
+    imageSampling: sampling of pixels on the fiber surface in x and y direction
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyMultimodeByIndex
+------------------------------------------
+getFiberCouplingEfficiencyMultimodeByIndex(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, index_core: float, index_cladd: float, dia_core: float, incl_fresnel: bool, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a multimode fiber where the fiber is specified by the NA.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    index_core: refractive index of the fiber core
+    index_cladd: refractive index of the fiber cladding
+    dia_core: fiber core diameter
+    incl_fresnel: include the Fresnell losses at the fiber surface in the calculation
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyMultimodeByNA
+---------------------------------------
+getFiberCouplingEfficiencyMultimodeByNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, index_core: float, NA: float, dia_core: float, incl_fresnel: bool, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a multimode fiber where the fiber is specified by the NA.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    index_core: refractive index of the fiber core
+    NA: fiber numerical aperture (maximal acceptance angle)
+    dia_core: fiber core diameter
+    incl_fresnel: include the Fresnell losses at the fiber surface in the calculation
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyPupilFunctionGaussianModeByMFD
+--------------------------------------------------------
+getFiberCouplingEfficiencyPupilFunctionGaussianModeByMFD(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_MFD: float, pupilSampling: int, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its mode field diameter (MFD) and the overlap integral is evaluated in the exit pupuil plane
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_MFD: 1/e^2 mode field diameter (MFD) of the fiber
+    pupilSampling: sampling of rays in the pupil in x and y direction
+    incl_sys: include the in system losses in the calculation
+
+getFiberCouplingEfficiencyPupilFunctionGaussianModeByNA
+-------------------------------------------------------
+getFiberCouplingEfficiencyPupilFunctionGaussianModeByNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, conf: int, fiber_NA: float, pupilSampling: int, incl_sys: bool) -> float
+
+Returns the fiber coupling efficiency of a single mode fiber with a gaussian mode where the fiber is specified by its numerical aperture and the overlap integral is evaluated in the exit pupuil plane
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength:
+    conf: configuration of multiconfig lookup table
+    fiber_NA: 1/e^2 numerical aperture of the fiber
+    pupilSampling: sampling of rays in the pupil in x and y direction
+    incl_sys: include the in system losses in the calculation
+
+getFieldDecenterX
+-----------------
+getFieldDecenterX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int) -> float
+
+Returns the field decenter in x direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of decenter
+(see getFieldType()).
+
+The tilt can be changed with setFieldDecenterX()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+
+getFieldDecenterY
+-----------------
+getFieldDecenterY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int) -> float
+
+Returns the field decenter in y direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of decenter
+(see getFieldType()).
+
+The tilt can be changed with setFieldDecenterY()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+
+getFieldTiltX
+-------------
+getFieldTiltX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int) -> float
+
+Returns the field tilt in x direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of tilt
+(see getFieldType()).
+
+The tilt can be changed with setFieldTiltX()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+
+getFieldTiltY
+-------------
+getFieldTiltY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int) -> float
+
+Returns the field tilt in y direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of tilt
+(see getFieldType()).
+
+The tilt can be changed with setFieldTiltY()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+
+getFieldType
+------------
+getFieldType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceFieldType
+
+Returns the type of the field definition for a sequence specified by seq_nr.
+
+The field type type can be changed by setFieldType()
+
+Args:
+    seq_nr: index of the sequence
+
+getFirstError
+-------------
+getFirstError(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns a string containing information about the first error.
+If there are no errors a empty string is returned.
+
+getFirstWarning
+---------------
+getFirstWarning(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns a string containing information about the first warning.
+If there are no errors a empty string is returned.
+
+getFootPrintType
+----------------
+getFootPrintType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.distributionFootprintType
+
+Returns the footprint type definition for a sequence specified by seq_nr.
+
+The footprint type can be changed by setFootPrintType()
+
+Args:
+    seq_nr: index of the sequence
+
+getFullVersionInfoString
+------------------------
+getFullVersionInfoString(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns a string containing information about the Quaoda library version.
+
+getGeoMTF
+---------
+getGeoMTF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, image_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns an DataObject4D containing the modulation transfer function computed for the geometric spot diagram.
+
+Each row in the DataObject represents the values of the MTF for the following directions:
+Row 0: linepairs in mm in radial direction
+Row 1: modulation transfer value in radial direction
+Row 2: linepairs in mm in tangential direction
+Row 3: modulation transfer value in tangential direction
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    image_size: grid for image rasterization
+
+getGeoPSF
+---------
+getGeoPSF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, image_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the point spread function computed for the geometric spot diagram.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    image_size: grid for image rasterization
+
+getGeoPSFPolychrom
+------------------
+getGeoPSFPolychrom(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, image_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the polychromatic point spread function computed for the geometric spot diagram.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    image_size: grid for image rasterization
+
+getGlobalRayDirExit
+-------------------
+getGlobalRayDirExit(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a getGlobalRayDirExit containing the (x, y, z) exit ray direction vector
+of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the global coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getGlobalRayDirIncident
+-----------------------
+getGlobalRayDirIncident(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) incident ray direction vector
+of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the global coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getGlobalRayPos3D
+-----------------
+getGlobalRayPos3D(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) position of the rays
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the global coordinate system.
+The 4th cooridinate is always 1.0
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getHuyMTF
+---------
+getHuyMTF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int, image_size: int, image_scale: float) -> quadoa.quadoa.DataObject4D
+
+Returns an DataObject4D containing the modulation transfer function computed via Huygens integral.
+
+Each row in the DataObject represents the values of the MTF for the following directions:
+Row 0: linepairs in mm in radial direction
+Row 1: modulation transfer value in radial direction
+Row 2: linepairs in mm in tangential direction
+Row 3: modulation transfer value in tangential direction
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+    image_scale: size of the area on the image plain to simulate
+
+getHuyPSF
+---------
+getHuyPSF(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int, image_size: int, image_scale: float) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the point spread function computed via Huygens integral.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+    image_scale: size of the area on the image plain to simulate
+
+getHuyPSFPolychrom
+------------------
+getHuyPSFPolychrom(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, grid_size: int, image_size: int, image_scale: float) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the polychromatic point spread function computed via Huygens integral.
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+    image_scale: size of the area on the image plain to simulate
+
+getImgSpaceFNumber
+------------------
+getImgSpaceFNumber(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the image space F-Number for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getImgSpaceNA
+-------------
+getImgSpaceNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the object space Numerical Aperture for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getIrradianceImageIncoherent
+----------------------------
+getIrradianceImageIncoherent(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the irradiance map of the rays on the image surface.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    grid_size: number of pixels in image plane (same for x and y-direction)
+
+getIrradianceImageIncoherentAfocal
+----------------------------------
+getIrradianceImageIncoherentAfocal(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int) -> quadoa.quadoa.ImageObjectD
+
+Returns an ImageObjectD containing the irradiance map of the rays in the afocal image space.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    grid_size: number of pixels in image plane (same for x and y-direction)
+
+getIrradianceOfSpotArea
+-----------------------
+getIrradianceOfSpotArea(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the sum of the flux of all rays of a specific sequence/field/wavelength divided by the spot area in image space.
+
+Args:
+    seq_nr: index nr of the sequence
+    filed_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getMajorVersion
+---------------
+getMajorVersion(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the major version number of the Quadoa library.
+
+getMaxNrFields
+--------------
+getMaxNrFields(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the maximum number of fields defined for any inside the current model.
+
+getMaxNrWavelengths
+-------------------
+getMaxNrWavelengths(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the maximum number of wavelengths defined for any inside the current model.
+
+getMeritVector
+--------------
+getMeritVector(self: quadoa.quadoa.QuadoaCore, merit_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns the current vector of the merit function values for all
+optimization goals in the Meritfunction specified by merit_nr
+Args:
+    merit_nr: index of merit function
+
+getMinorVersion
+---------------
+getMinorVersion(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the minor version number of the Quadoa library.
+
+getMulticonfParam
+-----------------
+getMulticonfParam(self: quadoa.quadoa.QuadoaCore, param_name: str, config: int) -> float
+
+Returns the value of a parameter inside the multiconfig lookup
+table specified by the name and configuration.
+
+Args:
+    param_name: name of the multiconfig param to edit
+    config: config for whitch the param will be set
+
+getNrConfigs
+------------
+getNrConfigs(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the number of multiconfig lookuptable configurations in a model.
+
+getNrFields
+-----------
+getNrFields(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the number of fields for a given sequence defined by seq_nr
+
+Args:
+    seq_nr: index of the sequence
+
+getNrItems
+----------
+getNrItems(self: quadoa.quadoa.QuadoaCore, type: QOS::treeItemType) -> int
+
+Returns the total amount of items of a specific type in the optical design editor.
+
+Args:
+    type: treeItemType enum specifies item type
+
+getNrRays
+---------
+getNrRays(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the number of rays to be traced for each field and wavelegth
+for a given sequence defined by seq_nr.
+
+The count depends on the distribution type as well the settings of the distribution.
+See setRayDistributionType(), setRayDistributionCount1() and setRayDistributionCount2();
+
+Args:
+    seq_nr: index of the sequence
+
+getNrSurfaces
+-------------
+getNrSurfaces(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the number of surfaces for a given sequence defined by seq_nr
+
+Args:
+    seq_nr: index of the sequence
+
+getNrTotalItems
+---------------
+getNrTotalItems(self: quadoa.quadoa.QuadoaCore) -> int
+
+Returns the total amount of items (rows) in the optical design editor.
+
+getNrWavelengths
+----------------
+getNrWavelengths(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the number of wavelengths for a given sequence defined by seq_nr
+
+Args:
+    seq_nr: index of the sequence
+
+getNumberActiveVariables
+------------------------
+getNumberActiveVariables(self: quadoa.quadoa.QuadoaCore, merit_nr: int) -> int
+
+Returns the number of currently active variables for the merit function specified by merit_nr.
+
+Args:
+    merit_nr: index of the merit function
+
+getNumberTargets
+----------------
+getNumberTargets(self: quadoa.quadoa.QuadoaCore, merit_nr: int) -> int
+
+Returns the number of optimization targets that are defined
+for the merit function specified by merit_nr.
+
+Args:
+    merit_nr: index of the merit function
+
+getOPDChiefReferenceType
+------------------------
+getOPDChiefReferenceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceOPDChiefRefType
+
+Returns the type of the OPD chief reference type definition for a sequence specified by seq_nr.
+
+The OPD chief reference type type can be changed by setOPDChiefReferenceType()
+
+Args:
+    seq_nr: index of the sequence
+
+getOPDReferenceType
+-------------------
+getOPDReferenceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceOPDRefType
+
+Returns the type of the OPD reference type definition for a sequence specified by seq_nr.
+
+The OPD reference type type can be changed by setOPDReferenceType()
+
+Args:
+    seq_nr: index of the sequence
+
+getOPL
+------
+getOPL(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the absolute optical path length of the rays.
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The returned OPL is not the absolute OPL but the corrected OPL in the exit pupil location.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getObjSpaceFNumber
+------------------
+getObjSpaceFNumber(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the object space F-Number for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getObjSpaceNA
+-------------
+getObjSpaceNA(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the object space Numerical Aperture for a given sequence / field / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+getOpticalSystemElementRowNrByID
+--------------------------------
+getOpticalSystemElementRowNrByID(self: quadoa.quadoa.QuadoaCore, id: str) -> int
+
+Returns the row number of an item in the optical design editor that matches the specified ID.
+
+Args:
+     id: string containing the ID of the item
+
+getOpticalSystemElementSurfaceRowNrByID
+---------------------------------------
+getOpticalSystemElementSurfaceRowNrByID(self: quadoa.quadoa.QuadoaCore, id: str, surf_nr: int) -> int
+
+Returns the row number of a surface of a element or lens in the optical design editor that matches the specified ID and surface number.
+
+Args:
+    id: string containing the ID of the item
+    surf_nr: index of the surface in the element or lens
+
+getOpticalSystemItemParamIDs
+----------------------------
+getOpticalSystemItemParamIDs(self: quadoa.quadoa.QuadoaCore, id: int) -> str
+
+Returns a list of all parameter IDs of an item based on the items row_nr as a string.
+
+Args:
+     row_nr: row of the item in the optical design editor
+
+getOpticalSystemOverviewReport
+------------------------------
+getOpticalSystemOverviewReport(self: quadoa.quadoa.QuadoaCore) -> str
+
+Returns the list of all items in the optical design editor as a string.
+
+getOpticalSystemParamByIDB
+--------------------------
+getOpticalSystemParamByIDB(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str) -> bool
+
+Returns the value of a boolean parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+
+getOpticalSystemParamByIDC
+--------------------------
+getOpticalSystemParamByIDC(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str) -> str
+
+Returns the value of a string parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+
+getOpticalSystemParamByIDD
+--------------------------
+getOpticalSystemParamByIDD(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str) -> float
+
+Returns the value of a double parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+
+getOpticalSystemParamByIDI
+--------------------------
+getOpticalSystemParamByIDI(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str) -> int
+
+Returns the value of a integer parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+
+getOpticalSystemParamByIndexB
+-----------------------------
+getOpticalSystemParamByIndexB(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int) -> bool
+
+Returns the value of a boolean parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+
+getOpticalSystemParamByIndexC
+-----------------------------
+getOpticalSystemParamByIndexC(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int) -> str
+
+Returns the value of a string parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+
+getOpticalSystemParamByIndexD
+-----------------------------
+getOpticalSystemParamByIndexD(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int) -> float
+
+Returns the value of a double parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+
+getOpticalSystemParamByIndexI
+-----------------------------
+getOpticalSystemParamByIndexI(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int) -> int
+
+Returns the value of a integer parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+
+getOpticalSystemParamTypeByID
+-----------------------------
+getOpticalSystemParamTypeByID(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str) -> quadoa.quadoa.paramType
+
+Returns the type of a parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+
+getOpticalSystemParamTypeByIndex
+--------------------------------
+getOpticalSystemParamTypeByIndex(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int) -> quadoa.quadoa.paramType
+
+Returns the type of a parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+
+getOpticalSystemVariableStateByID
+---------------------------------
+getOpticalSystemVariableStateByID(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: int, merit_nr: str) -> bool
+
+Returns the activation state of a variable parameter at
+a given row_nr matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    merit_nr: index of the merit function
+
+getOpticalSystemVariableStateByIndex
+------------------------------------
+getOpticalSystemVariableStateByIndex(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, merit_nr: int) -> bool
+
+Returns the activation state of a variable parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+    merit_nr: index of the merit function
+
+getOptimizerResidualRMSValue
+----------------------------
+getOptimizerResidualRMSValue(self: quadoa.quadoa.QuadoaCore, merit_nr: int) -> float
+
+Returns the current value of the merit function specified by merit_nr.
+
+Args:
+    merit_nr: index of the merit function
+
+getParticularSurfFormByRow
+--------------------------
+getParticularSurfFormByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, form_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate of the form contribution of
+a single surface form in the local surface coordinate system.
+The 4th cooridinate is always 1.0
+
+Args:
+    row_nr: index row number of surface in tree
+    form_nr: index nr of the form
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getParticularSurfFormBySequence
+-------------------------------
+getParticularSurfFormBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int, form_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate of the form contribution of
+a single surface form in the local surface coordinate system.
+The 4th cooridinate is always 1.0
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+    form_nr: index nr of the form
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getParticularSurfPhaseByRow
+---------------------------
+getParticularSurfPhaseByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, phase_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate of the form contribution of
+a single surface form in the local surface coordinate system.
+The 4th cooridinate is always 1.0
+
+Args:
+    row_nr: index row number of surface in tree
+    phase_nr: index nr of the phase
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getParticularSurfPhaseBySequence
+--------------------------------
+getParticularSurfPhaseBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int, phase_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate of the form contribution of
+a single surface form in the local surface coordinate system.
+The 4th cooridinate is always 1.0
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+    phase_nr: index nr of the phase
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getPolarizationEllipticity
+--------------------------
+getPolarizationEllipticity(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, type: quadoa.quadoa.polarInteractionType, ref: quadoa.quadoa.polarReferenceCoo) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the ellipticity of the polarization state at a surface.
+
+A polarization raytrace needs to be performed prior to calling this method.
+Also polarization needs to be enabled for the source of the sequence.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index nr of the surface
+    type: interaction type where to obtain the polarization state.
+    ref: reference for the projection of the 3D E-Field to the surface
+
+getPolarizationJones
+--------------------
+getPolarizationJones(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, type: quadoa.quadoa.polarInteractionType, ref: quadoa.quadoa.polarReferenceCoo) -> quadoa.quadoa.DataObject2C
+
+Returns a DataObject2C containing the 2D-polarization state at a surface.
+
+A polarization raytrace needs to be performed prior to calling this method.
+Also polarization needs to be enabled for the source of the sequence.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index nr of the surface
+    type: interaction type where to obtain the polarization state.
+    ref: reference for the projection of the 3D E-Field to the surface
+
+getPolarizationOrientation
+--------------------------
+getPolarizationOrientation(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, type: quadoa.quadoa.polarInteractionType, ref: quadoa.quadoa.polarReferenceCoo) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the orientation of the polarization state at a surface.
+
+A polarization raytrace needs to be performed prior to calling this method.
+Also polarization needs to be enabled for the source of the sequence.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index nr of the surface
+    type: interaction type where to obtain the polarization state.
+    ref: reference for the projection of the 3D E-Field to the surface
+
+getPolarizationStokes
+---------------------
+getPolarizationStokes(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, type: quadoa.quadoa.polarInteractionType, ref: quadoa.quadoa.polarReferenceCoo) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the Stokes parameters of the field at a surface.
+
+A polarization raytrace needs to be performed prior to calling this method.
+Also polarization needs to be enabled for the source of the sequence.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index nr of the surface
+    type: interaction type where to obtain the polarization state
+    ref: reference for the projection of the 3D E-Field to the surface
+
+getPolarizationType
+-------------------
+getPolarizationType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequencePolarizationType
+
+Returns the type of the polarization definition for a sequence specified by seq_nr.
+
+The polarization type can be changed by setPolarizationType()
+
+Args:
+    seq_nr: index of the sequence
+
+getRayDirExit
+-------------
+getRayDirExit(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) exit ray direction vector of the rays
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getRayDirIncident
+-----------------
+getRayDirIncident(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) incident ray direction vector
+of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getRayDistributionCount1
+------------------------
+getRayDistributionCount1(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the first parameter that specifies the ray density of a distribution type for a sequence specified by seq_nr.
+
+The meaning of this parameter depends on the selected distribution type (see getRayDistributionType())
+Depending on the distribution type selected, this parameter may have no meaning
+
+It can be changed by setRayDistributionCount1()
+
+Args:
+    seq_nr: index of the sequence
+
+getRayDistributionCount2
+------------------------
+getRayDistributionCount2(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the second parameter that specifies the ray density of a distribution type for a sequence specified by seq_nr.
+
+The meaning of this parameter depends on the selected distribution type (see getRayDistributionType())
+Depending on the distribution type selected, this parameter may have no meaning
+
+It can be changed by setRayDistributionCount2()
+
+Args:
+    seq_nr: index of the sequence
+
+getRayDistributionType
+----------------------
+getRayDistributionType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceDistributionType
+
+Returns the type of the ray distribution. Depending ont the type different kind of grids,
+fans, random distributions and so on can be specified.
+
+The density of the grid can be specified with setRayDistributionCount1() and setRayDistributionCount2()
+It can be changed by setRayDistributionType()
+
+Args:
+    seq_nr: index of the sequence
+
+getRayPos
+---------
+getRayPos(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject2D
+
+Returns a DataObject2D containing the (x, y)-position of the rays
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getRayPos3D
+-----------
+getRayPos3D(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) position of the rays
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+The 4th cooridinate is always 1.0
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getRayPosOnOPDReferenceSurface
+------------------------------
+getRayPosOnOPDReferenceSurface(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject2D
+
+Returns a DataObject2D containing the (x, y)-position of the rays
+of a specific sequence, field and wavelenght
+on the OPD reference surface which is typically the exit pupil.
+In case of sequenceOPDRefType absOverImageSurf it is the image e surface.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getSeidelCoefficient
+--------------------
+getSeidelCoefficient(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int, seidel: quadoa.quadoa.seidelAberration, type: quadoa.quadoa.seidelType) -> float
+
+Returns the seidel coefficient specifiedy by the parameters seidel and type for a given sequence / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    wavelength_nr: index nr of the wavelength to be traced
+    seidel: enum that defines the seidel coefficient to return
+    type: tpye of the seidel coefficient (S1,S2,...) or wavefront error (W040, ...)
+
+getSeidelCoefficientForSurface
+------------------------------
+getSeidelCoefficientForSurface(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int, surf_nr: int, seidel: quadoa.quadoa.seidelAberration, type: quadoa.quadoa.seidelType) -> float
+
+Returns the seidel contribution of a singel surface specifiedy by the parameters seidel and type for a given sequence / wavelength.
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    wavelength_nr: index nr of the wavelength to be traced
+    surf_nr: index nr of the surface in the sequence
+    seidel: enum that defines the seidel coefficient to return
+    type: tpye of the seidel coefficient (S1,S2,...) or wavefront error (W040, ...)
+
+getSequenceImageSpaceType
+-------------------------
+getSequenceImageSpaceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceImageSpaceType
+
+Returns the type image space type definition for a sequence specified by seq_nr.
+
+The source type can be changed by setSequenceImageSpaceType()
+
+Args:
+    seq_nr: index of the sequence
+
+getSequenceImageSurface
+-----------------------
+getSequenceImageSurface(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the index of the last surface inside the sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+
+getSequenceStopSurface
+----------------------
+getSequenceStopSurface(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> int
+
+Returns the index of the stop surface inside the sequence specified by seq_nr.
+
+If the sequence aperture type does not rely on a stop surface this parameter has no meaning.
+
+It can be changed by setSequenceStopSurface()
+
+Args:
+    seq_nr: index of the sequence
+
+getSingleGlobalConstraintDisplayValue
+-------------------------------------
+getSingleGlobalConstraintDisplayValue(self: quadoa.quadoa.QuadoaCore, merit_nr: int, target_nr: int) -> float
+
+Returns the current value of a single global optimization constraint in a meritfunction
+Args:
+    merit_nr: index of merit function
+    target_nr: index of target
+
+getSingleGlobalConstraintName
+-----------------------------
+getSingleGlobalConstraintName(self: quadoa.quadoa.QuadoaCore, merit_nr: int, target_nr: int) -> str
+
+Returns the type-string of a single global optimization constraint in a meritfunction
+Args:
+    merit_nr: index of merit function
+    target_nr: index of target
+
+getSingleGlobalGoalDisplayValue
+-------------------------------
+getSingleGlobalGoalDisplayValue(self: quadoa.quadoa.QuadoaCore, merit_nr: int, target_nr: int) -> float
+
+Returns the current value of a single global optimization goal in a meritfunction
+Args:
+    merit_nr: index of merit function
+    target_nr: index of target
+
+getSingleGlobalGoalName
+-----------------------
+getSingleGlobalGoalName(self: quadoa.quadoa.QuadoaCore, merit_nr: int, target_nr: int) -> str
+
+Returns the type-string of a single global optimization goal in a meritfunction
+Args:
+    merit_nr: index of merit function
+    target_nr: index of target
+
+getSingleRayTraceConstraintDisplayValue
+---------------------------------------
+getSingleRayTraceConstraintDisplayValue(self: quadoa.quadoa.QuadoaCore, merit_nr: int, raytrace_nr: int, target_nr: int) -> float
+
+Returns the current value of a single raytrace optimization constraint in a meritfunction
+Args:
+    merit_nr: index of merit function
+    raytrace_nr: index of raytrace
+    target_nr: index of target
+
+getSingleRayTraceConstraintName
+-------------------------------
+getSingleRayTraceConstraintName(self: quadoa.quadoa.QuadoaCore, merit_nr: int, raytrace_nr: int, target_nr: int) -> str
+
+Returns the type-string of a single raytrace optimization constraint in a meritfunction
+Args:
+    merit_nr: index of merit function
+    raytrace_nr: index of raytrace
+    target_nr: index of target
+
+getSingleRayTraceGoalDisplayValue
+---------------------------------
+getSingleRayTraceGoalDisplayValue(self: quadoa.quadoa.QuadoaCore, merit_nr: int, raytrace_nr: int, target_nr: int) -> float
+
+Returns the current value of a single raytrace optimization goal in a meritfunction
+Args:
+    merit_nr: index of merit function
+    raytrace_nr: index of raytrace
+    target_nr: index of target
+
+getSingleRayTraceGoalName
+-------------------------
+getSingleRayTraceGoalName(self: quadoa.quadoa.QuadoaCore, merit_nr: int, raytrace_nr: int, target_nr: int) -> str
+
+Returns the type-string of a single raytrace optimization goal in a meritfunction
+Args:
+    merit_nr: index of merit function
+    raytrace_nr: index of raytrace
+    target_nr: index of target
+
+getSourceType
+-------------
+getSourceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int) -> quadoa.quadoa.sequenceSourceType
+
+Returns the type of the OPD reference type definition for a sequence specified by seq_nr.
+
+The source type can be changed by setSourceType()
+
+Args:
+    seq_nr: index of the sequence
+
+getStrehlRatio
+--------------
+getStrehlRatio(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the strehl ratio for a given sequence / field / wavelength estimdated from the wavefront error
+For more accurate results getStrehlRatioHuy() is to be preferred
+
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+
+getStrehlRatioHuy
+-----------------
+getStrehlRatioHuy(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, grid_size: int, image_size: int, image_scale: float) -> float
+
+Returns the strehl ratio for a given sequence / field / wavelength by computing a Huygens PSF.
+See also getStrehlRatio()
+Args:
+    seq_nr: index of the squence
+    field_nr: index of the field
+    wavelength_nr: index of the wavelength
+    grid_size: grid for pupil rasterization
+    image_size: grid for image rasterization
+    image_scale: size of the area on the image plain to simulate
+
+getSurfBaseXByRow
+-----------------
+getSurfBaseXByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems X-axis direction in the global coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+
+getSurfBaseXBySequence
+----------------------
+getSurfBaseXBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems X-axis direction in the global coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+
+getSurfBaseYByRow
+-----------------
+getSurfBaseYByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems Y-axis direction in the global coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+
+getSurfBaseYBySequence
+----------------------
+getSurfBaseYBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems Y-axis direction in the global coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+
+getSurfBaseZByRow
+-----------------
+getSurfBaseZByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems Z-axis direction in the global coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+
+getSurfBaseZBySequence
+----------------------
+getSurfBaseZBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) vector of
+the local surface coordinate systems Z-axis direction in the global coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+
+getSurfFormByRow
+----------------
+getSurfFormByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate
+of the surface form in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfFormBySequence
+---------------------
+getSurfFormBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate
+of the surface form in the local surface coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfGradByRow
+----------------
+getSurfGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the (2d) gradient
+of the surface form in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfOriginByRow
+------------------
+getSurfOriginByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z, 1.0) coordinate of
+the surface origin in the global coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+
+getSurfOriginBySequence
+-----------------------
+getSurfOriginBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z, 1.0) coordinate of
+the surface origin in the global coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+
+getSurfPhaseByRow
+-----------------
+getSurfPhaseByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate
+of the surface phase in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfPhaseBySequence
+----------------------
+getSurfPhaseBySequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int, grid_size: int) -> quadoa.quadoa.DataObject4D
+
+Returns a DataObject4D containing the (x, y, z) coordinate
+of the surface phase in the local surface coordinate system.
+
+Args:
+    seq_nr: index nr of the sequence
+    surf_nr: index nr of the surface
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfPhaseGradByRow
+---------------------
+getSurfPhaseGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the (2D) gradient
+of the surface phase in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfPhaseXGradByRow
+----------------------
+getSurfPhaseXGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient in x direction
+of the surface phase in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfPhaseYGradByRow
+----------------------
+getSurfPhaseYGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient in y direction
+of the surface phase in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfXGradByRow
+-----------------
+getSurfXGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient  in x direction
+of the surface form in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfYGradByRow
+-----------------
+getSurfYGradByRow(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient in y direction
+of the surface form in the local surface coordinate system.
+
+Args:
+    row_nr: index row number of surface in tree
+    grid_size: resolution of poins for the grid in x- and y-direction
+
+getSurfaceNormalAtRayPos
+------------------------
+getSurfaceNormalAtRayPos(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject3D
+
+Returns a DataObject3D containing the (x, y, z) surface normal vector
+of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getSurfaceNrInSequenceFromRowNr
+-------------------------------
+getSurfaceNrInSequenceFromRowNr(self: quadoa.quadoa.QuadoaCore, seq_nr: int, row_nr: int) -> int
+
+Returns the index number of a surface in a sequence based on the row number in the optical design editor.
+
+Args:
+    seq_nr: index of the sequence
+    row_nr: row of the surface in the optical design editor
+
+getSurfaceRowNrFromSequence
+---------------------------
+getSurfaceRowNrFromSequence(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> int
+
+Returns the row number of a surface in the optical design editor based on the surf_nr in the sequence.
+
+Args:
+    seq_nr: index of the sequence
+    surf_nr: index of the surface in the sequence
+
+getTotalPowerInImageSpace
+-------------------------
+getTotalPowerInImageSpace(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> float
+
+Returns the sum of the flux of all rays of a specific sequence/field/wavelength in image space.
+
+Args:
+    seq_nr: index nr of the sequence
+    filed_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getTransmission
+---------------
+getTransmission(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int, before_interaction: bool) -> quadoa.quadoa.DataObject1D
+
+Returns an DataObject1D containing the transmission for each ray up to a given surface.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: surface up to which the transmission is evaluated
+    before_interaction: if true the transmission is evaluated before the surface interaction
+
+getVacuumWavelength
+-------------------
+getVacuumWavelength(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int) -> float
+
+Returns the vacuum wavelength for a specific sequence / wavelength combination.
+
+The wavelength can be changed with setWaveLength() which takes the environment wavelength as argument.
+
+Args:
+    seq_nr: index of the sequence
+    wavelength_nr: index of the wavelength
+
+getWaveFrontGrad
+----------------
+getWaveFrontGrad(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the (2D) gradient of the wavefront
+at the position of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getWaveFrontXGrad
+-----------------
+getWaveFrontXGrad(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient in local coordinate system
+x-direction of the wavefront at the position of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getWaveFrontYGrad
+-----------------
+getWaveFrontYGrad(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, surf_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing the gradient in local coordinate system
+y-direction of the wavefront at the position of the rays of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+A raytrace needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    surf_nr: index of the surface inside the sequence
+
+getWavelengthWeight
+-------------------
+getWavelengthWeight(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wavelength_nr: int) -> float
+
+Returns the weight of the wavelength for a specific sequence / wavelength combination.
+
+The wavelength weight can be changed with setWaveLengthWeight()
+
+Args:
+    seq_nr: index of the sequence
+    wavelength_nr: index of the wavelength
+
+getZernikeCoefficientsANSIISO
+-----------------------------
+getZernikeCoefficientsANSIISO(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, n_coeff: int, rad: float) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+The sorting of the polynomial is according to the ANSI/ISO sorting.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    n_coeff: number of zernike coefficients to be used for the fit
+    rad: norm radius for the zernike polynomial fit
+
+getZernikeCoefficientsANSIISONormRadFromAperture
+------------------------------------------------
+getZernikeCoefficientsANSIISONormRadFromAperture(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, n_coeff: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+The norm radius is calculated automatically from the aperture of the OPD reference surface.
+
+The sorting of the polynomial is according to the ANSI/ISO sorting.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    n_coeff: number of zernike coefficients to be used for the fit
+
+getZernikeCoefficientsANSIISONormRadFromRays
+--------------------------------------------
+getZernikeCoefficientsANSIISONormRadFromRays(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, n_coeff: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+The norm radius is calculated automatically by the circumcicle arround the rays on the OPD reference surface.
+
+The sorting of the polynomial is according to the ANSI/ISO sorting.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    n_coeff: number of zernike coefficients to be used for the fit
+
+getZernikeCoefficientsFringe
+----------------------------
+getZernikeCoefficientsFringe(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int, rad: float) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike Fringe polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+    rad: norm radius for the zernike polynomial fit
+
+getZernikeCoefficientsFringeNormRadFromAperture
+-----------------------------------------------
+getZernikeCoefficientsFringeNormRadFromAperture(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike Fringe polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+The norm radius is calculated automatically from the aperture of the OPD reference surface.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+getZernikeCoefficientsFringeNormRadFromRays
+-------------------------------------------
+getZernikeCoefficientsFringeNormRadFromRays(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> quadoa.quadoa.DataObject1D
+
+Returns a DataObject1D containing teh coefficients of a Zernike Fringe polynomial fit to the wavefront
+of a specific sequence, field and wavelenght
+on a surface inside the sequence in the local surface coordinate system.
+
+The norm radius is calculated automatically by the circumcicle arround the rays on the OPD reference surface.
+
+If the OPDReferenceType is set to ExitPupil (see getOPDReferenceType() and setOPDReferenceType())
+The OPL used for the computation of the fit is not the absolute OPL but the corrected OPL in the exit pupil location
+and the x- y-coordinstes for the fit are also take from the exit pupil location.
+
+A raytrace with a suitable distribution of the rays for the fit is needs to be performed prior to calling this method.
+
+Args:
+    seq_nr: index nr of the sequence
+    field_nr: index nr of the field
+    wavelength_nr: index nr of the wavelength
+
+hasError
+--------
+hasError(self: quadoa.quadoa.QuadoaCore) -> bool
+
+Returns true is there is an error.
+The error message can be obtained by calling getFirstError().
+
+hasWarning
+----------
+hasWarning(self: quadoa.quadoa.QuadoaCore) -> bool
+
+Returns true is there is a warning.
+The warning message can be obtained by calling getFirstWarning().
+
+importCodeVAssembly
+-------------------
+importCodeVAssembly(self: quadoa.quadoa.QuadoaCore, filename: str, mode: quadoa.quadoa.importMode) -> bool
+
+Imports a SEQ file as an assembly into the currently opend model.
+
+Args:
+    filename: the filename of the file to be imported
+    mode: import mode (keep or remove dummy surfaces)
+
+Returns:
+true if success
+
+importCodeVModel
+----------------
+importCodeVModel(self: quadoa.quadoa.QuadoaCore, filename: str, mode: quadoa.quadoa.importMode) -> bool
+
+Loads a SEQ file to a new empty model.
+
+Args:
+    filename: the filename of the file to be imported
+    mode: import mode (keep or remove dummy surfaces)
+
+Returns:
+true if success
+
+importZMXAssembly
+-----------------
+importZMXAssembly(self: quadoa.quadoa.QuadoaCore, filename: str, mode: quadoa.quadoa.importMode) -> bool
+
+Imports a ZMX file as an assembly into the currently opend model.
+
+Args:
+    filename: the filename of the file to be imported
+    mode: import mode (keep or remove dummy surfaces)
+
+Returns:
+true if success
+
+importZMXModel
+--------------
+importZMXModel(self: quadoa.quadoa.QuadoaCore, filename: str, mode: quadoa.quadoa.importMode) -> bool
+
+Loads a ZMX file to a new empty model.
+
+Args:
+    filename: the filename of the file to be imported
+    mode: import mode (keep or remove dummy surfaces)
+
+Returns:
+true if success
+
+loadCoatingMaterialFile
+-----------------------
+loadCoatingMaterialFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Loads a coating material file (\*.glas)
+
+Needs to be called prior to loading a model, so the model can find the coating materials for the optical surfaces.
+This methos can be called several times to load more than one catalog.
+
+Args:
+    filename: the file path to a ``.glas`` material file.
+
+loadLensCatalogFile
+-------------------
+loadLensCatalogFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Loads a lens catalog file (\*.lnct)
+
+Args:
+    filename: the file path to a ``.lnct`` lens catalog file.
+
+loadMaterialFile
+----------------
+loadMaterialFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Loads a material file (\*.glas)
+
+Needs to be called prior to loading a model, so the model can find the materials for the optical elements.
+This methos can be called several times to load more than one catalog.
+
+Args:
+    filename: the file path to a ``.glas`` material file.
+
+loadModelFile
+-------------
+loadModelFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Loads a Quadoa model file (\*.optx)
+
+To allow Quadoa to find the materials used in the file loadMaterialFile()
+needs to be called prior to loading the model file
+on any material catalog that is used in the model.
+
+Args:
+    filename: the file path to a ``.optx`` model file.
+
+Returns:
+    true if success
+
+loadThinFilmFile
+----------------
+loadThinFilmFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Loads a thin film stack file (\*.coat)
+
+Needs to be called prior to loading a model, so the model can find the coating stack for the optical surfaces.
+This methos can be called several times to load more than one catalog.
+
+Args:
+    filename: the file path to a ``.coat`` material file.
+
+newModelFile
+------------
+newModelFile(self: quadoa.quadoa.QuadoaCore) -> None
+
+Clears the current model that is opened and opens a new empty Quadoa model file
+
+nextConfig
+----------
+nextConfig(self: quadoa.quadoa.QuadoaCore) -> None
+
+Switches the active realisation of the multiconfig lookuptable to the next configuration.
+
+optimizeExtendedSync
+--------------------
+optimizeExtendedSync(self: quadoa.quadoa.QuadoaCore, timeout_seconds: float, merit_id: int) -> None
+
+Calls the extended optimizer for a merit function that can be chosen by merit_id.
+
+Args:
+    timeout_seconds: timeout to abort the optimization if it takes too long in seconds
+    merit_id: index of the merit function
+
+optimizeGlobalSync
+------------------
+optimizeGlobalSync(self: quadoa.quadoa.QuadoaCore, timeout_seconds: float, merit_id: int) -> None
+
+Calls the global optimizer for a merit function that can be chosen by merit_id.
+
+Args:
+    timeout_seconds: timeout to abort the optimization if it takes too long in seconds
+    merit_id: index of the merit function
+
+optimizeLocalSync
+-----------------
+optimizeLocalSync(self: quadoa.quadoa.QuadoaCore, timeout_seconds: float, merit_id: int) -> None
+
+Calls the local optimizer for a merit function that can be chosen by merit_id.
+
+Args:
+    timeout_seconds: timeout to abort the optimization if it takes too long in seconds
+    merit_id: index of the merit function
+
+optimizeQuickFocusSpotRadius
+----------------------------
+optimizeQuickFocusSpotRadius(self: quadoa.quadoa.QuadoaCore, seq_nr: int, dir: int) -> None
+
+Calls the quick focus optimizer to optimize the spotradius by moving the image surface.
+
+Args:
+    seq_nr: index of the sequence to optimize
+    dir: diretion to move the image surface (typically z
+
+optimizeQuickFocusWaveFront
+---------------------------
+optimizeQuickFocusWaveFront(self: quadoa.quadoa.QuadoaCore, seq_nr: int, dir: int) -> None
+
+Calls the quick focus optimizer to optimize the spotradius by moving the image surface.
+
+     Args:
+         seq_nr: index of the sequence to optimize
+         dir: diretion to move the image surface (typically z
+
+previousConfig
+--------------
+previousConfig(self: quadoa.quadoa.QuadoaCore) -> None
+
+Switches the active realisation of the multiconfig lookuptable to the previous configuration.
+
+removeAllGhostSequences
+-----------------------
+removeAllGhostSequences(self: quadoa.quadoa.QuadoaCore) -> None
+
+Deletes any ghost sequence in the model.
+
+saveModelFile
+-------------
+saveModelFile(self: quadoa.quadoa.QuadoaCore, filename: str) -> bool
+
+Saves the current model to a Quadoa model file (\*.optx)
+
+Args:
+    filename: the file path to a ``.optx`` model file.
+
+Returns:
+    true if success
+
+setApertureType
+---------------
+setApertureType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceApertureType) -> bool
+
+Sets the type of the aperture definition of a sequence specified by seq_nr.
+
+The current aperture type type can be obtained by getApertureType()
+
+Args:
+    seq_nr: index of the sequence
+    type: aperture type to set
+
+setApertureValue
+----------------
+setApertureValue(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the value of the aperture for a sequence specified by seq_nr.
+Depending on the setting of the aperture type this value may be the NA or the aperture diameter.
+
+In case of a sequence with floating aperture, where the aperture is defined by the stop surface,
+the value has no meaning"
+
+The current value can be obtained by getApertureValue()
+
+Args:
+    seq_nr: index of the sequence
+    value: new value for the aperture
+
+setApodizationExponent
+----------------------
+setApodizationExponent(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the exponent of a super gaussian apodization for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationExponentX
+-----------------------
+setApodizationExponentX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the exponent of an elliptic super gaussian apodization in X-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationExponentY
+-----------------------
+setApodizationExponentY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the exponent of an elliptic super gaussian apodization in Y-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationSigma
+-------------------
+setApodizationSigma(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the standard deviation of a gaussian apodization for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationSigmaX
+--------------------
+setApodizationSigmaX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the standard deviation of a gaussian apodization in X-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationSigmaY
+--------------------
+setApodizationSigmaY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the standard deviation of a gaussian apodization in Y-direction for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationTotalPower
+------------------------
+setApodizationTotalPower(self: quadoa.quadoa.QuadoaCore, seq_nr: int, value: float) -> bool
+
+Sets the total power in W of the apodization for a sequence specified by seq_nr.
+
+Args:
+    seq_nr: index of the sequence
+    value: value to set
+
+setApodizationType
+------------------
+setApodizationType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceApodizationType) -> bool
+
+Sets the type of the apodization for a sequence specified by seq_nr.
+
+The current apodization type can be obtained by getApodizationType()
+
+Args:
+    seq_nr: index of the sequence
+    type: apodization type to set
+
+setConfig
+---------
+setConfig(self: quadoa.quadoa.QuadoaCore, conf: int) -> bool
+
+Switches the active realisation of the multiconfig lookuptable to the specified value.
+
+Args:
+    conf: index to set as curretn multiconfig realisation
+
+setCurrentMulticonfParam
+------------------------
+setCurrentMulticonfParam(self: quadoa.quadoa.QuadoaCore, param_name: str, val: float) -> bool
+
+Sets the value of a parameter inside the multiconfig lookuptable
+for the current active realisation specified by the name.
+
+Args:
+    param_name: name of the multiconfig parameter
+    val: value taht will be set to the paramter
+
+setFieldDecenterX
+-----------------
+setFieldDecenterX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, val: float) -> bool
+
+Sets the field decenter in x direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of decenter.
+
+The current value can be obtained by getFieldDecenterX()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+    val: new value for the field decenter
+
+setFieldDecenterY
+-----------------
+setFieldDecenterY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, val: float) -> bool
+
+Sets the field tilt in y direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of tilt.
+
+The current value can be obtained by getFieldDecenterY()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+    val: new value for the field tilt
+
+setFieldTiltX
+-------------
+setFieldTiltX(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, val: float) -> bool
+
+Sets the field tilt in x direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of tilt.
+
+The current value can be obtained by getFieldTiltX()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+    val: new value for the field tilt
+
+setFieldTiltY
+-------------
+setFieldTiltY(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, val: float) -> bool
+
+Sets the field tilt in y direction of a specific field and sequence combination.
+This paramter has onle a meaning when the field type allows the specification of tilt.
+
+The current value can be obtained by getFieldTiltY()
+
+Args:
+    seq_nr: index of the sequence
+    field_nr: index of the field
+    val: new value for the field tilt
+
+setFieldType
+------------
+setFieldType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceFieldType) -> bool
+
+Sets the type of the field definition of a sequence specified by seq_nr.
+
+The current field type type can be obtained by getFieldType()
+
+Args:
+    seq_nr: index of the sequence
+    type: field type to set
+
+setFootPrintType
+----------------
+setFootPrintType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.distributionFootprintType) -> bool
+
+Sets the type of the footrpint for a sequence specified by seq_nr.
+
+The current polarization type can be obtained by getFootPrintType()
+
+Args:
+    seq_nr: index of the sequence
+    type: footprint type to set
+
+setMulticonfParam
+-----------------
+setMulticonfParam(self: quadoa.quadoa.QuadoaCore, param_name: str, config: int, val: float) -> bool
+
+Sets the value of a parameter inside the multiconfig lookup
+table specified by the name and configuration.
+
+Args:
+    param_name: name of the multiconfig param to edit
+    config: config for whitch the param will be set
+    val: value that will be set to the parameter
+
+setNrWaveLengths
+----------------
+setNrWaveLengths(self: quadoa.quadoa.QuadoaCore, seq_nr: int, n_wav: int) -> bool
+
+Sets the number of differnt wavlengths for a specific sequence
+
+The value of the wavelengths can be changed with setWaveLength() which takes the environment wavelength as argument.
+
+Args:
+    seq_nr: index of the sequence
+    n_wav: number of wavelengths
+
+setOPDChiefReferenceType
+------------------------
+setOPDChiefReferenceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceOPDChiefRefType) -> bool
+
+Sets the type of the OPD chief reference type of a sequence specified by seq_nr.
+
+The current OPD chief reference type type can be obtained by getOPDChiefReferenceType()
+
+Args:
+    seq_nr: index of the sequence
+    type: OPD chief reference type to set
+
+setOPDReferenceType
+-------------------
+setOPDReferenceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceOPDRefType) -> bool
+
+Sets the type of the OPD reference type of a sequence specified by seq_nr.
+
+The current OPD reference type type can be obtained by getOPDReferenceType()
+
+Args:
+    seq_nr: index of the sequence
+    type: OPD reference type to set
+
+setOpticalSystemExtendedData2D
+------------------------------
+setOpticalSystemExtendedData2D(self: quadoa.quadoa.QuadoaCore, arg0: int, arg1: quadoa.quadoa.ImageObjectD) -> bool
+
+Overwrites the extended data of an item at the given row_nr.
+
+Args:
+    row_nr: row index of the item in the tree
+    data: ImageObjectD containing the grid data. Dimensions must match allowed format for the items extended data.
+    py::arg("row_nr"), py::arg("data"))
+
+
+//--------- get data sequence ---------------------------------------------------------------------------------
+        .def("getNrSequences", &QOS::QuadoaCore::getNrSequences,
+R"doc(Returns the number of sequences that are defined inside the current model.
+
+setOpticalSystemParamByIDB
+--------------------------
+setOpticalSystemParamByIDB(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str, value: bool) -> bool
+
+Sets the value of a boolean parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    value: value to set
+
+setOpticalSystemParamByIDC
+--------------------------
+setOpticalSystemParamByIDC(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str, value: str) -> bool
+
+Sets the value of a string parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    value: value to set
+
+setOpticalSystemParamByIDD
+--------------------------
+setOpticalSystemParamByIDD(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str, value: float) -> bool
+
+Sets the value of a double parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    value: value to set
+
+setOpticalSystemParamByIDI
+--------------------------
+setOpticalSystemParamByIDI(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str, value: int) -> bool
+
+Sets the value of a integer parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    value: value to set
+
+setOpticalSystemParamByIndexB
+-----------------------------
+setOpticalSystemParamByIndexB(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, value: bool) -> bool
+
+Sets the value of a boolean parameter at a given
+row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+    value: value to set
+
+setOpticalSystemParamByIndexC
+-----------------------------
+setOpticalSystemParamByIndexC(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, value: str) -> bool
+
+Sets the value of a string parameter at a given
+    row_nr and col_nr in the Optical Design Editor.
+
+    Args:
+        row_nr: row index of the item in the tree
+        col_nr: comumn index of the paramter
+        value: value to set
+
+setOpticalSystemParamByIndexD
+-----------------------------
+setOpticalSystemParamByIndexD(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, value: float) -> bool
+
+Sets the value of a double parameter at a given row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+    value: value to set
+
+setOpticalSystemParamByIndexI
+-----------------------------
+setOpticalSystemParamByIndexI(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, value: int) -> bool
+
+Sets the value of a integer parameter at a given
+row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+    value: value to set
+
+setOpticalSystemVariableStateByID
+---------------------------------
+setOpticalSystemVariableStateByID(self: quadoa.quadoa.QuadoaCore, row_nr: int, param_name: str, merit_nr: int, value: bool) -> bool
+
+Sets the activation state of a variable parameter at a given row_nr
+matching the parameter name in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    param_id: ID of the parameter
+    merit_nr: index of the merit function
+    value: value to set for activation state
+
+setOpticalSystemVariableStateByIndex
+------------------------------------
+setOpticalSystemVariableStateByIndex(self: quadoa.quadoa.QuadoaCore, row_nr: int, col_nr: int, merit_nr: int, value: bool) -> bool
+
+Sets the activation state of a variable parameter at a given
+row_nr and col_nr in the Optical Design Editor.
+
+Args:
+    row_nr: row index of the item in the tree
+    col_nr: comumn index of the paramter
+    merit_nr: index of the merit function
+    value: value to set for activation state
+
+setPolarizationType
+-------------------
+setPolarizationType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequencePolarizationType) -> bool
+
+Sets the type of the polarization for a sequence specified by seq_nr.
+
+The current polarization type can be obtained by getPolarizationType()
+
+Args:
+    seq_nr: index of the sequence
+    type: polarization type to set
+
+setRayDistributionCount1
+------------------------
+setRayDistributionCount1(self: quadoa.quadoa.QuadoaCore, seq_nr: int, nr_rays: int) -> bool
+
+Sets the first parameter that specifies the ray density of a distribution type for a sequence specified by seq_nr.
+
+The meaning of this parameter depends on the selected distribution type (see getRayDistributionType())
+Depending on the distribution type selected, this parameter may have no meaning
+
+The current value can be obtained by getRayDistributionCount1()
+
+Args:
+    seq_nr: index of the sequence
+    nr_rays: number of rays to specify the first ray density parameter
+
+setRayDistributionCount2
+------------------------
+setRayDistributionCount2(self: quadoa.quadoa.QuadoaCore, seq_nr: int, nr_rays: int) -> bool
+
+Sets the first parameter that specifies the ray density of a distribution type for a sequence specified by seq_nr.
+
+The meaning of this parameter depends on the selected distribution type (see getRayDistributionType())
+Depending on the distribution type selected, this parameter may have no meaning
+
+The current value can be obtained by getRayDistributionCount2()
+
+Args:
+    seq_nr: index of the sequence
+    nr_rays: number of rays to specify the second ray density parameter
+
+setRayDistributionType
+----------------------
+setRayDistributionType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceDistributionType) -> bool
+
+Sets the type of the ray distribution. Depending ont the type different kind of grids,
+fans, random distributions and so on can be specified.
+
+The density of the grid can be specified with setRayDistributionCount1() and setRayDistributionCount2()
+The current value can be obtained by getRayDistributionType()
+
+Args:
+    seq_nr: index of the sequence
+    type: distribution type to set
+
+setSequenceImageSpaceType
+-------------------------
+setSequenceImageSpaceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceImageSpaceType) -> bool
+
+Sets the image space type of a sequence specified by seq_nr.
+
+//The current source type type can be obtained by getSequenceImageSpaceType()
+
+//Args:
+//    seq_nr: index of the sequence
+//    type: image space type to set
+
+setSequenceStopRayPosition
+--------------------------
+setSequenceStopRayPosition(self: quadoa.quadoa.QuadoaCore, seq_nr: int, stop_surf: int, pos: quadoa.quadoa.DataObject2D) -> bool
+
+Sets the ray positions on the stop surface for the rayaiming for the sequence specified by seq_nr
+accoring to the (x, y) positions specified by the DataObject2D pos.
+
+Args:
+    seq_nr: index of the sequence
+    stop_surf: index of the surface inside the sequence
+    pos: DataObject2D containing the position coordinates in the local coordinate surface system
+
+setSequenceStopSurface
+----------------------
+setSequenceStopSurface(self: quadoa.quadoa.QuadoaCore, seq_nr: int, surf_nr: int) -> bool
+
+Sets the index of the stop surface inside the sequence specified by seq_nr.
+
+If the sequence aperture type does not rely on a stop surface this parameter has no meaning.
+
+The current value can be obtained by getSequenceStopSurface()
+
+Args:
+    seq_nr: index of the sequence
+    surf_nr: index of the surface inside the sequence
+
+setSourceType
+-------------
+setSourceType(self: quadoa.quadoa.QuadoaCore, seq_nr: int, type: quadoa.quadoa.sequenceSourceType) -> bool
+
+Sets the type of the source type of a sequence specified by seq_nr.
+
+//The current source type type can be obtained by getSourceType()
+
+//Args:
+//    seq_nr: index of the sequence
+//    type: source type to set
+
+setWaveLength
+-------------
+setWaveLength(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wave_nr: int, val: float) -> bool
+
+Sets the wavlengths for a specific wavelength for a sequence
+
+The value of the current wavelengths can be obtained by getEnvironmentWaveLength()
+
+Args:
+    seq_nr: index of the sequence
+    n_wav: index of wavelength
+    val: wavelength to set
+
+setWaveLengthWeight
+-------------------
+setWaveLengthWeight(self: quadoa.quadoa.QuadoaCore, seq_nr: int, wave_nr: int, val: float) -> bool
+
+Sets the wavlengths weight for a specific wavelength for a sequence
+
+The value of the current wavelengths weight can be obtained by getWaveLengthWeight()
+
+Args:
+    seq_nr: index of the sequence
+    n_wav: index of wavelength
+    val: wavelength to set
+
+sortGhostsByIntensityPerSpotSize
+--------------------------------
+sortGhostsByIntensityPerSpotSize(self: quadoa.quadoa.QuadoaCore) -> None
+
+Sorts the ghost sequences according to the maximum energy per area on image surface.
+
+sortGhostsByTotalIntensity
+--------------------------
+sortGhostsByTotalIntensity(self: quadoa.quadoa.QuadoaCore) -> None
+
+Sorts the ghost sequences according to the total energy that will arrive at the image surface.
+
+traceAllRays
+------------
+traceAllRays(self: quadoa.quadoa.QuadoaCore) -> bool
+
+Traces all the rays for any sequence, field and wavelenght in the current loaded model.
+A raytrace needs to be performed prior to any method that returns ray data like getRayPos(), getOPL(), ...
+
+If only data for a specific sequence, field or wavelength is needed traceRays()
+should be used since it will only trace the specified rays.
+
+The grid of the rays to be traced is the same as visible in the 3D view in the Quadao GUI
+and can be specified using setRayDistributionType() as well as setRayDistributionCount1(),
+setRayDistributionCount2().
+
+traceAllRaysInclPupilsAndPolarization
+-------------------------------------
+traceAllRaysInclPupilsAndPolarization(self: quadoa.quadoa.QuadoaCore) -> bool
+
+Traces all the rays for any sequence, field and wavelenght in the current loaded model.
+A polariszation raytrace needs to be performed prior to any method that returns polarization data like getEField(), getPolarization(), ...
+The polarization is only calculated for sequences with polarization enabled in the source.
+
+The grid of the rays to be traced is the same as visible in the 3D view in the Quadao GUI
+and can be specified using setRayDistributionType() as well as setRayDistributionCount1(),
+setRayDistributionCount2().
+
+traceRays
+---------
+traceRays(self: quadoa.quadoa.QuadoaCore, seq_nr: int, field_nr: int, wavelength_nr: int) -> bool
+
+Traces a specific set of rays for one sequence, field and wavelenght combination in the current loaded model.
+    A raytrace needs to be performed prior to any method that returns ray data like getRayPos(), getOPL(), ...
+
+    The grid of the rays to be traced is the same as visible in the 3D view in the Quadao GUI
+    and can be specified using setRayDistributionType() as well as setRayDistributionCount1(),
+    setRayDistributionCount2().
+
+Args:
+    seq_nr: index nr of the sequence to be traced
+    field_nr: index nr of the field to be traced
+    wavelength_nr: index nr of the wavelength to be traced 
+
+writeSurfaceFormToXYZ
+---------------------
+writeSurfaceFormToXYZ(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int, filename: str, incl_header: bool, remove_nan: bool) -> bool
+
+Exports the sag of a surface given by its row_nr to csv textfile.
+
+The file will contain the x, y, z coordinate of the points on the surface.
+
+Args:
+    row_nr: row of the surface in the optical design editor
+    grid_size: grid for rasterization in x and y direction
+    filename: file to save (e.g. grid.txt or grid.csv)
+    inlc_header: include header in file or only coordinate data (bool)
+    remove_nan: remove values that are NAN / lie outside the phisical aperture (bool))
+
+Returns:
+    true if success
+
+writeSurfacePhaseToXYZ
+----------------------
+writeSurfacePhaseToXYZ(self: quadoa.quadoa.QuadoaCore, row_nr: int, grid_size: int, filename: str, incl_header: bool, remove_nan: bool) -> bool
+
+Exports the phase of a surface given by its row_nr to csv textfile.
+
+The file will contain the x, y, z coordinate of the points on the surface.
+
+Args:
+    row_nr: row of the surface in the optical design editor
+    grid_size: grid for rasterization in x and y direction
+    filename: file to save (e.g. grid.txt or grid.csv)
+    inlc_header: include header in file or only coordinate data (bool)
+    remove_nan: remove values that are NAN / lie outside the phisical aperture (bool))
+
+Returns:
+    true if success

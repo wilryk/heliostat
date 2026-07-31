@@ -1,0 +1,4 @@
+# Quadoa model files: byte-exact, never normalize line endings
+*.optx -text
+*.uix -text
+*.glas -text

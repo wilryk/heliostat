@@ -1,0 +1,1128 @@
+<?xml version="1.0"?>
+<optical_system_definition>
+	<version major="25" minor="9" />
+	<geometry>
+		<pos id="heli_pos" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly1">
+			<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="x" value="posx" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="posy" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<pos id="heliostat" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly4">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="heli_coord_shift" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly2">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-rot_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="rot_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="helio_surf" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf1" suid="surf_uid1" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="2886.36939254263" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<aperture type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+						<form type="zernike" normrad="1.0" maxorder="6" is_visible="true" store_hidden="false" active="true">
+							<variable name="z0" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z3" value="c3" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z4" value="c4" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z5" value="c5" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<form type="zernike" normrad="1.0" maxorder="6" is_visible="true" store_hidden="false" active="false">
+							<variable name="z0" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z3" value="-4.61492560736453e-08" is_active="1" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z4" value="-8.64144199598961e-08" is_active="1" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z5" value="-1.13159843221257e-07" is_active="1" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<form type="cosine" axis="y" is_visible="true" store_hidden="false" active="false">
+							<variable name="periode" value="100.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="amplitude" value="0.0232" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="phase_offset" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<form type="cosine" axis="x" is_visible="true" store_hidden="false" active="false">
+							<variable name="periode" value="100.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="amplitude" value="0.0232" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="phase_offset" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<coating type="ideal_mirror" is_visible="true" store_hidden="false" active="true" />
+						<form type="biconic" is_visible="true" store_hidden="false" active="false">
+							<variable name="radius_x" value="-134095" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="radius_y" value="-174394" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="conic_x" value="-1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="conic_y" value="-1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+					</surf>
+				</pos>
+			</pos>
+			<pos id="source" refe="abs" off_axis="true" order="xyz" posrot="rot" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly5">
+				<variable name="z" value="30000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="-solze" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="-solaz" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<surf id="sun" refe="abs" off_axis="true" order="xyz" posrot="rot" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="false" store_hidden="false" puuid="surf2" suid="surf_uid5" ghost="true">
+					<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<float_ap name="radius" value="3500.0" is_locked="true" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="180.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				</surf>
+			</pos>
+		</pos>
+		<pos id="shade_block" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly200">
+			<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<pos id="p_ax0" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly229">
+				<variable name="z" value="13500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="ax0_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="ax0_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<surf id="ax0" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf214" suid="surf_uid214" ghost="true">
+					<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<float_ap name="radius" value="0.0" is_locked="false" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<obscuration type="circ" c_x="0.0" c_y="0.0" is_visible="true" store_hidden="false">
+						<float_ap name="radius" value="15000.0" is_locked="true" />
+					</obscuration>
+				</surf>
+			</pos>
+			<pos id="p_so0" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly201">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so0_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so0_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so0" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly202">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so0_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so0_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so0" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf200" suid="surf_uid200" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so1" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly203">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so1_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so1_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so1" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly204">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so1_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so1_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so1" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf201" suid="surf_uid201" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so2" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly205">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so2_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so2_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so2" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly206">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so2_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so2_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so2" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf202" suid="surf_uid202" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so3" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly207">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so3_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so3_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so3" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly208">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so3_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so3_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so3" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf203" suid="surf_uid203" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so4" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly209">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so4_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so4_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so4" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly210">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so4_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so4_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so4" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf204" suid="surf_uid204" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so5" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly211">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so5_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so5_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so5" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly212">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so5_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so5_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so5" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf205" suid="surf_uid205" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so6" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly213">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so6_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so6_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so6" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly214">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so6_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so6_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so6" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf206" suid="surf_uid206" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so7" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly215">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so7_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so7_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so7" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly216">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so7_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so7_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so7" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf207" suid="surf_uid207" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so8" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly217">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so8_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so8_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so8" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly218">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so8_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so8_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so8" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf208" suid="surf_uid208" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_so9" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly219">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="so9_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="so9_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_so9" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly220">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-so9_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="so9_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="so9" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf209" suid="surf_uid209" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_bo0" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly221">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="bo0_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="bo0_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_bo0" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly222">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-bo0_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="bo0_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="bo0" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf210" suid="surf_uid210" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_bo1" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly223">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="bo1_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="bo1_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_bo1" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly224">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-bo1_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="bo1_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="bo1" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf211" suid="surf_uid211" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_bo2" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly225">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="bo2_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="bo2_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_bo2" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly226">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-bo2_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="bo2_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="bo2" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf212" suid="surf_uid212" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+			<pos id="p_bo3" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly227">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="bo3_x" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="bo3_y" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="h_bo3" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly228">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-bo3_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="bo3_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="bo3" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf213" suid="surf_uid213" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="0.0" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<obscuration type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+					</surf>
+				</pos>
+			</pos>
+		</pos>
+		<surf id="prime_focus" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf7" suid="surf_uid7" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="27000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="0.0" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+		<surf id="secondary" refe="abs" off_axis="false" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf3" suid="surf_uid2" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="sec_height" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="9922.79133010094" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<form type="axicon" is_visible="true" store_hidden="false" active="true">
+				<variable name="angle" value="axi_angle" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="tip_rad" value="500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			</form>
+			<aperture type="circ" c_x="0.0" c_y="0.0" is_visible="true" store_hidden="false">
+				<float_ap name="radius" value="15000.0" is_locked="true" />
+			</aperture>
+		</surf>
+		<surf id="receiver" refe="rel" off_axis="false" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf4" suid="surf_uid3" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="rec_offset" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="795.759779296933" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+		<surf id="SURFACE 1" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf5" suid="surf_uid4" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="42320.9" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="0.0" is_locked="false" />
+			<variable name="x" value="-4478.72" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="12050.37" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="-55" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+	</geometry>
+	<environment>
+		<material model_type="air" name="" is_substitute="0" is_thermal="false" temp="20.0" scale_thermal="false" is_visible="true" store_hidden="false" press="1.0" model_sub_type="vd">
+			<variable name="c_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="c_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="c_z" value="1.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="index" value="1.5" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="abbe_e" value="50.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="index_error" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="abbe_error" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</material>
+	</environment>
+	<sequences>
+		<sequence name="prime_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid2" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="prime_focus" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="extended" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="0.1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="1000" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid1" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="secondary" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+				<surf id="receiver" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid2" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="plane" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="3500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="10" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid4" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="SURFACE 1" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="plane" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="3500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="10" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="17" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="true" store_hidden="false" sequid="seq_uid3" is_ghost="false">
+			<surfaces is_visible="true" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="ax0" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid214" hide_to="false" hide_from="false" />
+				<surf id="so0" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid200" hide_to="false" hide_from="false" />
+				<surf id="so1" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid201" hide_to="false" hide_from="false" />
+				<surf id="so2" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid202" hide_to="false" hide_from="false" />
+				<surf id="so3" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid203" hide_to="false" hide_from="false" />
+				<surf id="so4" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid204" hide_to="false" hide_from="false" />
+				<surf id="so5" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid205" hide_to="false" hide_from="false" />
+				<surf id="so6" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid206" hide_to="false" hide_from="false" />
+				<surf id="so7" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid207" hide_to="false" hide_from="false" />
+				<surf id="so8" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid208" hide_to="false" hide_from="false" />
+				<surf id="so9" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid209" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="bo0" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid210" hide_to="false" hide_from="false" />
+				<surf id="bo1" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid211" hide_to="false" hide_from="false" />
+				<surf id="bo2" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid212" hide_to="false" hide_from="false" />
+				<surf id="bo3" surf="1" action="transmission" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid213" hide_to="false" hide_from="false" />
+				<surf id="secondary" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+				<surf id="receiver" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid2" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="extended" ap_scale_x="1.0" is_visible="true" store_hidden="false">
+				<variable name="aperture_val" value="0.1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="1000" rays_2="10" footprinttype="plane" is_visible="true" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="true" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="true" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="true" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="true" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="true" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="true" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+	</sequences>
+	<slider columns="4" />
+	<multiconfig columns="24" current="0">
+		<param id="rot_az" tcuid="tr_1">
+			<variable name="val_0" value="128.812744044287" is_active="0" min="0.0" max="100.0" bound_type="1" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="rot_el" tcuid="tr_2">
+			<variable name="val_0" value="36.0564092932909" is_active="0" min="-180" max="180.0" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="posx" tcuid="tr_3">
+			<variable name="val_0" value="22300.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="posy" tcuid="tr_4">
+			<variable name="val_0" value="-60000" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c3" tcuid="tr_5">
+			<variable name="val_0" value="-7.95905857643392e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c4" tcuid="tr_6">
+			<variable name="val_0" value="-9.09727087059752e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c5" tcuid="tr_7">
+			<variable name="val_0" value="-7.25119704359473e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<single_param id="solaz" tcuid="tr_8">
+			<variable name="val" value="300.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="solze" tcuid="tr_9">
+			<variable name="val" value="50.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="sec_height" tcuid="tr_10">
+			<variable name="val" value="27000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="rec_offset" tcuid="tr_11">
+			<variable name="val" value="-20000" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="axi_angle" tcuid="tr_12">
+			<variable name="val" value="20.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so0_x" tcuid="tr_200">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so0_y" tcuid="tr_201">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so0_az" tcuid="tr_202">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so0_el" tcuid="tr_203">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so1_x" tcuid="tr_204">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so1_y" tcuid="tr_205">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so1_az" tcuid="tr_206">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so1_el" tcuid="tr_207">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so2_x" tcuid="tr_208">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so2_y" tcuid="tr_209">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so2_az" tcuid="tr_210">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so2_el" tcuid="tr_211">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so3_x" tcuid="tr_212">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so3_y" tcuid="tr_213">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so3_az" tcuid="tr_214">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so3_el" tcuid="tr_215">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so4_x" tcuid="tr_216">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so4_y" tcuid="tr_217">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so4_az" tcuid="tr_218">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so4_el" tcuid="tr_219">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so5_x" tcuid="tr_220">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so5_y" tcuid="tr_221">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so5_az" tcuid="tr_222">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so5_el" tcuid="tr_223">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so6_x" tcuid="tr_224">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so6_y" tcuid="tr_225">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so6_az" tcuid="tr_226">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so6_el" tcuid="tr_227">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so7_x" tcuid="tr_228">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so7_y" tcuid="tr_229">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so7_az" tcuid="tr_230">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so7_el" tcuid="tr_231">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so8_x" tcuid="tr_232">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so8_y" tcuid="tr_233">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so8_az" tcuid="tr_234">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so8_el" tcuid="tr_235">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so9_x" tcuid="tr_236">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so9_y" tcuid="tr_237">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so9_az" tcuid="tr_238">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="so9_el" tcuid="tr_239">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo0_x" tcuid="tr_240">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo0_y" tcuid="tr_241">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo0_az" tcuid="tr_242">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo0_el" tcuid="tr_243">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo1_x" tcuid="tr_244">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo1_y" tcuid="tr_245">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo1_az" tcuid="tr_246">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo1_el" tcuid="tr_247">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo2_x" tcuid="tr_248">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo2_y" tcuid="tr_249">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo2_az" tcuid="tr_250">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo2_el" tcuid="tr_251">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo3_x" tcuid="tr_252">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo3_y" tcuid="tr_253">
+			<variable name="val" value="200000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo3_az" tcuid="tr_254">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="bo3_el" tcuid="tr_255">
+			<variable name="val" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="ax0_x" tcuid="tr_256">
+			<variable name="val" value="1000000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="ax0_y" tcuid="tr_257">
+			<variable name="val" value="1000000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+	</multiconfig>
+	<optimization active_merit="0">
+		<merit_function v="2202.3" norm="46.929" auto="false" is_visible="true" store_hidden="false" var_id="0">
+			<variable_container>
+				<optivar />
+				<optivar />
+				<optivar />
+			</variable_container>
+			<sequence_p seq="2" field="All" wave="1" conf="1" is_visible="true" store_hidden="false">
+				<dist disttype="opt" rays="10" rays_2="10" footprinttype="plane" is_visible="true" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<target_container is_visible="true" store_hidden="false">
+					<spotradius_rms contrib="2202.3" v="46.929" t="0.0" weight="1.0" wave="All" field="All" surf="4" ign_col="false" ray_weight="none" is_visible="true" store_hidden="false" />
+				</target_container>
+				<constraint_container is_visible="true" store_hidden="false" />
+			</sequence_p>
+			<target_container is_visible="true" store_hidden="false" />
+			<constraint_container is_visible="true" store_hidden="false" />
+		</merit_function>
+		<opti_settings_global max_sub_cycles="0" save_best="10" is_visible="true" store_hidden="false" />
+		<opti_settings_local solver="lm" vign="rem" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="local" />
+		<opti_settings_local solver="lm" vign="error" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="global" />
+		<opti_settings_local solver="lm" vign="rem" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="ext" />
+		<opti_settings_local solver="lm" vign="error" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="tol" />
+		<opti_settings_ext max_sub_cycles="0" glass_s="fullj" is_visible="true" store_hidden="false" />
+		<opti_settings_plot x_interval_l="10.0" x_interval_g="10.0" y_min_l="0.0" y_min_g="0.0" y_max_l="100.0" y_max_g="100.0" plot_type="global" x_inter_l="last" x_inter_g="all" y_scale_l="auto" y_scale_g="full" axis_type="log" axis_type="log" is_visible="true" store_hidden="true" />
+	</optimization>
+	<substitute_materials />
+	<tolerancing active_merit="0">
+		<element is_visible="true" store_hidden="false" specific="false" />
+		<surf surf="All" nO_lone="true" is_visible="true" store_hidden="false" specific="false" />
+		<assembly is_visible="true" store_hidden="false" specific="false" />
+		<multiconf is_visible="true" store_hidden="false" />
+		<comp_container is_visible="true" store_hidden="false" />
+	</tolerancing>
+	<crypt value="87ebf56d3f9a34ba7a41decd4e096c4d978346e3ae3570300bd134fbdd78d389" />
+</optical_system_definition>

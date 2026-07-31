@@ -1,0 +1,216 @@
+# Beam-down heliostat field analysis configuration.
+# Every constant that used to be hardcoded in main.py / heliostat_geometry.py lives here.
+
+[site]
+latitude = -10.0        # deg, +N
+longitude = -52.0       # deg, +E
+timezone = -3           # hours from UTC
+
+[geometry]
+# Values as stored in heliostat_field_model_mcfg.optx multiconfig block.
+secondary_height_mm = 27000.0
+receiver_offset_mm = -20000.0
+axicon_angle_deg = 20.0          # axicon layout only
+# Two further keys apply only to the shared-focus layouts and are deliberately
+# left unset while [optics] secondary = "axicon". See "Secondary layouts" in
+# README.md. load_config raises naming whichever is missing if you switch layout.
+#
+#   focus_height_mm = 24000.0
+#       REQUIRED by prime_focus and cassegrain. F1 = (0, 0, focus_height_mm) is
+#       the ONE point the whole field aims at and focuses on. The axicon has no
+#       such point -- it derives an aim point per heliostat from radial position.
+#   secondary_rim_height_mm = 20000.0
+#       REQUIRED by cassegrain. Height of the hyperboloid rim, i.e. of the
+#       horizontal circle whose shadow falls on the field. There is no axicon
+#       equivalent: the cone's rim height is derived in shading.SecondaryCone
+#       from vertex height + radius * tan(angle), and duplicating it here would
+#       let the two disagree.
+#
+# THE PRIME-FOCUS RUN, ready to uncomment. Four edits in three sections, and all
+# four matter -- three of them change results silently rather than failing:
+#
+#   [geometry]
+#   focus_height_mm = 47000.0
+#   [optics]
+#   secondary = "prime_focus"
+#   n_mirrors = 1
+#   [trace]
+#   model_file = "models/heliostat_field_prime_focus.optx"
+#
+# 47000 is the symmetric throw. The axicon's receiver sits 20 m BELOW the vertex
+# (secondary_height_mm 27000 + receiver_offset_mm -20000 = 7000); prime focus
+# takes the same 20 m the other way, so the receiver is 27000 + 20000 = 47000 and
+# the light travels the same distance in both layouts. The model file's
+# `pf_height` single_param defaults to 47000.0 to match; PrimeFocusStrategy
+# .global_params writes focus_height_mm into it on every session, so the detector
+# follows this key rather than the file -- but only for THAT model. Pointed at
+# heliostat_field_model_mcfg.optx the write is silently ignored (no such
+# parameter) and the detector stays at its literal 27000 while the heliostats aim
+# at 47000: a perfectly round, perfectly on-axis, wrong-sized spot. Change
+# model_file with focus_height_mm, always.
+#
+# n_mirrors = 1 because prime focus has ONE reflection. load_config only warns;
+# throughput is applied when a run is READ, so leaving it at 2 rescales every
+# existing run in analysis_output/ by 0.9 the moment you change it back.
+#
+# analysis_seq stays 3: the prime-focus model puts sun -> helio_surf ->
+# prime_focus on sequence 3, so the [trace] block below needs no per-layout edit.
+# analysis_surface stays 3 too and is simply ignored -- QuadoaSession asks the
+# sequence where its own detector is (index 2 in that model).
+#
+# Do all of this on the command line instead if a sweep may be reading this file:
+#   beamdown sweep --secondary prime_focus --focus-height-mm 47000 --n-mirrors 1 \
+#                  --model-file models/heliostat_field_prime_focus.optx
+
+[field]
+positions_file = "data/Beam down 645 field x,y centers.xlsx"
+downselect_file = "data/downselected_x,y centers.xlsx"
+n_configs = 25          # heliostats in the figure/3D-view model
+mirror_width_mm = 5000.0    # helio_surf aperture s_x = 2500 (half-width)
+mirror_height_mm = 3000.0   # helio_surf aperture s_y = 1500 (half-width)
+
+[optics]
+secondary = "axicon"        # axicon | prime_focus | cassegrain
+                            #   -> selects beamdown.secondary.<name>
+mirror_reflectivity = 0.9
+n_mirrors = 2               # heliostat + secondary -> 0.9^2 = 0.81
+                            # prime_focus has ONE reflection and wants 1 (0.9);
+                            # axicon and cassegrain have two and want 2.
+                            # load_config only WARNS on a mismatch -- throughput
+                            # is applied when a stored run is READ, so changing
+                            # this rescales what every existing run in
+                            # analysis_output/ reports.
+# flat_mirrors = false      # FLAT heliostats: keep the pointing, drop the
+                            # focusing (forces the Zernike z3/z4/z5 on
+                            # helio_surf to zero, leaving its radius = inf base
+                            # plane). Orthogonal to `secondary` above, so any of
+                            # the three layouts can be run flat or focused --
+                            # that is the fourth comparison axis for the paper.
+                            # A flat 5 m x 3 m mirror at 30-120 m throws a far
+                            # bigger spot than a focused one, so spillage rises
+                            # and collected energy falls sharply; that is the
+                            # measurement, not a fault.
+                            # Left commented out (the default is false) so it is
+                            # chosen per run on the command line --
+                            # `beamdown sweep --flat-mirrors` -- rather than by
+                            # editing this file while a sweep is reading it.
+
+[source]
+# Source disk radius 3500 mm -> pi*3.5^2 = 38.4845 m^2; 38484.5 W => exactly 1000 W/m^2.
+power_w = 38484.5
+aperture_radius_mm = 3500.0
+angular_spread_rad = 0.0024
+
+[dni]
+# DNI is a pure post-processing multiplier on flux -- changing it never requires
+# re-tracing. The ray trace is normalised to exactly 1000 W/m^2 by construction.
+mode = "monthly"            # constant | table | monthly
+constant_w_m2 = 1000.0      # also the fallback for days/months missing from a table
+table_file = "dni_pvgis.csv"
+# Three modes, in increasing order of realism:
+#   constant  flat 1000 W/m2 every hour. Use for pure optical-efficiency work
+#             where you deliberately don't want a weather signal in the way.
+#   table     the TMY's actual value for that one calendar day, hour-interpolated.
+#             Carries real day-to-day weather -- use it when you specifically
+#             want to trace a particular historical-feeling day. The cost: a
+#             TMY splices together twelve different donor years, so any single
+#             day's value is that donor day's weather, not the month's climate.
+#             Measured on this table: 2026-12-21 has day-mean DNI of 51 W/m2
+#             (that December's donor day was overcast) while 2026-07-21 reads
+#             571 W/m2 -- an 11x swing between two "typical" dates, which is
+#             cloud noise, not seasonality.
+#   monthly   the mean diurnal DNI curve for that calendar month, averaged
+#             across every day of the month, hour-interpolated the same way.
+#             THE DEFAULT. An annual energy sweep traces ~12 representative
+#             dates and wants each one to stand in for its whole month; a
+#             single TMY day is a noisy, sometimes wildly unrepresentative
+#             estimator of that (see the 51 vs 571 W/m2 swing above), while the
+#             monthly mean is the whole point of a TMY in the first place. Do
+#             not switch this back to "table" for the default sweep without
+#             re-reading this comment -- it will reintroduce that noise into
+#             the annual energy curve.
+# Fetched PVGIS TMY for this site: 8760 h, 1751.9 kWh/m2/yr. Strongly seasonal --
+# monthly mean DNI runs 332 W/m2 in July (dry) against 127 in December (wet), a
+# 2.6x swing. That fights the optical efficiency, which peaks near the two
+# overhead-sun dates (~20 Feb and ~21 Oct at this latitude), so annual collected
+# energy is NOT a simple sinusoid and should not be forced into one.
+# Populate table_file with:  python -m beamdown fetch-dni --source pvgis
+#   pvgis = EU JRC typical meteorological year (no API key, built for annual energy)
+#   nasa  = NASA POWER hourly for one historical year (no API key)
+
+[trace]
+model_file = "models/heliostat_field_model_mcfg.optx"
+quadoa_folder = "C:/Program Files/Quadoa"
+analysis_seq = 3            # user sequence 4; setRayDistributionCount1 is a literal ray count here
+analysis_surface = 3        # receiver opening
+figure_seq = 1              # user sequence 2; fewer rays, faster 3D draw
+bulk_config = 0             # bulk 645 sweep reuses this single config
+rays_per_heliostat = 120000 # total ray budget for ONE heliostat at ONE instant.
+                            # Override per run with `--rays N` (do not edit this
+                            # file to set up a run: a sweep already running
+                            # re-reads it for its end-of-run report).
+rays_per_trace = 60000      # split into chunks of this many rays: each chunk is
+                            # one setRayDistributionCount1 + traceRays +
+                            # getRayPos round trip, so a heliostat costs
+                            # ceil(rays_per_heliostat / rays_per_trace) calls --
+                            # 2 at these values, not ~100. The chunks sum
+                            # EXACTLY to rays_per_heliostat (an uneven budget
+                            # gets a short final chunk); see config.chunk_plan.
+                            # Override per run with `--rays-per-trace N`.
+                            #   --rays alone      -> this value, clamped to the
+                            #                        new budget
+                            #   both flags        -> both honoured literally;
+                            #                        a chunk larger than the
+                            #                        budget is an error
+                            # `python -m beamdown info` prints the resulting
+                            # call count, as does the GUI's Trace tab.
+#
+# HOW EXPENSIVE ARE RAYS? NOT KNOWN. Nothing in this repository measures it.
+# Until the override-propagation fix, `--rays` never reached the sweep workers
+# (they call load_config themselves, from disk), so EVERY stored run in
+# analysis_output/ traced the 120,000 above no matter what it asked for --
+# including full8, which asked for 60,000, and whose manifest.json still records
+# 60,000 while the trace emitted 120,000. Anything scaling stored counts by that
+# manifest field reads 2x high until it is patched. There is therefore no data
+# on how trace time splits between the fixed per-heliostat cost, the fixed
+# per-traceRays-call cost and the marginal per-ray cost -- and so no basis for
+# claiming rays are expensive OR cheap. scripts/probe_ray_cost.py measures all
+# three separately; run it (never while a sweep holds the licence seat) before
+# choosing a budget on speed grounds. What IS established is the precision side:
+# the per-heliostat Monte-Carlo noise floor is 0.0067 at 120,000 rays, and field
+# power sums 645 independent traces, so field-level relative noise is
+# 0.0067/sqrt(645) = 0.03% here -- well under the 0.46% energy-integration
+# residual.
+n_workers = 1               # Quadoa sessions in parallel; 1-4 (USB HASP key limit).
+                            # Measured: one traceRays call already runs at ~4.0x
+                            # parallelism on this 8-core machine, so a second
+                            # process mostly contends for the same cores rather
+                            # than adding throughput. Raise to 2 only if you have
+                            # more cores AND a free license seat; the pool
+                            # degrades gracefully if a seat is unavailable.
+max_retries = 2             # seat exhaustion is NOT retried (each attempt pops an
+                            # H0038 dialog); this only covers transient failures
+
+[sweep]
+# Monthly dates; the four originally-traced dates (03-20, 06-21, 09-22, 12-21)
+# are kept exactly so results stay comparable with analysis_output/full7.
+dates = ["2026-01-21", "2026-02-20", "2026-03-20", "2026-04-21",
+         "2026-05-21", "2026-06-21", "2026-07-21", "2026-08-21",
+         "2026-09-22", "2026-10-21", "2026-11-21", "2026-12-21"]
+sunrise_margin_min = 10     # start >= this after sunrise, end >= this before sunset
+hour_step = 1.0             # MAXIMUM spacing between samples; the daylight window is
+                             # divided into equal intervals no wider than this, so actual
+                             # spacing is usually a bit less and samples land on the
+                             # true window edges instead of a clock grid
+
+[receiver]
+# Half-width of the stored/binned receiver window. Must comfortably exceed the
+# largest spot: at 8.8 deg sun elevation r90 reaches ~1140 mm, and a 1000 mm
+# window discarded 3.5% of landed rays. Raw rays keep ~0.06 mm precision here,
+# so fine detail is recovered by rebinning rather than by a finer grid.
+window_mm = 2000.0
+grid_size = 128             # -> 31.25 mm bins; use store.rebin() for finer
+
+[storage]
+root = "analysis_output"
+raw_rays = "all"            # all | downselected | none
