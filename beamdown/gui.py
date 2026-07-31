@@ -66,7 +66,7 @@ DNI_MODES = ("constant", "table", "monthly")
 # Anything numeric in the summary works; these are just the useful ones first.
 PREFERRED_COLUMNS = [
     "power_w", "power_in_aperture_w", "aperture_spillage", "transmission",
-    "eta_shade", "eta_block", "cosine_efficiency", "peak_flux_w_m2",
+    "eta_shade", "eta_block", "eta_occlusion", "cosine_efficiency", "peak_flux_w_m2",
     "r90_mm", "r50_mm", "rms_radius_mm", "spillage", "aoi_deg", "rays_landed",
 ]
 
@@ -742,12 +742,17 @@ class BeamdownGUI:
 
     @property
     def _weight_columns(self) -> tuple:
-        """Which summary columns the sweep actually multiplied into the counts."""
-        if not self.traced_occluders:
-            return ("eta_shade", "eta_block")
-        if self.store.manifest.get("traced_secondary", False):
-            return ()          # everything is in the ray path
-        return ("eta_secondary",)
+        """Which summary columns the sweep actually multiplied into the counts.
+
+        Delegated to :func:`beamdown.store.occlusion_weight_columns` so the
+        GUI, ``compare`` and ``cli figures`` cannot drift apart on it -- a
+        union-form run weighted by the old product columns reads as a small
+        uniform deficit, which is indistinguishable from a real result.
+        """
+        from .store import occlusion_weight_columns
+
+        return occlusion_weight_columns(self.store.manifest,
+                                        self.summary.columns)
 
     def _eta_by_row(self, rows) -> np.ndarray:
         """Weights in manifest row order, which is the order the counts are in."""
@@ -997,7 +1002,10 @@ class BeamdownGUI:
         if self.var_shading.get():
             r = self._selected_row()
             if r is not None:
-                eff = float(r.eta_shade) * float(r.eta_block)
+                # Whatever the sweep applied -- product, union, or the
+                # secondary alone -- rather than a second opinion about it.
+                eff = float(np.prod([float(r[c]) for c in self._weight_columns
+                                     if c in r.index] or [1.0]))
         counts = np.asarray(self.store.read_counts(self.key)[row]).astype(np.float64)
         counts = self._regrid(counts, self.key, heliostat_id=self.selected) * eff
         emitted = int(self.store.manifest.get("rays_per_heliostat",
@@ -2939,7 +2947,8 @@ class BeamdownGUI:
         for name in ["heliostat_id", "x_m", "y_m", "radius_m", "-",
                      "solar_az_deg", "solar_el_deg", "-",
                      "rot_az_deg", "rot_el_deg", "aoi_deg", "cosine_efficiency", "-",
-                     "eta_shade", "eta_block", "transmission", "spillage", "-",
+                     "eta_shade", "eta_block", "eta_occlusion",
+                     "transmission", "spillage", "-",
                      "rays_landed", "rays_outside_window", "power_w",
                      "power_in_aperture_w", "aperture_spillage", "-",
                      "peak_flux_w_m2", "centroid_x_mm", "centroid_y_mm",

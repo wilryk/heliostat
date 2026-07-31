@@ -99,6 +99,24 @@ def recompute_weights(run_dir, cfg, apply: bool = False,
     summary = store.summary()
     report = RescaleReport(run=str(store.root))
 
+    # Which form the run's weights are in decides both what is divided out and
+    # what is put back. Rescaling a union-form run with the product form would
+    # not be a correction, it would be the 0.338% bias this project measured
+    # and rejected, applied on purpose.
+    form = store.manifest.get("occlusion_form", "product")
+    if form == "traced" or store.manifest.get("occluders", False):
+        raise ValueError(
+            f"{store.root} traced its occluders as geometry, so its counts -- "
+            f"not its summary -- carry shading and blocking. There is no scalar "
+            f"weight here to rescale; re-run instead."
+        )
+    if form == "union" and "eta_occlusion" not in summary.columns:
+        raise ValueError(
+            f"{store.root}/manifest.json says occlusion_form='union' but the "
+            f"summary has no eta_occlusion column, so the weight it applied "
+            f"cannot be divided back out."
+        )
+
     dup = int(summary.duplicated(subset=["timestep", "heliostat_id"]).sum())
     if dup:
         raise ValueError(
@@ -150,8 +168,16 @@ def recompute_weights(run_dir, cfg, apply: bool = False,
             geoms, aims, az, el, neighbours, secondary=cone
         )
 
-        old_eff = (rows.eta_shade.to_numpy(float) * rows.eta_block.to_numpy(float))
-        new_eff = eta_shade * eta_block
+        if form == "union":
+            eta_union = shading_mod.occlusion_efficiency(
+                geoms, aims, az, el, neighbours, secondary=cone
+            )
+            old_eff = rows.eta_occlusion.to_numpy(float)
+            new_eff = eta_union
+        else:
+            eta_union = None
+            old_eff = (rows.eta_shade.to_numpy(float) * rows.eta_block.to_numpy(float))
+            new_eff = eta_shade * eta_block
         # A timestep with the sun down has zero weight both before and after;
         # dividing would turn a legitimate zero into a nan.
         ratio = np.where(old_eff > 0, new_eff / np.where(old_eff > 0, old_eff, 1.0), 0.0)
@@ -175,6 +201,8 @@ def recompute_weights(run_dir, cfg, apply: bool = False,
         updated.loc[idx, "eta_block"] = eta_block
         updated.loc[idx, "eta_secondary"] = eta_secondary
         updated.loc[idx, "shading_blocking_efficiency"] = new_eff
+        if eta_union is not None:
+            updated.loc[idx, "eta_occlusion"] = eta_union
 
         if progress and (n == 1 or n % 10 == 0 or n == len(keys)):
             progress(f"  [{n}/{len(keys)}] {key}  el {el:5.1f}  "

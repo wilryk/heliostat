@@ -71,6 +71,42 @@ def scale_factor(cfg, rays_emitted: int, dni_w_m2: float = 1000.0) -> float:
     )
 
 
+def occlusion_weight_columns(manifest: dict, columns=()) -> tuple[str, ...]:
+    """Summary columns a reader must multiply into a run's stored ray counts.
+
+    One place decides, because getting it wrong is invisible: every wrong
+    answer is a plausible number a few percent from the right one. Four
+    readers ask (the GUI, ``compare``, ``cli figures`` and ``rescale``), and
+    the answer depends on how the run was written:
+
+    ``occluders`` true
+        Neighbour shading and blocking are already in the ray counts.
+        Only the secondary's shadow is left as a scalar -- and not even that
+        once ``traced_secondary`` says its shadow plane is in the model.
+
+    ``occlusion_form == "union"`` (runs from 2026-07-31 on)
+        The sweep applied :func:`beamdown.shading.occlusion_efficiency` and
+        stored it as ``eta_occlusion``. Reproduce it from that column; it is
+        NOT recoverable from eta_shade and eta_block, whose product deletes
+        the overlap twice.
+
+    absent / ``"product"`` (every earlier run)
+        ``eta_shade x eta_block``, which is what those runs' ``power_w``
+        already carries. Left exactly as it was so old runs keep reading the
+        way they always did.
+
+    ``columns`` is the summary's column index when the caller has it; a
+    union-form run whose summary somehow lacks ``eta_occlusion`` falls back to
+    the product columns rather than silently weighting by nothing.
+    """
+    if manifest.get("occluders", False):
+        return () if manifest.get("traced_secondary", False) else ("eta_secondary",)
+    if manifest.get("occlusion_form", "product") == "union":
+        if not len(columns) or "eta_occlusion" in columns:
+            return ("eta_occlusion",)
+    return ("eta_shade", "eta_block")
+
+
 class RunStore:
     """Reader/writer for a sweep output directory."""
 

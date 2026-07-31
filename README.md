@@ -661,6 +661,19 @@ exactly the reason the totals agree. Through focus they need not. **Any
 through-focus work must trace occlusion** — this vet does not license scalars
 there, and it makes no claim about that regime.
 
+**What the sweep does now (owner decision, 2026-07-31).** A sweep run without
+`--occluders` applies the **union** form: `shading.occlusion_efficiency`, stored
+per row as `eta_occlusion` and recorded in the manifest as
+`"occlusion_form": "union"`. Every run written before that date used the product
+form and has no `occlusion_form` key, which readers must take to mean
+`"product"` — the two are different numbers from the same geometry, and the
+overlap is not recoverable from `eta_shade` and `eta_block` after the fact.
+`store.occlusion_weight_columns` is the single place that turns a manifest into
+the columns a reader must multiply into the stored counts; the GUI, `compare`,
+`figures` and `rescale` all ask it rather than deciding for themselves.
+`--occluders` runs are untouched by any of this: their neighbours are in the ray
+path and only the secondary stays a scalar (`"occlusion_form": "traced"`).
+
 The GUI's **"Export with shading + blocking geometry"** button
 (`build_occluder_model.build_from_slot_model`) writes the selected heliostat
 and timestep into a copy of that same traced model, with its occluder slots

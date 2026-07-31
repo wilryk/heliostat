@@ -98,7 +98,10 @@ def main() -> int:
     step_rows = summary[summary.timestep == key]
     power_from_rows = step_rows.power_w.sum()
     landed = step_rows.rays_landed.sum()
-    eff = (step_rows.eta_shade * step_rows.eta_block).to_numpy()
+    from beamdown.store import occlusion_weight_columns
+    eff = np.ones(len(step_rows))
+    for col in occlusion_weight_columns(reader.manifest, step_rows.columns):
+        eff = eff * step_rows[col].to_numpy(float)
     power_from_counts = float(
         (np.asarray(counts).sum(axis=(1, 2)) * eff).sum()
         * scale_factor(cfg, cfg.trace.rays_per_heliostat)

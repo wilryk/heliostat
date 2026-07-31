@@ -238,12 +238,22 @@ def cmd_figures(args) -> int:
     outdir.mkdir(parents=True, exist_ok=True)
     print(f"{len(keys)} timesteps, {len(summary)} summary rows -> {outdir}")
 
-    # Per-timestep shading x blocking, applied as weights on the stored counts.
+    # Per-timestep occlusion, applied as weights on the stored counts. Which
+    # columns hold it is the run's business, not this command's -- see
+    # store.occlusion_weight_columns.
     eff = {}
     if not args.no_shading:
+        import numpy as np
+
+        from .store import occlusion_weight_columns
+
+        cols = occlusion_weight_columns(store.manifest, summary.columns)
         for key in keys:
             sub = summary[summary.timestep == key].sort_values("heliostat_id")
-            eff[key] = (sub.eta_shade * sub.eta_block).to_numpy()
+            w = np.ones(len(sub))
+            for col in cols:
+                w = w * sub[col].to_numpy(float)
+            eff[key] = w
 
     provider = D.load_dni_provider(cfg)
 

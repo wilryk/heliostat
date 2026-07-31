@@ -308,6 +308,21 @@ def run_sweep(
         # aperture radius and looks deceptively like a real result.
         "occluders": bool(occluders),
         "traced_secondary": bool(traced_secondary),
+        # How the scalar occlusion path combined shading and blocking, so a
+        # reader can tell a union-form run from the older product-form ones
+        # WITHOUT re-deriving it from the columns (it cannot be re-derived:
+        # eta_shade x eta_block and the union are different numbers computed
+        # from the same geometry). Values:
+        #   "union"    eff = shading.occlusion_efficiency  -> column eta_occlusion
+        #   "product"  eff = eta_shade x eta_block         -> the historical form
+        #   "traced"   occluders in the ray path; only the secondary is scalar
+        # An ABSENT key means "product": every run written before 2026-07-31
+        # used that form, so readers must default to it rather than assume the
+        # current one. The union form is the vetted one -- the product double-
+        # charges patches that are both shaded and blocked, which measured
+        # 0.338% low on annual aperture energy against a traced run, against
+        # 0.114% for the union (README, "Scalar vs traced occlusion").
+        "occlusion_form": "traced" if occluders else "union",
         # What this run was told to use instead of config.toml. config.toml is
         # copied into the run directory too, but that copy is the file as it was,
         # not as the command line amended it -- and the file legitimately changes
@@ -353,6 +368,9 @@ def run_sweep(
     if occluders:
         progress(f"  occluders traced as geometry; secondary shadow "
                  f"{'traced too' if traced_secondary else 'still a scalar'}")
+    else:
+        progress("  occlusion applied as scalars, UNION form "
+                 "(shading.occlusion_efficiency, not eta_shade x eta_block)")
 
     pool = None
     if workers > 1:
@@ -383,6 +401,18 @@ def run_sweep(
             solutions = [all_solutions[k] for k in take]
             eta_shade, eta_block = all_shade[take], all_block[take]
             eta_secondary = all_sec[take]
+
+            # The weight the scalar path actually applies. Computed only when
+            # there are no traced occluders, both because an occluder run has
+            # no use for it and because it costs a second analytic pass over
+            # the field -- which would otherwise change nothing about a traced
+            # run except its runtime and its summary schema.
+            eta_occlusion = None
+            if not occluders:
+                eta_occlusion = shading_mod.occlusion_efficiency(
+                    geoms, aims, step.solar_az_deg, step.solar_el_deg, neighbours,
+                    secondary=secondary,
+                )[take]
 
             plans = None
             if occluders:
@@ -418,7 +448,8 @@ def run_sweep(
                 _assemble(cfg, fld, step, results, solutions,
                           eta_shade, eta_block, eta_secondary, keep_raw,
                           occluders=occluders,
-                          traced_secondary=traced_secondary)
+                          traced_secondary=traced_secondary,
+                          eta_occlusion=eta_occlusion)
             )
 
             dt = time.time() - t0
@@ -440,9 +471,25 @@ def run_sweep(
 
 def _assemble(cfg, fld, step, results, solutions, eta_shade, eta_block,
               eta_secondary, keep_raw, occluders: bool = False,
-              traced_secondary: bool = False):
-    """Turn worker output into a :class:`TimestepResult`."""
+              traced_secondary: bool = False, eta_occlusion=None):
+    """Turn worker output into a :class:`TimestepResult`.
+
+    ``eta_occlusion`` is :func:`beamdown.shading.occlusion_efficiency` -- the
+    lit-and-unblocked fraction of each aperture, shaded and blocked patches
+    unioned rather than multiplied. It is the weight the scalar path applies,
+    and it is stored as its own column so a reader can reproduce the weight
+    exactly instead of recombining eta_shade and eta_block (which cannot
+    reproduce it: the overlap is not recoverable from the two factors).
+    Required unless ``occluders``.
+    """
     from . import metrics as metrics_mod
+
+    if not occluders and eta_occlusion is None:
+        raise ValueError(
+            "the scalar occlusion path needs eta_occlusion "
+            "(shading.occlusion_efficiency). Falling back to eta_shade x "
+            "eta_block here would silently reinstate the product form."
+        )
 
     order = {int(hid): k for k, (hid, *_rest) in enumerate(results)}
     grid = cfg.receiver.grid_size
@@ -471,10 +518,20 @@ def _assemble(cfg, fld, step, results, solutions, eta_shade, eta_block,
         # approximation for it alone, because its shadow is a hard-edged 30 m
         # disc: a heliostat is essentially all in it or all out, unlike a
         # neighbour's shadow, which carves a patch out of one mirror.
+        #
+        # Without them the whole loss is a scalar, and the two channels are
+        # UNIONED, not multiplied: a patch of mirror lying in a neighbour's
+        # shadow reflects nothing onward, so it cannot also be blocked, and
+        # eta_shade x eta_block deletes it twice. Measured against a traced
+        # run the product form reads 0.338% low on annual aperture energy and
+        # 3.28% low in the 5-15 deg elevation band; the union form, the same
+        # analytic geometry, lands at 0.114% and 0.63%. Runs written before
+        # 2026-07-31 used the product form and say so by having no
+        # "occlusion_form" key in their manifest.
         if occluders:
             eff = 1.0 if traced_secondary else float(eta_secondary[i])
         else:
-            eff = float(eta_shade[i] * eta_block[i])
+            eff = float(eta_occlusion[i])
         xy = quant.astype(np.float32) * (cfg.receiver.window_mm / INT16_MAX)
         row = metrics_mod.spot_metrics(xy, emitted, cfg, efficiency=eff)
         row.update({
@@ -500,6 +557,11 @@ def _assemble(cfg, fld, step, results, solutions, eta_shade, eta_block,
             "eta_block": float(eta_block[i]),
             "rays_outside_window": int(n_outside),
         })
+        # Only where it means something. An occluder run has its neighbours in
+        # the ray path, so there is no union weight to record, and writing a
+        # column of ones there would invite a reader to apply it.
+        if eta_occlusion is not None:
+            row["eta_occlusion"] = float(eta_occlusion[i])
         rows.append(row)
 
     lead = ["date", "hour", "timestep", "heliostat_id", "x_m", "y_m", "radius_m"]

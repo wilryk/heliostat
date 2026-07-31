@@ -85,16 +85,16 @@ def _radial_mask(cfg, radii_mm):
     return radial_masks(cfg, radii_mm)
 
 
-def _weights(summary, key, ids, use_shading, notes=None, traced_occluders=False,
-             traced_secondary=False):
+def _weights(summary, key, ids, use_shading, notes=None, manifest=None):
     """Per-heliostat efficiency weights, aligned to the manifest's row order.
 
-    ``traced_occluders`` says the run put its neighbours in the ray path, so
-    shading and blocking are already in the stored counts and must not be
-    applied again. Only the secondary's shadow stays a scalar there, because it
-    is not in the traced sequence. Getting this wrong charges the same loss
-    twice and shows up as a uniform deficit at every aperture radius -- which
-    reads exactly like a real optical result and is not one.
+    Which columns carry the weight is :func:`beamdown.store.occlusion_weight_columns`'s
+    call, from ``manifest``: a run that put its neighbours in the ray path has
+    shading and blocking in the counts already and must not have them applied
+    again, and a scalar run applies either the union column or the older
+    eta_shade x eta_block. Getting this wrong charges the same loss twice and
+    shows up as a uniform deficit at every aperture radius -- which reads
+    exactly like a real optical result and is not one.
 
     The summary is appended to per timestep, so a resumed -- or accidentally
     duplicated -- run can hold more than one row for the same
@@ -112,12 +112,9 @@ def _weights(summary, key, ids, use_shading, notes=None, traced_occluders=False,
     rows = rows.drop_duplicates(subset="heliostat_id", keep="last").set_index("heliostat_id")
     w = np.ones(len(ids))
     if use_shading:
-        if traced_occluders:
-            # Nothing left to apply once the secondary is in the path too.
-            cols = () if traced_secondary else ("eta_secondary",)
-        else:
-            cols = ("eta_shade", "eta_block")
-        for col in cols:
+        from .store import occlusion_weight_columns
+
+        for col in occlusion_weight_columns(manifest or {}, rows.columns):
             if col in rows.columns:
                 w = w * rows[col].reindex(ids).fillna(1.0).to_numpy()
     return w
@@ -158,9 +155,7 @@ def compare_runs(store_a, store_b, cfg, label_a="A", label_b="B",
                                        ("b", store_b, take_b, sum_b)):
             counts = np.asarray(store.read_counts(key))[take].astype(np.float64)
             w = _weights(summ, key, ids, use_shading, notes,
-                         traced_occluders=bool(store.manifest.get("occluders", False)),
-                         traced_secondary=bool(store.manifest.get("traced_secondary",
-                                                                  False)))
+                         manifest=store.manifest)
             rays = int(store.manifest.get("rays_per_heliostat",
                                           cfg.trace.rays_per_heliostat))
             watts = scale_factor(cfg, rays, dni_w_m2)

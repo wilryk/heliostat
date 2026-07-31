@@ -4,8 +4,12 @@ DNI never affects the ray trace. The Quadoa source is fixed at 38484.5 W over a
 38.4845 m^2 aperture -- exactly 1000 W/m^2 -- so real DNI enters as a scale
 factor at analysis time:
 
-    flux = count * W_per_ray * throughput * eta_shade * eta_block
+    flux = count * W_per_ray * throughput * eta_occlusion
            * (dni / 1000) / bin_area
+
+``eta_occlusion`` is the union of shading and blocking (``shading.occlusion_
+efficiency``); runs written before 2026-07-31 carry ``eta_shade * eta_block``
+there instead and say so by having no ``occlusion_form`` key in their manifest.
 
 That means the DNI model can be swapped, refined, or replaced with measured data
 at any point **without re-tracing anything**.

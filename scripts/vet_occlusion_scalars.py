@@ -75,14 +75,25 @@ def resolve_run(name: str) -> Path:
 
 
 def weight_mode(manifest: dict) -> str:
-    """Which scalar the sweep already folded into this run's power_w."""
+    """Which scalar the sweep already folded into this run's power_w.
+
+    The three vetted runs (full5/6/7) predate the union form and carry no
+    ``occlusion_form`` key, which is exactly what "product" means. A scalar run
+    written from 2026-07-31 on says ``"union"`` and carries ``eta_occlusion``;
+    it is the *outcome* of this vet, so measuring it against a traced run again
+    is a legitimate thing to want, and the script must not quietly re-weight it
+    with the form it replaced.
+    """
     if not bool(manifest.get("occluders", False)):
+        if manifest.get("occlusion_form", "product") == "union":
+            return "union"                    # shading.occlusion_efficiency
         return "product"                      # eta_shade * eta_block
     return "none" if bool(manifest.get("traced_secondary", False)) else "secondary"
 
 
 MODE_TEXT = {
     "product": "eta_shade * eta_block   (all occlusion analytic)",
+    "union": "eta_occlusion           (shade and block unioned)",
     "secondary": "eta_secondary           (neighbours traced, axicon scalar)",
     "none": "1.0                     (everything traced)",
 }
@@ -91,6 +102,8 @@ MODE_TEXT = {
 def weights_from(mode: str, rows: pd.DataFrame) -> np.ndarray:
     if mode == "product":
         return (rows.eta_shade * rows.eta_block).to_numpy(float)
+    if mode == "union":
+        return rows.eta_occlusion.to_numpy(float)
     if mode == "secondary":
         return rows.eta_secondary.to_numpy(float)
     return np.ones(len(rows))
@@ -748,7 +761,12 @@ def main(argv=None) -> int:
     key_index = {k: i for i, k in enumerate(keys)}
 
     etas = None
-    if not args.skip_union and scalar.mode != "product":
+    if not args.skip_union and scalar.mode == "union":
+        # Nothing to convert: this run was written in the union form already,
+        # so the "union variant" and the run itself are the same number.
+        log(f"  union variant skipped: {scalar.name} was written in the union "
+            f"form (power_w carries eta_occlusion) -- it IS the variant.")
+    elif not args.skip_union and scalar.mode != "product":
         # The union variant re-weights the scalar run's *clean* rays. If the run
         # named as the scalar path already traced its occluders, its rays are not
         # clean and re-weighting them would charge the same loss twice.
