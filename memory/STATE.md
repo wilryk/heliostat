@@ -1,17 +1,16 @@
-# STATE — beamdown (rewritten 2026-07-30 ~10:50, session end)
+# STATE — beamdown (rewritten 2026-07-31, relocation finished)
 
 ## Git / location — READ THIS FIRST
 **Home is C:\gitlab\heliostats (this tree). Start all sessions here.**
 Remote: https://github.com/wilryk/heliostat.git (branch main). Push from
 this tree ONLY.
-The OLD tree at C:\gitlab is a live husk: the full8 sweep is still running
-there (its open handles made a physical move impossible today) and
-`analysis_output/` here is a junction into C:\gitlab\analysis_output, so
-all run data reads/writes work from this tree transparently.
-After full8 finishes (~19:00 2026-07-30): (1) delete the junction and
-physically move C:\gitlab\analysis_output into this tree; (2) delete the
-old tree's code files and .git (everything tracked lives here; the vetting
-script is already ported and committed).
+RELOCATION COMPLETE (2026-07-31): junction deleted, `analysis_output/`
+(34 GB) and `legacy/old_output/` (2.2 GB) physically moved into this tree;
+12/12 + test_gui PASS re-verified afterwards. ONE leftover: deleting the
+old tree's stale code + .git at C:\gitlab was blocked by the permission
+classifier — owner must run the rm themselves (everything tracked lives
+here, verified identical incl. vet_occlusion_scalars.py; the only real
+diffs were the intended path fixups). Until then, do NOT work in C:\gitlab.
 
 ## What this project is
 Python package `beamdown/` drives Quadoa Optical CAD to trace a 645-heliostat
@@ -20,11 +19,14 @@ geometries: 3 secondary layouts (axicon / prime_focus / cassegrain) x
 (focused / flat heliostats). DNI from PVGIS TMY, monthly-mean default.
 
 ## Running RIGHT NOW
-- **full8 sweep** (12 dates, 161 timesteps, axicon, occluders traced, 120k
-  rays): resumed after a power-event kill at 93/161; now ~97/161, ETA ~19:00.
-  Holds the ONLY Quadoa licence seat. Log: `analysis_output/full8.log`,
-  lock: `analysis_output/.full8.lock`. On completion it auto-runs
-  `scripts/report_energy.py` (annual MWh, sine fit, declination pairs).
+- Nothing. Licence seat FREE. full8 FINISHED 2026-07-31 04:49:
+  **10,152.2 MWh annual, optical eta 0.5990** (axicon, occluders traced,
+  120k rays, 161 timesteps). Declination pairs agree to ±0.0002; worst
+  daily residual 1.50% (Jun 21); sine fit R²=0.878, peak doy 201.
+  NOTE: full8 (traced) is 0.83% BELOW full7's 10,237.0 (scalar) — opposite
+  sign to the vetting verdict (scalar 0.338% low), but full7 used the OLD
+  time grid; not directly comparable. Owner should sanity-check before
+  citing either as the axicon reference.
 - **Vetting RESOLVED** (scalar vs traced occlusion, full5/6/7 ladder):
   scalar path is 0.338% ± 0.004% LOW on annual aperture energy — one-sided,
   fully explained (eta_shade × eta_block double-charges overlapping losses;
@@ -62,19 +64,20 @@ DNI, optical eta 0.6040.
   measured opposite below 120k) — extended probe queued, needs seat.
 
 ## Queued work (in order)
-1. full8 finishes → read report, patch nothing (manifest already corrected),
-   run `scripts/verify_prime_focus_model.py` (needs seat, minutes).
-2. Launch axicon-flat sweep (no new model needed) — first of the 5.
-3. Owner builds cassegrain hyperboloid in Quadoa manually (numbers above);
+1. Owner deletes stale code + .git in C:\gitlab (classifier blocked agent).
+2. Run `scripts/verify_prime_focus_model.py` (seat now free, minutes).
+3. Decide union vs product scalar-occlusion form (see Open decisions), then
+   launch axicon-flat sweep (no new model needed) — first of the 5.
+4. Owner builds cassegrain hyperboloid in Quadoa manually (numbers above);
    prime-focus model ALREADY BUILT: `models/heliostat_field_prime_focus.optx`.
-4. Prime-focus and cassegrain sweeps (x focused/flat).
-5. Cross-geometry comparison report + paper figures.
-6. AFTER full8 + agents go quiet: relocate the whole tree (with .git) from
-   C:\gitlab to C:\gitlab\heliostats (owner wants C:\gitlab as a multi-repo
-   workspace). Same-volume rename, instant; blocked only by open handles.
-   Fix REPO= in scripts/resume_full8.sh + run_full8.sh afterwards. Remote
-   already wired and pushed; coordinator's private memory dir is keyed to
-   the OLD path (C--gitlab) — expect it not to auto-load after the move.
+5. Prime-focus and cassegrain sweeps (x focused/flat).
+6. Cross-geometry comparison report + paper figures.
+
+## Delegation policy (owner, 2026-07-31)
+Spawn subagents with EXPLICIT model. Haiku/Sonnet: data pulls, searches,
+fact checks. Opus: code review, verification, ordinary implementation.
+Lead (Fable) keeps: audits, hard architecture, complex implementation.
+Lead also owns short/mid/long-term memory continuity across sessions.
 
 ## Traps that bite (details in CLAUDE.md / README)
 - ONE licence seat. Never workers>1, never retry seat failures, never import
