@@ -1,4 +1,10 @@
-# STATE — beamdown (rewritten 2026-07-30 ~10:00)
+# STATE — beamdown (rewritten 2026-07-30 ~10:50, session end)
+
+## Git
+Repo lives at C:\gitlab, initial commit 860d1a9 pushed to
+https://github.com/wilryk/heliostat.git (branch main, tracking). Relocation
+to C:\gitlab\heliostats still pending (see queued work) — until then, start
+sessions in C:\gitlab.
 
 ## What this project is
 Python package `beamdown/` drives Quadoa Optical CAD to trace a 645-heliostat
@@ -14,8 +20,13 @@ geometries: 3 secondary layouts (axicon / prime_focus / cassegrain) x
   `scripts/report_energy.py` (annual MWh, sine fit, declination pairs).
 - **Vetting analysis** (subagent, no licence): scalar vs traced occlusion from
   the full5/full6/full7 ladder → verdict decides whether remaining sweeps skip
-  `--occluders`. Output will land in `analysis_output/vet_occlusion/` +
-  `scripts/vet_occlusion_scalars.py` + README section.
+  `--occluders`. AS OF THIS SNAPSHOT: 7 CSVs already in
+  `analysis_output/vet_occlusion/` (per_timestep, per_heliostat, annual_energy,
+  morphology, aperture_radius_sweep, daily_energy, analytic_etas), script at
+  `scripts/vet_occlusion_scalars.py` (~1150 lines, UNCOMMITTED — was still
+  being written at commit time). Next session: run the script to print the
+  verdict block, read its README section if it landed, THEN commit it. Do not
+  skip --occluders on new sweeps until the verdict is read.
 
 ## Suite status
 `python -m tests.verify --no-quadoa` → 12/12. `python tests/test_gui.py
@@ -52,7 +63,9 @@ DNI, optical eta 0.6040.
 6. AFTER full8 + agents go quiet: relocate the whole tree (with .git) from
    C:\gitlab to C:\gitlab\heliostats (owner wants C:\gitlab as a multi-repo
    workspace). Same-volume rename, instant; blocked only by open handles.
-   Then add the owner's GitLab remote (URL not yet provided) and push.
+   Fix REPO= in scripts/resume_full8.sh + run_full8.sh afterwards. Remote
+   already wired and pushed; coordinator's private memory dir is keyed to
+   the OLD path (C--gitlab) — expect it not to auto-load after the move.
 
 ## Traps that bite (details in CLAUDE.md / README)
 - ONE licence seat. Never workers>1, never retry seat failures, never import

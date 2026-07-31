@@ -2,7 +2,8 @@
 
 Attempted: keep full8 alive; make the 3x2 geometry comparison runnable.
 
-Landed (all verified, 12/12 + test_gui PASS; first commit today — no ids yet):
+Landed (all verified, 12/12 + test_gui PASS; initial commit 860d1a9, pushed
+to github.com/wilryk/heliostat):
 - **--rays override bug**: CLI ray count NEVER reached sweep workers (they
   reload config.toml); every historical run traced 120k rays regardless.
   Fixed (workers replay full override dict, recorded in manifest). Every
@@ -33,6 +34,7 @@ override bug); 14 h full8 estimate (real: ~24 h).
 
 Loose ends: vetting agent in flight (scalar vs traced verdict); extended
 chunk probe >120k queued (owner's contrary prior experience); cassegrain
-.optx is owner's manual build; repo initialized at C:\gitlab but owner wants
-it moved to C:\gitlab\heliostats once full8's open handles allow — then wire
-up their GitLab remote (URL pending) and push.
+.optx is owner's manual build; tree moves to C:\gitlab\heliostats once
+full8's open handles allow (remote already pushed);
+scripts/vet_occlusion_scalars.py uncommitted pending its verdict; full8
+finishes ~19:00 and auto-reports annual energy into its log.
