@@ -1,124 +1,77 @@
-# STATE — beamdown (rewritten 2026-07-31, relocation finished)
+# STATE — beamdown (rewritten 2026-07-31 ~07:20, session end)
 
-## Git / location — READ THIS FIRST
-**Home is C:\gitlab\heliostats (this tree). Start all sessions here.**
-Remote: https://github.com/wilryk/heliostat.git (branch main). Push from
-this tree ONLY.
-RELOCATION COMPLETE (2026-07-31): junction deleted, `analysis_output/`
-(34 GB) and `legacy/old_output/` (2.2 GB) physically moved into this tree;
-12/12 + test_gui PASS re-verified afterwards. ONE leftover: deleting the
-old tree's stale code + .git at C:\gitlab was blocked by the permission
-classifier — owner must run the rm themselves (everything tracked lives
-here, verified identical incl. vet_occlusion_scalars.py; the only real
-diffs were the intended path fixups). Until then, do NOT work in C:\gitlab.
+## Git / location
+**Home is C:\gitlab\heliostats. Start all sessions here.** Remote:
+https://github.com/wilryk/heliostat.git (main, pushed through 704aa08).
+Relocation FINISHED 2026-07-31: analysis_output (34 GB) + legacy/old_output
+physically here, junction gone, baseline re-verified. One leftover: OWNER
+must hand-delete the stale code + .git in C:\gitlab (classifier blocks
+agents). Do not work in C:\gitlab.
 
 ## What this project is
-Python package `beamdown/` drives Quadoa Optical CAD to trace a 645-heliostat
-beam-down solar field for a paper comparing annualized collected energy across
-geometries: 3 secondary layouts (axicon / prime_focus / cassegrain) x
-(focused / flat heliostats). DNI from PVGIS TMY, monthly-mean default.
+Package `beamdown/` drives Quadoa to trace a 645-heliostat beam-down field
+for a paper: annualized energy across (axicon / prime_focus / cassegrain)
+x (focused / flat heliostats). DNI: PVGIS TMY monthly-mean, 1,751.9 kWh/m2.
 
-## Running RIGHT NOW
-- **axicon_flat sweep** (launched 2026-07-31 07:03): 645 heliostats x 94
-  timesteps, 7 distinct declinations (explicit --dates; NOTE --suggest-dates
-  ADDS to config's 12, it does not replace — first launch went out with 16
-  dates/214 steps and was killed 2 min in, partial run deleted). Flat
-  mirrors, NO occluders, scalar occlusion in UNION form (landed e4f0e0f).
-  Holds the ONLY seat. Log: analysis_output/axicon_flat.log, lock:
-  .axicon_flat.lock. Auto-runs report_energy.py on completion.
-- Prime-focus model VERIFIED 10/10 (verify_prime_focus_model.py): pf_height
-  reaches trace, seq 3 literal ray semantics, centroids on-axis, flat
-  zeroing works. Prime-focus sweeps unblocked.
-- full8 FINISHED 2026-07-31 04:49:
-  **10,152.2 MWh annual, eta 0.5990 — THE axicon reference** (occluders
-  traced, 120k rays, 12 dates, 161 steps). full7's 10,237.0 is RETIRED as
-  reference (stays as read-path regression pin for test_gui): both runs
-  are TRACED (scalar run in the vetting ladder is full5, NOT full7); the
-  -0.829% decomposes EXACTLY as grid correction -1.175% + date coverage
-  +0.351%. Old grid never sampled below el 8.78° and extrapolated 14.4%
-  of annual hours high; corrected grid reaches el 1.75°, extrap 1.5%.
-  Matched sun positions agree to -0.15% (noise floor). Resume boundary
-  clean (4/5 declination pairs straddle it, ≤0.023%). Vetting verdict
-  untouched (it compared full5 vs full7 aperture energy). Residual watch
-  items: -0.15% matched-sun offset consistently negative (noise-level);
-  slot overflow at el<5° adds ~+0.01% annual to full8.
-- **Vetting RESOLVED** (scalar vs traced occlusion, full5/6/7 ladder):
-  scalar path is 0.338% ± 0.004% LOW on annual aperture energy — one-sided,
-  fully explained (eta_shade × eta_block double-charges overlapping losses;
-  union form via shading.occlusion_efficiency cuts it to 0.114%). Secondary
-  channel exact in aggregate (+0.002%). OWNER-APPROVED CONSEQUENCE: remaining
-  comparison sweeps run WITHOUT --occluders, scalars in post. Scalars remain
-  invalid for: low-sun instantaneous power (few % low), heavily-occluded
-  single mirrors (+5.4%), and ALL through-focus/spot-shape work (traced only).
-  Full verdict: analysis_output/vet_occlusion/verdict.txt; README section
-  "Scalar vs traced occlusion"; rerunnable scripts/vet_occlusion_scalars.py.
+## Running RIGHT NOW (as of session end 2026-07-31 ~07:20)
+- **axicon_flat sweep**: 645 x 94 steps, 7 explicit declination dates, flat
+  mirrors, scalar occlusion (UNION form). Holds the ONLY seat. Log:
+  analysis_output/axicon_flat.log, lock .axicon_flat.lock.
+- **Chain watcher** (scripts/run_after_axicon_flat.sh): on clean "done",
+  launches prime_focus then prime_focus_flat automatically. Both scripts
+  committed and parameter-checked (F1 47000, n_mirrors 1, verified .optx).
+- BOTH are background children of the 2026-07-31 session. If a later
+  session finds a lock but NO live python: stale lock — remove the lock
+  dir, relaunch the same run script (sweeps RESUME from stored steps),
+  rerun the chain watcher.
+
+## Reference numbers
+- **Axicon reference: full8 = 10,152.2 MWh, eta 0.5990** (traced occluders,
+  corrected grid, 120k rays homogeneous, resume boundary verified clean).
+- full7 = 10,237.0 MWh is the read-path REGRESSION PIN only: its old grid
+  never sampled below el 8.78°, extrapolated 14.4% of hours, read high.
+  The -0.83% delta = grid -1.175% + dates +0.351%, exact (journal 07-31).
+- Vetting (full5 scalar vs full7 traced, aperture energy): product form
+  0.338% low; UNION form 0.114%. Scalars invalid for low-sun instantaneous
+  power, single heavily-occluded mirrors, and all spot-shape work.
+
+## Landed 2026-07-31 (all pushed)
+- UNION occlusion form (e4f0e0f): sweep scalar branch uses
+  shading.occlusion_efficiency; manifest key occlusion_form (absent =
+  historical product); ALL readers via store.occlusion_weight_columns.
+  Bonus fix: GUI heliostat-flux double-charged occlusion on traced runs.
+- Prime-focus model VERIFIED 10/10 (scripts/verify_prime_focus_model.py).
+- Harness: .claude/agents fetcher(haiku)/implementer(opus)/reviewer(opus)
+  — load at session START; permission allowlist .claude/settings.json.
 
 ## Suite status
-`python -m tests.verify --no-quadoa` → 12/12. `python tests/test_gui.py
-analysis_output/full7` → PASS. Axicon numbers bit-identical through all
-refactors (verify stage 3b). Reference: full7 annual = 10,237.0 MWh @ monthly
-DNI, optical eta 0.6040.
-
-## Decisions made (owner)
-- 120,000 rays everywhere — SNR on single-heliostat irradiance plots drives it.
-- One traceRays call per heliostat (measured: 646 ms vs 698 ms for 2 calls;
-  chunking is pure loss at this scale — `scripts/probe_ray_cost.py`).
-- Comparison sweeps trace 7 distinct declinations, not 12 dates (5 dates are
-  declination duplicates; interpolation surface identical).
-- Prime focus receiver at z = 47,000 mm (H = 20 m ABOVE axicon vertex,
-  mirroring receiver 20 m below). Cassegrain aims at its own F1 = 38,986 mm.
-- Cassegrain design final: rim 15 m radius @ z 32,460; K = -5.8789,
-  |R_v| = 32,181.3 mm, vertex z = 29,589 (`scripts/design_cassegrain.py`).
-
-## Open decisions
-- DECIDED 2026-07-31: UNION form for scalar occlusion (owner: "avoid the
-  double counting"). Landed e4f0e0f: sweep.py scalar branch uses
-  shading.occlusion_efficiency, manifest records occlusion_form (absent =
-  historical product), ALL readers delegate to
-  store.occlusion_weight_columns. Bonus fix: gui._heliostat_flux was
-  double-charging occlusion on traced runs. All remaining sweeps scalar
-  (owner reconfirmed).
-- Chunk-size crossover above 120k rays (owner saw small-chunks-win last year;
-  measured opposite below 120k) — extended probe queued, needs seat.
+`python -m tests.verify --no-quadoa` → 12/12; `python tests/test_gui.py
+analysis_output/full7` → PASS (must stay so after any change). Axicon
+solve() bit-identical (stage 3b).
 
 ## Queued work (in order)
-1. AUTOMATED (chain watcher scripts/run_after_axicon_flat.sh, running in
-   the 2026-07-31 session's background): axicon_flat → prime_focus →
-   prime_focus_flat, back to back, chaining ONLY on clean "done" in each
-   log. CAVEAT: background processes are tied to that session's shell. If
-   a new session finds a lock but NO live python: stale lock from a killed
-   shell — remove the lock dir by hand, relaunch the same run script (the
-   sweep RESUMES from stored timesteps), then rerun the chain watcher.
-2. Owner deletes stale code + .git in C:\gitlab (classifier blocked agent;
-   command is in the 2026-07-31 chat).
-3. Owner builds cassegrain hyperboloid in Quadoa manually (numbers above),
-   then cassegrain focused/flat sweeps (scripts not yet written — clone
-   run_prime_focus*.sh: --secondary cassegrain, --focus-height-mm 38986,
-   --rim-height-mm 32460, --n-mirrors 2, owner's --model-file).
-4. Cross-geometry comparison report + paper figures (5 of 6 runs will
-   exist once the chain drains: full8=axicon-focused, axicon_flat,
-   prime_focus, prime_focus_flat).
+1. Chain drains: axicon_flat → prime_focus → prime_focus_flat (automated,
+   see Running). Then read the three report_energy outputs.
+2. Owner deletes stale C:\gitlab code + .git.
+3. Owner builds cassegrain hyperboloid .optx by hand (rim z 32,460 r
+   15,000; F1 38,986; K -5.8789; |R_v| 32,181.3; vertex z 29,589 —
+   scripts/design_cassegrain.py). Then cassegrain focused/flat sweeps:
+   clone run_prime_focus*.sh with --secondary cassegrain,
+   --focus-height-mm 38986, --rim-height-mm 32460, --n-mirrors 2.
+4. Cross-geometry comparison report + paper figures.
+5. Chunk-size probe >120k rays (owner's contrary prior) — needs seat.
 
 ## Delegation policy (owner, 2026-07-31)
 Spawn subagents with EXPLICIT model. Haiku/Sonnet: data pulls, searches,
-fact checks. Opus: code review, verification, ordinary implementation.
-Lead (Fable) keeps: audits, hard architecture, complex implementation.
-Lead also owns short/mid/long-term memory continuity across sessions.
+fact checks. Opus: review, verification, ordinary implementation. Lead
+(Fable): audits, architecture, complex implementation, memory continuity.
 
 ## Traps that bite (details in CLAUDE.md / README)
-- ONE licence seat. Never workers>1, never retry seat failures, never import
-  quadoa while a `.lock` dir exists under analysis_output/.
-- Running sweeps re-read config.toml at report time — never edit its VALUES
-  while a sweep runs.
-- `--rays` historically never reached workers (fixed 2026-07-30); every run
-  before full8's resume traced 120k regardless of what was asked.
-- `setRayDistributionCount1` is literal on sequences 0/3, grid-density on 1/2.
-- Coincident heliostats 144=192 and 241=289 double-count ~0.3% of field power.
-- `--suggest-dates N` ADDS N declination-spaced dates to config.toml's 12
-  (must_include, cli.py) — it does NOT replace them. Comparison sweeps use
-  explicit `--dates` (the 7 distinct declinations, see run_axicon_flat.sh).
-
-## Recently landed (this session, pre-commit)
-Energy tab + DNI-mode selector; corrected time grid; pluggable secondaries;
-flat-mirror option; Trace tab (GUI sweep launcher); ray-cost probe + measured
-cost model; prime-focus model file; cassegrain design script.
+- ONE licence seat: never workers>1, never retry seat failures, never
+  import quadoa while any analysis_output/.*.lock exists.
+- Never edit config.toml VALUES while a sweep runs (report re-reads it).
+- `--suggest-dates N` ADDS to config's 12 dates (does NOT replace) — use
+  explicit --dates; first axicon_flat launch died to this, 2 min in.
+- `setRayDistributionCount1`: literal on sequences 0/3, grid-density 1/2.
+- Coincident heliostats 144=192, 241=289: ~0.3% double-count, deliberate.
+- cfg.optics.throughput applies at READ time; manifests record the truth.
