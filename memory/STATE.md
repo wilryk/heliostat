@@ -1,10 +1,19 @@
 # STATE — beamdown (rewritten 2026-07-30 ~10:50, session end)
 
-## Git
-Repo lives at C:\gitlab, initial commit 860d1a9 pushed to
-https://github.com/wilryk/heliostat.git (branch main, tracking). Relocation
-to C:\gitlab\heliostats still pending (see queued work) — until then, start
-sessions in C:\gitlab.
+## Git / location — READ THIS FIRST
+**Home is C:\gitlab\heliostats (this tree). Start all sessions here.**
+Remote: https://github.com/wilryk/heliostat.git (branch main). Push from
+this tree ONLY.
+The OLD tree at C:\gitlab is a live husk: the full8 sweep is still running
+there (its open handles made a physical move impossible today) and
+`analysis_output/` here is a junction into C:\gitlab\analysis_output, so
+all run data reads/writes work from this tree transparently.
+After full8 finishes (~19:00 2026-07-30): (1) commit the finished
+scripts/vet_occlusion_scalars.py FROM THE OLD TREE (copy it here first —
+it is uncommitted there); (2) delete the junction, physically move
+C:\gitlab\analysis_output into this tree, recreate nothing; (3) delete the
+old tree's code files and .git (KEEP nothing — everything tracked is here;
+the only unique files there are analysis_output and the vetting script).
 
 ## What this project is
 Python package `beamdown/` drives Quadoa Optical CAD to trace a 645-heliostat

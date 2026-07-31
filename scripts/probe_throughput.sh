@@ -11,7 +11,7 @@
 # carry over to the real run.
 
 set -u
-cd "C:/gitlab" || exit 1
+cd "C:/gitlab/heliostats" || exit 1
 LOG="analysis_output/probe_throughput.log"
 : > "$LOG"
 

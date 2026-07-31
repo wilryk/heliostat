@@ -8,7 +8,7 @@
 
 set -u
 
-REPO="C:/gitlab"
+REPO="C:/gitlab/heliostats"
 OUT="analysis_output/full5"
 LOG="$REPO/analysis_output/full5_launch.log"
 LOCKDIR="$REPO/analysis_output/.full5.lock"

@@ -1,7 +1,7 @@
 #%%
 from quadoa_tools.QuadoaIrradiance import QuadoaIrradiance
 
-ModelFolder = "C:/gitlab"
+ModelFolder = "C:/gitlab/heliostats"  # updated for repo relocation
 filename = "heliostat_field_model_mcfg.optx"
 
 # Initialize the class

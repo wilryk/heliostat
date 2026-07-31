@@ -32,7 +32,7 @@
 
 set -u
 
-REPO="C:/gitlab"
+REPO="C:/gitlab/heliostats"
 OUT="analysis_output/full8"
 LOG="$REPO/analysis_output/full8.log"
 LOCKDIR="$REPO/analysis_output/.full8.lock"

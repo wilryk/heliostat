@@ -11,7 +11,7 @@
 
 set -u
 
-REPO="C:/gitlab"
+REPO="C:/gitlab/heliostats"
 OUT="analysis_output/full6"
 LOG="$REPO/analysis_output/full6.log"
 LOCKDIR="$REPO/analysis_output/.full6.lock"
