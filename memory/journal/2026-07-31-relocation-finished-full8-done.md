@@ -29,3 +29,13 @@ memory continuity.
 
 Loose ends: verify_prime_focus_model.py ready to run (seat free); union vs
 product occlusion form still undecided — blocks axicon-flat launch.
+
+Late addition — full8 vs full7 ADJUDICATED (Opus subagent investigation):
+my "opposite sign to vetting" flag was a FALSE ALARM built on a wrong
+premise — full7 is traced (occluders:true), the scalar rung is full5.
+The -0.83% is exactly grid correction (-1.175%) + 12-vs-4 dates (+0.351%);
+old grid missed el<8.78° and extrapolated 14.4% of hours high. Matched-sun
+eta agreement -0.15% (noise). full8 10,152.2 MWh adopted as axicon
+reference; full7 retired to regression pin (CLAUDE.md updated). Also
+landed: .claude/agents (fetcher=haiku/implementer=opus/reviewer=opus) +
+starter permission allowlist; delegation ladder in private memory.

@@ -20,13 +20,18 @@ geometries: 3 secondary layouts (axicon / prime_focus / cassegrain) x
 
 ## Running RIGHT NOW
 - Nothing. Licence seat FREE. full8 FINISHED 2026-07-31 04:49:
-  **10,152.2 MWh annual, optical eta 0.5990** (axicon, occluders traced,
-  120k rays, 161 timesteps). Declination pairs agree to ±0.0002; worst
-  daily residual 1.50% (Jun 21); sine fit R²=0.878, peak doy 201.
-  NOTE: full8 (traced) is 0.83% BELOW full7's 10,237.0 (scalar) — opposite
-  sign to the vetting verdict (scalar 0.338% low), but full7 used the OLD
-  time grid; not directly comparable. Owner should sanity-check before
-  citing either as the axicon reference.
+  **10,152.2 MWh annual, eta 0.5990 — THE axicon reference** (occluders
+  traced, 120k rays, 12 dates, 161 steps). full7's 10,237.0 is RETIRED as
+  reference (stays as read-path regression pin for test_gui): both runs
+  are TRACED (scalar run in the vetting ladder is full5, NOT full7); the
+  -0.829% decomposes EXACTLY as grid correction -1.175% + date coverage
+  +0.351%. Old grid never sampled below el 8.78° and extrapolated 14.4%
+  of annual hours high; corrected grid reaches el 1.75°, extrap 1.5%.
+  Matched sun positions agree to -0.15% (noise floor). Resume boundary
+  clean (4/5 declination pairs straddle it, ≤0.023%). Vetting verdict
+  untouched (it compared full5 vs full7 aperture energy). Residual watch
+  items: -0.15% matched-sun offset consistently negative (noise-level);
+  slot overflow at el<5° adds ~+0.01% annual to full8.
 - **Vetting RESOLVED** (scalar vs traced occlusion, full5/6/7 ladder):
   scalar path is 0.338% ± 0.004% LOW on annual aperture energy — one-sided,
   fully explained (eta_shade × eta_block double-charges overlapping losses;

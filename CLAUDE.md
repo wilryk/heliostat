@@ -35,4 +35,6 @@ lines), add one journal entry (≤40 lines), and commit. Full protocol:
 `python -m tests.verify --no-quadoa` must stay 12/12 and
 `python tests/test_gui.py analysis_output/full7` must stay PASS after any
 change. Axicon solve() is regression-pinned bit-identical (stage 3b);
-full7 @ monthly DNI = 10,237.0 MWh is the reference annual number.
+full7 @ monthly DNI = 10,237.0 MWh is the read-path regression pin.
+The axicon REFERENCE annual is full8 = 10,152.2 MWh (corrected time grid;
+full7's old grid never sampled below 8.78° elevation and read high).
