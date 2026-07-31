@@ -13,17 +13,18 @@ Package `beamdown/` drives Quadoa to trace a 645-heliostat beam-down field
 for a paper: annualized energy across (axicon / prime_focus / cassegrain)
 x (focused / flat heliostats). DNI: PVGIS TMY monthly-mean, 1,751.9 kWh/m2.
 
-## Running RIGHT NOW (as of session end 2026-07-31 ~07:20)
-- **axicon_flat sweep**: 645 x 94 steps, 7 explicit declination dates, flat
-  mirrors, scalar occlusion (UNION form). Holds the ONLY seat. Log:
-  analysis_output/axicon_flat.log, lock .axicon_flat.lock.
-- **Chain watcher** (scripts/run_after_axicon_flat.sh): on clean "done",
-  launches prime_focus then prime_focus_flat automatically. Both scripts
-  committed and parameter-checked (F1 47000, n_mirrors 1, verified .optx).
-- BOTH are background children of the 2026-07-31 session. If a later
-  session finds a lock but NO live python: stale lock — remove the lock
-  dir, relaunch the same run script (sweeps RESUME from stored steps),
-  rerun the chain watcher.
+## Running RIGHT NOW (as of 2026-07-31 ~16:00)
+- **prime_focus sweep** (launched 15:56 by the chain watcher): 645 x 94
+  steps, focused, F1 47000, n_mirrors 1, verified .optx, union scalars —
+  header overrides all confirmed. Holds the ONLY seat. Expect ~9 h (ends
+  ~01:00 Aug 1); then the watcher auto-launches **prime_focus_flat**.
+- **axicon_flat FINISHED 15:55 clean: 3,781.2 MWh, eta 0.2231** (37% of
+  focused full8 — spillage, as designed). Worst residual 0.79%, R² 0.88,
+  extrap 1.5%. Report at end of analysis_output/axicon_flat.log.
+- Sweep + watcher are background children of the 2026-07-31 session. If a
+  later session finds a lock but NO live python: stale lock — remove the
+  lock dir, relaunch the same run script (sweeps RESUME from stored
+  steps), rerun scripts/run_after_axicon_flat.sh (idempotent).
 
 ## Reference numbers
 - **Axicon reference: full8 = 10,152.2 MWh, eta 0.5990** (traced occluders,
