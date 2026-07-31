@@ -9,4 +9,9 @@ legacy/old_output/
 __pycache__/
 *.pyc
 nohup.out
-.claude/
+
+# Personal Claude Code state stays local; shared harness (agent defs,
+# project permission allowlist) is checked in.
+.claude/*
+!.claude/agents/
+!.claude/settings.json
