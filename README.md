@@ -577,6 +577,90 @@ shading is most severe. Then tracing the axicon as geometry too (`full7` vs
 result is the point — it means the closed-form circle shadow already used in
 the scalar model was exact, not merely close.
 
+### Scalar vs traced occlusion: what was vetted
+
+Tracing occlusion roughly doubles a sweep's cost, so the question is whether the
+remaining comparison sweeps can skip it and apply the scalars in post.
+`scripts/vet_occlusion_scalars.py` answers that from the three runs already on
+disk — no license, nothing re-traced — and writes CSVs, three figures and a
+verdict block to `analysis_output/vet_occlusion/`:
+
+```bash
+python scripts/vet_occlusion_scalars.py                       # full5 vs full6 vs full7
+python scripts/vet_occlusion_scalars.py --runs full6 full7    # one channel at a time
+```
+
+The three runs share one 44-step grid, 645 heliostats and 120,000 rays each, and
+their stored analytic `eta_shade`/`eta_block`/`eta_secondary` agree to 0.0 — so
+`full5→full6` isolates the neighbour channel and `full6→full7` the secondary's.
+The script re-derives from each manifest which efficiency that run's `power_w`
+already carries and checks it on all 28,380 rows before comparing anything
+(`power_w == rays_landed × scale_factor × eff`, agreement 1e-16): `eta_shade ×
+eta_block` for `full5`, `eta_secondary` alone for `full6`, exactly 1 for `full7`.
+Getting that wrong would move the answer by the very quantity being measured.
+
+**Annualised collected energy inside the 700 mm aperture (monthly DNI) is 0.338%
+lower on the scalar path than on the fully traced one** — 9,755.2 against
+9,788.2 MWh, with a Monte-Carlo uncertainty of 0.004% on the annual total. The
+field total (no aperture) differs by 0.287%. Per traced date the trapezoid
+integral differs by 0.22–0.42%. The difference is one-sided and it is not noise:
+125σ on the aggregate, against a per-heliostat noise model validated against the
+data itself (predicted spread 0.69%, observed 0.71% on heliostats nothing
+occludes).
+
+**The cause is the scalar path's product form, not its geometry.** `eta_shade ×
+eta_block` charges twice for any patch of mirror that is both shaded and blocked;
+`shading.occlusion_efficiency` unions them instead, which is why it exists.
+Re-weighting the *same* analytic model in union form cuts the annual gap from
+0.338% to 0.114%, and the low-sun bands from +3.28% to +0.63% (el 5–15°) and
++1.25% to +0.20% (el 15–30°). Above 30° the two forms coincide, because nothing
+overlaps there. The analytic geometry's own validation is separate and does not
+involve a ray trace: `shading.self_check` compares the sampled shading fraction
+against a closed-form rectangle overlap (0.3491 vs 0.3502, 0.3540 vs 0.3536,
+0.4117 vs 0.4107).
+
+Where the gap sits: +3.28% below 15° elevation, +0.09% above 30°; +7.98% on
+heliostats with `eta_shade × eta_block < 0.5` (1.9% of field power), −0.01% on
+the 39% of power collected by heliostats nothing occludes. The neighbour channel
+is all of it (`full5→full6` +0.484% of aperture power, reproducing the +0.48%
+recorded above; the +2.79% "below 20°" recorded above is the unweighted mean of
+the per-timestep deltas — power-weighted over the same timesteps it is +2.68%);
+the secondary channel is +0.002% ± 0.004%. But *in aggregate*
+is the operative phrase for the secondary: on the 1.18% of rows whose mirror the
+axicon's shadow rim actually crosses, the one-number-per-heliostat scalar
+disagrees with the trace by −30% to +16% (5–95%, sd 17%, against a 1.1% noise
+floor). Those mirrors carry 0.75% of the field's power, so it cancels to +0.003%
+of the total — and shows up instead as per-timestep scatter, which is what the
+±0.18% recorded above actually was.
+
+**Slot overflow is the one regime where the traced path is the approximation.**
+The three compared runs never overflow — their lowest sun is 8.78° and their
+sweep logs carry no overflow warning. The 12-date grid in `config.toml` does, at
+its lowest step at each end of the day: the probe (analytic, no tracing —
+`occlusion_efficiency` over all neighbours against the same union over only the
+neighbours that fit the 10+4 slots) puts 250 of 645 heliostats over the limit at
+el = 1.75° and the traced model 0.80% high there. Nothing overflows by el =
+13.93°. Elevations below 5° carry 0.868% of modelled annual energy, so that
+regime is worth ~0.007% of the year.
+
+**The distribution is the caveat.** A scalar multiplies the whole spot; traced
+occlusion deletes particular rays, so it changes the spot's shape. At the
+receiver that change is real but small, and it is measured here against a null
+made of heliostats the analytic model says nothing occludes (there the two runs
+differ only by their independent rays). Median per occluded heliostat at el =
+8.78°: Δr50 −2.49 mm, Δr90 −6.18 mm, Δrms −3.68 mm, aperture fraction +0.257 pp,
+against nulls of +0.20, −0.12, +0.28 and −0.078. At el = 78.6° it is Δr90
+−0.48 mm and +0.012 pp. Field-summed over 645 heliostats the worst aperture
+fraction shift is 0.414 pp, so scalar-vs-traced barely moves spillage.
+
+That last number is a receiver-plane result and nothing more. These runs store
+rays **at the receiver only**, so no plane between the secondary and the receiver
+was measured, and none can be inferred from them: at the receiver 645
+heliostats' occluded edges land in different places and average out, which is
+exactly the reason the totals agree. Through focus they need not. **Any
+through-focus work must trace occlusion** — this vet does not license scalars
+there, and it makes no claim about that regime.
+
 The GUI's **"Export with shading + blocking geometry"** button
 (`build_occluder_model.build_from_slot_model`) writes the selected heliostat
 and timestep into a copy of that same traced model, with its occluder slots

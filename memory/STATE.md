@@ -8,12 +8,10 @@ The OLD tree at C:\gitlab is a live husk: the full8 sweep is still running
 there (its open handles made a physical move impossible today) and
 `analysis_output/` here is a junction into C:\gitlab\analysis_output, so
 all run data reads/writes work from this tree transparently.
-After full8 finishes (~19:00 2026-07-30): (1) commit the finished
-scripts/vet_occlusion_scalars.py FROM THE OLD TREE (copy it here first —
-it is uncommitted there); (2) delete the junction, physically move
-C:\gitlab\analysis_output into this tree, recreate nothing; (3) delete the
-old tree's code files and .git (KEEP nothing — everything tracked is here;
-the only unique files there are analysis_output and the vetting script).
+After full8 finishes (~19:00 2026-07-30): (1) delete the junction and
+physically move C:\gitlab\analysis_output into this tree; (2) delete the
+old tree's code files and .git (everything tracked lives here; the vetting
+script is already ported and committed).
 
 ## What this project is
 Python package `beamdown/` drives Quadoa Optical CAD to trace a 645-heliostat
@@ -27,15 +25,16 @@ geometries: 3 secondary layouts (axicon / prime_focus / cassegrain) x
   Holds the ONLY Quadoa licence seat. Log: `analysis_output/full8.log`,
   lock: `analysis_output/.full8.lock`. On completion it auto-runs
   `scripts/report_energy.py` (annual MWh, sine fit, declination pairs).
-- **Vetting analysis** (subagent, no licence): scalar vs traced occlusion from
-  the full5/full6/full7 ladder → verdict decides whether remaining sweeps skip
-  `--occluders`. AS OF THIS SNAPSHOT: 7 CSVs already in
-  `analysis_output/vet_occlusion/` (per_timestep, per_heliostat, annual_energy,
-  morphology, aperture_radius_sweep, daily_energy, analytic_etas), script at
-  `scripts/vet_occlusion_scalars.py` (~1150 lines, UNCOMMITTED — was still
-  being written at commit time). Next session: run the script to print the
-  verdict block, read its README section if it landed, THEN commit it. Do not
-  skip --occluders on new sweeps until the verdict is read.
+- **Vetting RESOLVED** (scalar vs traced occlusion, full5/6/7 ladder):
+  scalar path is 0.338% ± 0.004% LOW on annual aperture energy — one-sided,
+  fully explained (eta_shade × eta_block double-charges overlapping losses;
+  union form via shading.occlusion_efficiency cuts it to 0.114%). Secondary
+  channel exact in aggregate (+0.002%). OWNER-APPROVED CONSEQUENCE: remaining
+  comparison sweeps run WITHOUT --occluders, scalars in post. Scalars remain
+  invalid for: low-sun instantaneous power (few % low), heavily-occluded
+  single mirrors (+5.4%), and ALL through-focus/spot-shape work (traced only).
+  Full verdict: analysis_output/vet_occlusion/verdict.txt; README section
+  "Scalar vs traced occlusion"; rerunnable scripts/vet_occlusion_scalars.py.
 
 ## Suite status
 `python -m tests.verify --no-quadoa` → 12/12. `python tests/test_gui.py
@@ -55,9 +54,10 @@ DNI, optical eta 0.6040.
   |R_v| = 32,181.3 mm, vertex z = 29,589 (`scripts/design_cassegrain.py`).
 
 ## Open decisions
-- Scalar-vs-traced occlusion verdict (vetting agent, in flight). If clean:
-  5 remaining sweeps run scalar at 7 declinations (~est. cheaper; measure
-  no-occluder trace speed when seat frees).
+- Product vs UNION form for scalar occlusion in the 5 remaining sweeps: union
+  (shading.occlusion_efficiency) halves the known 0.34% low bias to 0.11%.
+  Small change to how eff is baked in sweep.py's scalar branch — decide
+  before launching axicon-flat. Recommendation: union.
 - Chunk-size crossover above 120k rays (owner saw small-chunks-win last year;
   measured opposite below 120k) — extended probe queued, needs seat.
 

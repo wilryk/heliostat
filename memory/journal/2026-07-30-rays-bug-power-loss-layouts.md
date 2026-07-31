@@ -34,7 +34,11 @@ override bug); 14 h full8 estimate (real: ~24 h).
 
 Loose ends: vetting agent in flight (scalar vs traced verdict); extended
 chunk probe >120k queued (owner's contrary prior experience); cassegrain
-.optx is owner's manual build; tree moves to C:\gitlab\heliostats once
-full8's open handles allow (remote already pushed);
-scripts/vet_occlusion_scalars.py uncommitted pending its verdict; full8
-finishes ~19:00 and auto-reports annual energy into its log.
+.optx is owner's manual build; full8 finishes ~19:00, auto-reports to log.
+
+Late addition: VETTING VERDICT landed — scalar 0.338% low (double-charged
+shade x block overlap; union form 0.114%), secondary scalar exact in
+aggregate, traced-only for through-focus. Remaining sweeps go scalar.
+Also: repo relocated to C:\gitlab\heliostats (clone + analysis_output
+junction; old tree is a husk hosting full8 until done). Open: bake union
+vs product form into the 5 comparison sweeps — decide before axicon-flat.
