@@ -27,15 +27,23 @@ leads high-judgment) — recorded in STATE and in coordinator private memory
 (delegation-model-tiers.md). Lead is responsible for short/mid/long-term
 memory continuity.
 
-Loose ends: verify_prime_focus_model.py ready to run (seat free); union vs
-product occlusion form still undecided — blocks axicon-flat launch.
+Rest of session (compressed): full8-vs-full7 ADJUDICATED — my "opposite
+sign to vetting" flag was a false alarm on a wrong premise (full7 is
+TRACED; the scalar rung is full5). The -0.83% = grid correction (-1.175%)
++ 12-vs-4 dates (+0.351%), exact; matched-sun eta agrees to -0.15%
+(noise). full8 10,152.2 MWh = axicon reference; full7 = regression pin
+(CLAUDE.md updated). UNION occlusion form landed (e4f0e0f, owner
+decision): manifest occlusion_form key, all readers via
+store.occlusion_weight_columns; bonus fix — GUI single-heliostat flux
+double-charged occlusion on traced runs. Prime-focus model VERIFIED
+10/10. axicon_flat LAUNCHED (94 steps, 7 explicit declinations; first
+launch used --suggest-dates which ADDS to config's dates — 214 steps,
+killed at 2 min, partial deleted, trap recorded). Chain watcher armed:
+axicon_flat → prime_focus → prime_focus_flat (scripts written, chains
+only on clean "done"). Harness landed: .claude/agents fetcher=haiku /
+implementer=opus / reviewer=opus + permission allowlist; delegation
+ladder + memory stewardship in coordinator private memory.
 
-Late addition — full8 vs full7 ADJUDICATED (Opus subagent investigation):
-my "opposite sign to vetting" flag was a FALSE ALARM built on a wrong
-premise — full7 is traced (occluders:true), the scalar rung is full5.
-The -0.83% is exactly grid correction (-1.175%) + 12-vs-4 dates (+0.351%);
-old grid missed el<8.78° and extrapolated 14.4% of hours high. Matched-sun
-eta agreement -0.15% (noise). full8 10,152.2 MWh adopted as axicon
-reference; full7 retired to regression pin (CLAUDE.md updated). Also
-landed: .claude/agents (fetcher=haiku/implementer=opus/reviewer=opus) +
-starter permission allowlist; delegation ladder in private memory.
+Loose ends: chain is session-tied (recovery steps in STATE queued work
+item 1); owner still to delete old C:\gitlab code+.git; cassegrain model
+is owner's manual build; chunk-size probe still queued behind the seat.
