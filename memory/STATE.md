@@ -58,7 +58,16 @@ solve() bit-identical (stage 3b).
    scripts/design_cassegrain.py). Then cassegrain focused/flat sweeps:
    clone run_prime_focus*.sh with --secondary cassegrain,
    --focus-height-mm 38986, --rim-height-mm 32460, --n-mirrors 2.
-4. Cross-geometry comparison report + paper figures.
+4. Cross-geometry comparison report + paper figures. Figure models: 25cfg
+   MYSTERY SOLVED 2026-07-31 — shipped figure_model_25cfg.optx was never
+   populated (configs 1-24 all zeros; old model_edit.build_figure_model
+   needed a seat for its second half, which never ran). NEW licence-free
+   generator: `python scripts/build_figure_model.py --date D --hour H
+   [--flat] --check` (25 configs = the 25 downselected heliostats at one
+   instant; sun is a single_param, CANNOT vary per config). Once the seat
+   frees: run `python scripts/verify_figure_model.py <built.optx>` (it
+   refuses under any lock). Old model_edit.build_figure_model is dead
+   code — removal offered as a spawned task chip.
 5. Chunk-size probe >120k rays (owner's contrary prior) — needs seat.
 
 ## Delegation policy (owner, 2026-07-31)

@@ -44,6 +44,13 @@ only on clean "done"). Harness landed: .claude/agents fetcher=haiku /
 implementer=opus / reviewer=opus + permission allowlist; delegation
 ladder + memory stewardship in coordinator private memory.
 
+Late: 25cfg figure model solved (Opus agent) — shipped .optx never
+populated (generator's licence half never ran; configs 1-24 zeros). New
+scripts/build_figure_model.py (licence-free, exact round-trip 12/12) +
+deferred verify_figure_model.py, committed c43c27e. Sun is single_param:
+one instant per model, by construction.
+
 Loose ends: chain is session-tied (recovery steps in STATE queued work
 item 1); owner still to delete old C:\gitlab code+.git; cassegrain model
-is owner's manual build; chunk-size probe still queued behind the seat.
+is owner's manual build; chunk-size probe still queued behind the seat;
+verify_figure_model.py to run when the seat frees.
