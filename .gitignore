@@ -15,3 +15,6 @@ nohup.out
 .claude/*
 !.claude/agents/
 !.claude/settings.json
+
+# Quadoa GUI window-state sidecars: per-user, regenerated on open, never needed
+*.uix
