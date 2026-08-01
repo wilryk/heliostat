@@ -353,6 +353,104 @@ def check_cli_overrides() -> bool:
           and over_combo["optics"]["flat_mirrors"] is True
           and over_combo["optics"]["secondary"] == "prime_focus")
 
+    # -- --fixed-shapes: the same trip, for the frozen mirror figure -----------
+    #
+    # Same bug class as --flat-mirrors above, with a worse failure mode: a table
+    # path that stopped at the driver would leave every worker re-figuring its
+    # mirror at every timestep while the console, the manifest and the run name
+    # all said the figure was fixed -- and the answer would land between the two
+    # cases, which is exactly where a real fixed-figure answer belongs.
+    import tempfile
+
+    from beamdown.secondary import FixedShapeError, FixedShapeHeliostats
+
+    tmp_shapes = Path(tempfile.mkdtemp()) / "fixed_shapes_fixture.csv"
+    # Two heliostats is enough: one to hit, one to prove the lookup is by
+    # position and not by row order.
+    tmp_shapes.write_text(
+        "# fixture: not a real figure, just three distinguishable numbers\n"
+        "heliostat,x_mm,y_mm,c3,c4,c5\n"
+        "0,45000.0,12000.0,1.5e-05,-8.5e-06,3.1e-07\n"
+        "1,-30000.0,70000.0,2.0e-05,-1.0e-05,4.0e-07\n"
+    )
+
+    fixed_args = ap.parse_args(["sweep", "--fixed-shapes", str(tmp_shapes)])
+    cfg_fixed, over_fixed = CLI._load_with_overrides(fixed_args)
+    check("--fixed-shapes lands on the driver's config",
+          cfg_fixed.optics.fixed_shapes == str(tmp_shapes))
+    check("and is in the override map the workers replay",
+          over_fixed["optics"]["fixed_shapes"] == str(tmp_shapes))
+    check("no figure flag puts nothing in the override map",
+          "fixed_shapes" not in over_quiet.get("optics", {}))
+
+    worker_fixed = load_config(str(REPO / "config.toml"))
+    check("a worker's own config.toml has no fixed figure before the replay",
+          worker_fixed.optics.fixed_shapes == "")
+    apply_overrides(worker_fixed, over_fixed)
+    fixed_strategy = get_strategy(worker_fixed)
+    hit = fixed_strategy.solve(45000.0, 12000.0, 135.0, 35.0, worker_fixed.geometry)
+    focused_hit = get_strategy(worker_fixed.optics.secondary).solve(
+        45000.0, 12000.0, 135.0, 35.0, worker_fixed.geometry)
+    check("the strategy a worker builds from that config carries the table",
+          isinstance(fixed_strategy, FixedShapeHeliostats)
+          and (hit.c3, hit.c4, hit.c5) == (1.5e-05, -8.5e-06, 3.1e-07))
+    # The whole point of the option: pointing is the focused answer, bit for bit,
+    # and only the figure moved.
+    check("pointing still tracks exactly as the focused solve does",
+          (hit.rot_az_deg, hit.rot_el_deg) == (focused_hit.rot_az_deg,
+                                               focused_hit.rot_el_deg)
+          and (hit.c3, hit.c4, hit.c5) != (focused_hit.c3, focused_hit.c4,
+                                           focused_hit.c5))
+
+    missing = False
+    try:
+        fixed_strategy.solve(1.0, 2.0, 135.0, 35.0, worker_fixed.geometry)
+    except FixedShapeError:
+        missing = True
+    check("a heliostat absent from the table is a hard error, not a fall-back",
+          missing)
+
+    # Both flags write c3/c4/c5, so argparse refuses the pair rather than
+    # letting one of them silently do nothing.
+    try:
+        ap.parse_args(["sweep", "--flat-mirrors", "--fixed-shapes", str(tmp_shapes)])
+        exclusive = False
+    except SystemExit:
+        exclusive = True
+    check("--flat-mirrors and --fixed-shapes are mutually exclusive", exclusive)
+    # ...and the config.toml-says-flat case, which argparse cannot see.
+    flat_and_fixed = load_config(str(REPO / "config.toml"))
+    apply_overrides(flat_and_fixed, {"optics": {"flat_mirrors": True,
+                                                "fixed_shapes": str(tmp_shapes)}})
+    try:
+        get_strategy(flat_and_fixed)
+        refused = False
+    except ValueError:
+        refused = True
+    check("a flat config plus a fixed table is refused by get_strategy", refused)
+    # --focused-mirrors is the documented way out of that, so it must compose.
+    both_ok = ap.parse_args(["sweep", "--focused-mirrors",
+                             "--fixed-shapes", str(tmp_shapes)])
+    cfg_both, _ = CLI._load_with_overrides(both_ok)
+    check("--focused-mirrors composes with --fixed-shapes",
+          cfg_both.optics.flat_mirrors is False
+          and isinstance(get_strategy(cfg_both), FixedShapeHeliostats))
+
+    # The manifest key: written only when the run has a fixed figure, so an
+    # ABSENT key keeps meaning "re-figured every timestep" for every run written
+    # before the option existed.
+    from beamdown.store import RunStore
+
+    manifests = {}
+    for label, source in (("fixed", cfg_both), ("plain", cfg_focused)):
+        root = Path(tempfile.mkdtemp()) / label
+        RunStore(root, cfg=source, mode="w").write_manifest()
+        manifests[label] = RunStore(root, cfg=source, mode="r").manifest
+    check("a fixed-figure run records fixed_shapes in its manifest",
+          manifests["fixed"].get("fixed_shapes") == str(tmp_shapes))
+    check("an ordinary run leaves the key out entirely",
+          "fixed_shapes" not in manifests["plain"])
+
     # -- --rays-per-trace: the number of traceRays calls per heliostat ---------
     #
     # This is the flag that controls the ITERATION count, which --rays does not:
@@ -642,6 +740,18 @@ def check_trace_tab(root, g, cfg) -> bool:
     check("back at config.toml's value it says nothing again",
           not any(f in preview() for f in ("--flat-mirrors", "--focused-mirrors"))
           and "flat_mirrors" not in g._trace_options()[0])
+
+    # -- a fixed-figure run's manifest key is inert here ----------------
+    #
+    # The Trace tab does not offer --fixed-shapes (it is a per-run table built
+    # offline), but the GUI must still LOAD a run that used it. Every manifest
+    # read in this module is a .get() by name, so an unknown key can only hurt if
+    # something enumerates -- checked here rather than assumed.
+    g.store.manifest["fixed_shapes"] = "data/fixed_shapes_fixture.csv"
+    line = g.run_optics_label()
+    g.store.manifest.pop("fixed_shapes")
+    check("a manifest carrying fixed_shapes still reads its optics line",
+          "heliostats" in line)
 
     # -- workers are capped at 1 until explicitly unlocked --------------
     check("workers default to 1", g.var_t_workers.get() == "1"

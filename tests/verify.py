@@ -463,9 +463,13 @@ def check_secondary_strategies():
     return all(checks.values()), f"{sum(checks.values())}/{len(checks)} checks, {n} solves"
 
 
-@stage("5c. Flat heliostats: only the shape changes, and no path can skip it")
+@stage("5c. Heliostat figure: only the shape changes, and no path can skip it")
 def check_flat_mirrors():
-    """``[optics] flat_mirrors``, checked on all three layouts at once.
+    """``[optics] flat_mirrors`` and ``fixed_shapes``, on all three layouts at once.
+
+    The two are the same seam -- both replace ``c3``/``c4``/``c5`` and nothing
+    else -- so they are checked together, and their mutual exclusion is checked
+    here too because ``get_strategy`` is the only place either can be applied.
 
     Four things, in the order a bug in them would hurt:
 
@@ -627,6 +631,126 @@ def check_flat_mirrors():
     # A bare name still means "focused", which is what the parity stages rely on.
     checks["a bare layout name is still focused"] = not isinstance(
         get_strategy("axicon"), FlatHeliostats)
+
+    # -- (5) the fixed figure: same seam, same guarantee -----------------------
+    #
+    # A mirror ground once. The focused solve re-figures every timestep, which no
+    # real glass does; this freezes the figure per heliostat and leaves the
+    # pointing tracking. So the property to hold is the one flat holds, with the
+    # table's numbers in place of zeros -- and the table must never be allowed to
+    # miss a heliostat, because a run that fell back to the solved shape for some
+    # of the field would report an annual number between fixed and focused and
+    # look entirely reasonable.
+    import tempfile
+
+    from beamdown.secondary import (FixedShapeError, FixedShapeHeliostats,
+                                    load_fixed_shapes)
+
+    figure = {}
+    for i, (x, y) in enumerate(positions):
+        figure[(x, y)] = (1e-5 + i * 1e-7, -8e-6 - i * 1e-7, 3e-7 + i * 1e-9)
+    table_path = Path(tempfile.mkdtemp()) / "fixed_shapes_fixture.csv"
+    with open(table_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("# fixture: arbitrary but distinguishable numbers, not a real figure\n")
+        fh.write("heliostat,x_mm,y_mm,c3,c4,c5\n")
+        for i, ((x, y), (c3, c4, c5)) in enumerate(figure.items()):
+            # float(), not repr() of whatever numpy handed over: under numpy 2 a
+            # scalar's repr is "np.float64(30000.0)", which is not a number in a
+            # CSV. load_fixed_shapes names that failure; do not reproduce it here.
+            fh.write(f"{i},{float(x)!r},{float(y)!r},"
+                     f"{float(c3)!r},{float(c4)!r},{float(c5)!r}\n")
+
+    loaded = load_fixed_shapes(table_path)
+    checks["the CSV round-trips through the '#'-commented reader"] = (
+        len(loaded) == len(figure)
+        and all(loaded[(round(x, 3), round(y, 3))] == v for (x, y), v in figure.items())
+    )
+
+    fixed_ok, fixed_unchanged, fixed_first_bad = True, True, ""
+    n_fixed = 0
+    for layout in ("axicon", "prime_focus", "cassegrain"):
+        focused = get_strategy(layout)
+        fixed = get_strategy(layout, fixed_shapes=str(table_path))
+        fixed_ok &= isinstance(fixed, FixedShapeHeliostats) and fixed.name == layout
+        for (x, y) in positions:
+            for (az, el) in suns:
+                a = focused.solve(x, y, az, el, geom)
+                b = fixed.solve(x, y, az, el, geom)
+                n_fixed += 1
+                # The frozen figure is the table's, exactly -- not the solved one
+                # nudged, and not the same value for every sun.
+                if (b.c3, b.c4, b.c5) != figure[(x, y)]:
+                    fixed_ok = False
+                for field_name in ("rot_az_deg", "rot_el_deg", "aoi_deg",
+                                   "focal_dist_mm", "cosine_efficiency"):
+                    if getattr(a, field_name) != getattr(b, field_name):
+                        fixed_unchanged = False
+                        fixed_first_bad = fixed_first_bad or f"{layout}.{field_name}"
+                for k in a.extras:
+                    if a.extras[k] != b.extras[k]:
+                        fixed_unchanged = False
+                        fixed_first_bad = fixed_first_bad or f"{layout}.extras[{k}]"
+
+    print(f"  {n_fixed} fixed-figure solves against a {len(loaded)}-row table")
+    print(f"  pointing/diagnostics bit-identical to the focused solve: {fixed_unchanged}"
+          + (f"  first difference at {fixed_first_bad}" if fixed_first_bad else ""))
+    checks["a fixed figure is the table's c3/c4/c5, on every layout and sun"] = fixed_ok
+    checks["fixed changes nothing but the shape, bit for bit"] = fixed_unchanged
+
+    # Coincident heliostats (144 = 192, 241 = 289 are byte-identical positions in
+    # the field file) put two rows on one key. Same figure to 1e-9 relative is
+    # normal -- a year-weighted mean reaches them in different orders and the
+    # last ULPs differ. A real disagreement is not.
+    def _two_row_table(second: tuple[float, float, float]) -> Path:
+        p = Path(tempfile.mkdtemp()) / "coincident.csv"
+        p.write_text("heliostat,x_mm,y_mm,c3,c4,c5\n"
+                     "144,30000.0,0.0,1e-05,-8e-06,3e-07\n"
+                     f"192,30000.0,0.0,{second[0]!r},{second[1]!r},{second[2]!r}\n",
+                     encoding="utf-8")
+        return p
+
+    coincident_ok = len(load_fixed_shapes(
+        _two_row_table((1e-05 * (1 + 1e-12), -8e-06, 3e-07)))) == 1
+    conflict_refused = False
+    try:
+        load_fixed_shapes(_two_row_table((2e-05, -8e-06, 3e-07)))
+    except ValueError:
+        conflict_refused = True
+    checks["coincident heliostats may repeat a position with the same figure"] = (
+        coincident_ok)
+    checks["two rows that really disagree are refused"] = conflict_refused
+
+    # Never a fall-back: a heliostat with no row stops the run.
+    missing = False
+    try:
+        get_strategy("axicon", fixed_shapes=str(table_path)).solve(
+            1.0, 2.0, 135.0, 35.0, geom)
+    except FixedShapeError:
+        missing = True
+    checks["a heliostat absent from the table raises, never falls back"] = missing
+
+    # The two figure options write the same three numbers, so they are refused
+    # together rather than ordered -- from the config as well as from the flags,
+    # because config.toml can supply either one.
+    def _refused(**kwargs) -> bool:
+        try:
+            get_strategy(_cfg("axicon", False), **kwargs)
+            return False
+        except ValueError:
+            return True
+
+    checks["flat and fixed together are refused, not ordered"] = (
+        _refused(flat=True, fixed_shapes=str(table_path))
+        # ...and a flat config is only refused because of the TABLE, so with the
+        # table explicitly cleared it is still an ordinary flat run.
+        and isinstance(get_strategy(_cfg("axicon", True), fixed_shapes=""),
+                       FlatHeliostats)
+    )
+    # The explicit "no fixed figure" escape, mirroring flat=False.
+    checks["fixed_shapes='' beats a config that names a table"] = not isinstance(
+        get_strategy(_cfg("axicon", False), fixed_shapes=""), FixedShapeHeliostats)
+    checks["OpticsSpec defaults to no fixed figure"] = OpticsSpec(
+        secondary="axicon", mirror_reflectivity=0.9, n_mirrors=2).fixed_shapes == ""
 
     for k, v in checks.items():
         print(f"  {'OK ' if v else 'FAIL'}  {k}")

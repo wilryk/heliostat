@@ -153,6 +153,16 @@ class RunStore:
             "geometry": asdict(cfg.geometry),
             "raw_rays": cfg.storage.raw_rays,
         }
+        # The third point on the figure axis, written ONLY when it applies. An
+        # absent key means the historical behaviour -- the mirror was re-figured
+        # every timestep -- which is what every run before this option was true
+        # of, so a reader must not have to distinguish "no key" from "not fixed".
+        # The value is the table's path as the run was given it: the CSV is not
+        # copied into the store, and the field positions in it are what make a
+        # run reproducible.
+        fixed_shapes = str(getattr(cfg.optics, "fixed_shapes", "") or "")
+        if fixed_shapes:
+            payload["fixed_shapes"] = fixed_shapes
         payload.update(extra or {})
         self._manifest = payload
         (self.root / MANIFEST_NAME).write_text(json.dumps(payload, indent=2))

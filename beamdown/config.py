@@ -128,6 +128,21 @@ class OpticsSpec:
     # That is the measurement.
     flat_mirrors: bool = False
 
+    # Fixed mirror figure: path to a CSV of per-heliostat c3/c4/c5, empty for
+    # none. A THIRD point on the same comparison axis as ``flat_mirrors`` --
+    # focused re-figures the mirror every timestep (an idealisation: no ground
+    # glass changes shape hourly), flat has no figure at all, and this freezes
+    # each mirror to one figure it was ground to once. Pointing still tracks.
+    #
+    # Mutually exclusive with ``flat_mirrors``: both write c3/c4/c5, so letting
+    # them compose would mean one silently winning. ``secondary.get_strategy``
+    # refuses the pair rather than picking.
+    #
+    # A path, not a table, because the value has to survive the trip through
+    # ``apply_overrides`` into every sweep worker, which re-reads config.toml
+    # from disk and replays the override dict.
+    fixed_shapes: str = ""
+
     @property
     def throughput(self) -> float:
         """Combined reflectivity, 0.9^2 = 0.81 by default.
@@ -317,6 +332,11 @@ class Config:
     @property
     def model_path(self) -> Path:
         return self.path(self.trace.model_file)
+
+    @property
+    def fixed_shapes_path(self) -> Path | None:
+        """The fixed-figure table, or ``None`` when the run has no fixed figure."""
+        return self.path(self.optics.fixed_shapes) if self.optics.fixed_shapes else None
 
     @property
     def output_root(self) -> Path:

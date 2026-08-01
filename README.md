@@ -360,6 +360,42 @@ across all three.
 | `prime_focus` | none | 1 | `F1 = (0, 0, focus_height_mm)` | nothing |
 | `cassegrain` | hyperboloid | 2 | `F1 = (0, 0, focus_height_mm)` | `SecondaryDisc`, circle at `secondary_rim_height_mm` |
 
+### Mirror figure: focused, flat, fixed
+
+Orthogonal to the layout, and composing with all three of them, is what the
+heliostat's own surface does. All three write the same three numbers — the
+`z3`/`z4`/`z5` coefficients of the one active Zernike form on `helio_surf`,
+whose base radius is `inf` — and nothing else. Pointing tracks the sun
+identically in all three cases.
+
+| | how the figure is chosen | flag | manifest |
+|---|---|---|---|
+| focused | re-solved every timestep for that instant's AOI and slant range | (default) | `flat_mirrors: false`, no `fixed_shapes` |
+| flat | forced to zero: a plane | `--flat-mirrors` | `flat_mirrors: true` |
+| fixed | per-heliostat, from a CSV, frozen for the whole run | `--fixed-shapes CSV` | `fixed_shapes: "<path>"` |
+
+Focused is an idealisation — no ground glass re-figures itself hourly. Flat is
+the opposite bound. **Fixed** is the physical case: one figure per mirror,
+ground once, pointing still tracking. Build the table with
+`scripts/build_fixed_shapes.py`; it writes
+`heliostat,x_mm,y_mm,c3,c4,c5` with `#` metadata lines, and heliostats are
+matched by position rounded to 1e-3 mm.
+
+```bash
+python -m beamdown sweep --secondary prime_focus --focus-height-mm 36000 \
+    --n-mirrors 1 --fixed-shapes data/fixed_shapes_pf36000_mean_cos.csv \
+    --all-heliostats --workers 1 --output analysis_output/prime_focus_f36_meancos
+```
+
+A heliostat missing from the table **stops the run** — it is never a fall-back to
+the solved shape, because a run that mixed ground and re-figured mirrors would
+report an annual number between the two and look entirely plausible. Flat and
+fixed are refused together (argparse for the two flags, `get_strategy` for the
+config-says-flat case) rather than one silently winning; use
+`--focused-mirrors --fixed-shapes ...` if `config.toml` sets `flat_mirrors = true`.
+An **absent** `fixed_shapes` manifest key means the historical behaviour, the
+re-figured mirror, so runs written before the option read exactly as they did.
+
 ### The shared-focus contract
 
 `prime_focus` and `cassegrain` share **one aim point for the whole field**: every

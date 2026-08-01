@@ -17,12 +17,22 @@ The last two share one aim point for the whole field and one solver -- see
 :mod:`beamdown.secondary.shared_focus`. The strategy name is recorded in each
 run's manifest so results from different layouts stay directly comparable.
 
-Orthogonal to the layout there is a second axis: ``[optics] flat_mirrors``.
-Flat heliostats keep their pointing and lose their optical power, and that is a
-property of the *run*, not of a layout -- so it is applied once, by
-:class:`~beamdown.secondary.base.FlatHeliostats`, wrapping whichever strategy
-:func:`~beamdown.secondary.base.get_strategy` was asked for. It is recorded in
-the manifest next to the layout name.
+Orthogonal to the layout there is a second axis, the heliostat FIGURE, with
+three points on it. Each is a property of the *run*, not of a layout, so each is
+applied once by a wrapper around whichever strategy
+:func:`~beamdown.secondary.base.get_strategy` was asked for, and each is recorded
+in the manifest next to the layout name:
+
+``focused``      the default: the mirror is re-figured every timestep for that
+                 instant's angle of incidence and slant range.
+``flat_mirrors`` :class:`~beamdown.secondary.base.FlatHeliostats` -- pointing
+                 kept, optical power dropped entirely.
+``fixed_shapes`` :class:`~beamdown.secondary.base.FixedShapeHeliostats` --
+                 pointing kept, figure frozen per heliostat to a table, which is
+                 what a mirror ground once actually does.
+
+The last two both write ``c3``/``c4``/``c5``, so ``get_strategy`` refuses them
+together rather than ordering them.
 
 Everything downstream -- tracing, storage, metrics, figures, annual energy -- is
 written against the :class:`~beamdown.secondary.base.SecondaryStrategy`
@@ -34,17 +44,23 @@ model-wide parameters get written into the ``.optx``.
 """
 
 from .base import (
+    FixedShapeError,
+    FixedShapeHeliostats,
     FlatHeliostats,
     HeliostatSolution,
     SecondaryStrategy,
     available,
     get_strategy,
+    load_fixed_shapes,
 )
 
 __all__ = [
+    "FixedShapeError",
+    "FixedShapeHeliostats",
     "FlatHeliostats",
     "HeliostatSolution",
     "SecondaryStrategy",
     "available",
     "get_strategy",
+    "load_fixed_shapes",
 ]

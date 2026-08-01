@@ -72,6 +72,11 @@ def _override_map(cfg, args) -> dict:
     # flag stopped at the driver would trace 645 FOCUSED heliostats while the
     # console and the manifest both said flat.
     put("optics", "flat_mirrors", getattr(args, "flat_mirrors", None))
+    # Same reasoning, and the same hole if it were left on the driver: the
+    # workers build the strategy themselves from their own config, so a
+    # fixed-figure run whose table path stopped here would trace 645 heliostats
+    # re-figured every timestep while the console and the manifest said fixed.
+    put("optics", "fixed_shapes", getattr(args, "fixed_shapes", None))
     put("geometry", "focus_height_mm", getattr(args, "focus_height_mm", None))
     put("geometry", "secondary_rim_height_mm", getattr(args, "rim_height_mm", None))
 
@@ -502,14 +507,36 @@ def build_parser() -> argparse.ArgumentParser:
     # --secondary, so it composes with all three layouts. Both directions exist
     # because the flag has to be able to DISAGREE with config.toml either way --
     # the GUI's Trace tab only emits a flag where it differs from the file.
-    p.add_argument("--flat-mirrors", dest="flat_mirrors", action="store_true",
-                   default=None,
-                   help="override [optics] flat_mirrors: FLAT heliostats -- keep "
-                        "the pointing, force the heliostat Zernike z3/z4/z5 to "
-                        "zero so each mirror is its bare radius = inf plane. "
-                        "Composes with every --secondary. Expect a much larger "
-                        "spot, much more spillage and much less collected "
-                        "energy than the focused run: that is the comparison")
+    #
+    # --flat-mirrors and --fixed-shapes are the two ways of NOT re-figuring the
+    # mirror every timestep, and both write the same three Zernike coefficients.
+    # argparse refuses the pair itself rather than letting one quietly win; the
+    # config.toml-says-flat case is caught later, by get_strategy, which is the
+    # only place either wrapper is applied. --focused-mirrors is outside the
+    # group on purpose: it composes with --fixed-shapes, and is how a
+    # fixed-figure run overrides a config.toml that sets flat_mirrors = true.
+    figure = p.add_mutually_exclusive_group()
+    figure.add_argument("--flat-mirrors", dest="flat_mirrors", action="store_true",
+                        default=None,
+                        help="override [optics] flat_mirrors: FLAT heliostats -- keep "
+                             "the pointing, force the heliostat Zernike z3/z4/z5 to "
+                             "zero so each mirror is its bare radius = inf plane. "
+                             "Composes with every --secondary. Expect a much larger "
+                             "spot, much more spillage and much less collected "
+                             "energy than the focused run: that is the comparison")
+    figure.add_argument("--fixed-shapes", dest="fixed_shapes", default=None,
+                        metavar="CSV",
+                        help="override [optics] fixed_shapes: FREEZE each mirror's "
+                             "figure to the per-heliostat c3/c4/c5 in this CSV "
+                             "(header heliostat,x_mm,y_mm,c3,c4,c5; leading '#' "
+                             "lines are comments; build one with "
+                             "scripts/build_fixed_shapes.py). Pointing still tracks "
+                             "the sun exactly as a focused run does -- this models a "
+                             "mirror ground ONCE instead of one that re-figures "
+                             "itself every timestep. The table must cover the whole "
+                             "field, not just a downselect -- occlusion is solved "
+                             "over every heliostat. A heliostat missing from it is "
+                             "an error, never a fall-back to the solved shape")
     p.add_argument("--focused-mirrors", dest="flat_mirrors", action="store_false",
                    default=None,
                    help="the opposite of --flat-mirrors, for when config.toml "
