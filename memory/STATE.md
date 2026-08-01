@@ -1,88 +1,81 @@
-# STATE — beamdown (rewritten 2026-07-31 ~07:20, session end)
+# STATE — beamdown (rewritten 2026-08-01 ~13:00)
 
 ## Git / location
-**Home is C:\gitlab\heliostats. Start all sessions here.** Remote:
-https://github.com/wilryk/heliostat.git (main, pushed through 704aa08).
-Relocation FINISHED 2026-07-31: analysis_output (34 GB) + legacy/old_output
-physically here, junction gone, baseline re-verified. One leftover: OWNER
-must hand-delete the stale code + .git in C:\gitlab (classifier blocks
-agents). Do not work in C:\gitlab.
+**Home is C:\gitlab\heliostats.** Remote https://github.com/wilryk/heliostat.git
+(main). 2026-08-01 work is committed LOCALLY through 7bc0790 + this commit —
+**NOT pushed** (classifier blocks agents; owner runs `git push`). Owner still
+to hand-delete stale C:\gitlab code + .git.
 
-## What this project is
-Package `beamdown/` drives Quadoa to trace a 645-heliostat beam-down field
-for a paper: annualized energy across (axicon / prime_focus / cassegrain)
-x (focused / flat heliostats). DNI: PVGIS TMY monthly-mean, 1,751.9 kWh/m2.
+## Seat / runs
+**Seat FREE since 2026-08-01 12:23** — the axicon_flat → prime_focus →
+prime_focus_flat chain drained cleanly, no intervention ever needed.
+All four comparison runs traced (94 steps, 7 declinations, scalar UNION):
+- axicon full8 **10,152.2 MWh** (eta 0.5990, traced occluders; reference)
+- axicon_flat **3,781.2** (0.2231) — flat keeps 37%
+- prime_focus **12,096.3** (0.7137, F1 47,000)
+- prime_focus_flat **8,333.5** (0.4917) — flat keeps 69%
+Concentration (cumulative field spot, traced): pf r90 474 mm / ~23,000 suns;
+axicon 595 mm / ~11,000 suns — axicon wins ground-receiver concentration;
+cassegrain is worst (best ideal estimate 636 mm, real will be larger).
 
-## Running RIGHT NOW (as of 2026-08-01 ~07:50)
-- **prime_focus_flat sweep**: launched 01:53 by the chain watcher (which
-  SURVIVED the app restart), ~52/94 steps, ETA ~12:30 Aug 1. Holds the
-  ONLY seat. Last sweep of the chain.
-- **Comparison scoreboard (annual MWh / optical eta, union scalars):**
-  axicon focused (full8)  10,152.2 / 0.5990   [traced occluders]
-  axicon flat              3,781.2 / 0.2231
-  prime_focus focused     12,096.3 / 0.7137   (worst residual 1.46%)
-  prime_focus flat        running
-  cassegrain x2           awaiting owner's .optx build
-- If a session finds a lock but NO live python: stale lock — remove the
-  lock dir, relaunch the same run script (sweeps RESUME from stored
-  steps), rerun scripts/run_after_axicon_flat.sh (idempotent).
+## Cassegrain: SETTLED and script-built (2026-08-01)
+Owner constraints: blocking comparable to axicon (→ F1 36,000 = tip+9 m;
+union occ 0.9445 vs axicon 0.9431 at the avg-AOI instant) + 30 m dia cap +
+dish as low as coverage allows. Design: rim r 15,000 at z 30,000,
+**K −6.582109, |R_v| 31,548.867, vertex z 27,151.783** (design_cassegrain.py
+--rim-height-mm 30000 --f1-height-mm 36000; coverage 645/645, F2 miss 1e-10).
+Models built by scripts/build_cassegrain_model.py (--rim-z-mm/--f1-mm):
+- models/heliostat_field_cassegrain.optx (sweep; run_cassegrain{,_flat}.sh)
+- models/figure_model_25cfg_20260220_0927_cass30.optx (GUI review)
+TRAP: in these models sec_height/rec_offset are UNREFERENCED literals —
+session writes to them are no-ops; never run an axicon sweep against them.
+**Licence-gated verification PENDING before first cassegrain sweep**
+(self-test trace; centroid prediction still (0,0) — stigmatic relay).
 
-## Reference numbers
-- **Axicon reference: full8 = 10,152.2 MWh, eta 0.5990** (traced occluders,
-  corrected grid, 120k rays homogeneous, resume boundary verified clean).
-- full7 = 10,237.0 MWh is the read-path REGRESSION PIN only: its old grid
-  never sampled below el 8.78°, extrapolated 14.4% of hours, read high.
-  The -0.83% delta = grid -1.175% + dates +0.351%, exact (journal 07-31).
-- Vetting (full5 scalar vs full7 traced, aperture energy): product form
-  0.338% low; UNION form 0.114%. Scalars invalid for low-sun instantaneous
-  power, single heavily-occluded mirrors, and all spot-shape work.
+## Fixed mirror figures (owner's scenarios, landed)
+`sweep --fixed-shapes <csv>` freezes c3/c4/c5 per heliostat (pointing still
+tracks); mutually exclusive with --flat-mirrors; manifest key fixed_shapes.
+Tables: data/fixed_shapes_pf36000_{spherical,mean_cos,median}.csv (annual
+c3≈0 by symmetry; mean_cos vs median differ ~40% in c5 → test needed).
+4-day family READY, not launched: run_prime_focus_f36{,_sphere,_meancos,
+_median}.sh — F1 36,000, dates 12-21/02-20/04-21/06-21, ~6 h each.
 
-## Landed 2026-07-31 (all pushed)
-- UNION occlusion form (e4f0e0f): sweep scalar branch uses
-  shading.occlusion_efficiency; manifest key occlusion_form (absent =
-  historical product); ALL readers via store.occlusion_weight_columns.
-  Bonus fix: GUI heliostat-flux double-charged occlusion on traced runs.
-- Prime-focus model VERIFIED 10/10 (scripts/verify_prime_focus_model.py).
-- Harness: .claude/agents fetcher(haiku)/implementer(opus)/reviewer(opus)
-  — load at session START; permission allowlist .claude/settings.json.
+## Design studies (all licence-free, scripts committed)
+- AOI: annual DNI-weighted 33.3°; representative instant **2026-02-20
+  hour 9.45401542341586** (el 42.24); axicon aim rays cross axis tip+2.6
+  to +10.0 m (mean +7.8) — owner's 9 m estimate confirmed (aoi_stats.py).
+- Estimator (cos × union occ × rho^n, 94-grid, annual_energy): validated
+  axicon +0.64%, prime focus +0.19% vs traced (scan_cassegrain_annual.py).
+- Axicon 27,000/20° is Pareto-efficient under the owner's sagittal cap
+  (7.115e-6 /mm at inner mirrors; hits at 1,943 mm). Higher tip = +energy
+  but inner hits collapse (33 km tip: 658 mm, crowding 1.41 — unusable).
+  Angle pinned by coverage to ~18–21° (scan_axicon_annual.py, exact).
+- beamdown/design_eval.py is the single source of design math (GUI + all
+  scripts import it).
+
+## GUI (committed d326cc7, 7bc0790)
+Design tab: layout radio + sliders, live cross-section from real sag
+equations, plain-language readouts, sagittal-cap traffic light, .optx
+export buttons (any explored geometry; never --force).
+plot_style.py paper style everywhere (white, 2 pt lines, tight margins);
+every tab: "Save figure…" (600 dpi PNG + vector PDF) + "Save data (CSV)".
 
 ## Suite status
-`python -m tests.verify --no-quadoa` → 12/12; `python tests/test_gui.py
-analysis_output/full7` → PASS (must stay so after any change). Axicon
-solve() bit-identical (stage 3b).
+verify --no-quadoa 12/12 (figure stage 21 checks); test_gui full7 PASS
+(new Design-tab + export sections). Axicon solve() bit-identical pin holds.
 
-## Queued work (in order)
-1. Chain drains: axicon_flat → prime_focus → prime_focus_flat (automated,
-   see Running). Then read the three report_energy outputs.
-2. Owner deletes stale C:\gitlab code + .git.
-3. Owner builds cassegrain hyperboloid .optx by hand (rim z 32,460 r
-   15,000; F1 38,986; K -5.8789; |R_v| 32,181.3; vertex z 29,589 —
-   scripts/design_cassegrain.py). Then cassegrain focused/flat sweeps:
-   clone run_prime_focus*.sh with --secondary cassegrain,
-   --focus-height-mm 38986, --rim-height-mm 32460, --n-mirrors 2.
-4. Cross-geometry comparison report + paper figures. Figure models: 25cfg
-   MYSTERY SOLVED 2026-07-31 — shipped figure_model_25cfg.optx was never
-   populated (configs 1-24 all zeros; old model_edit.build_figure_model
-   needed a seat for its second half, which never ran). NEW licence-free
-   generator: `python scripts/build_figure_model.py --date D --hour H
-   [--flat] --check` (25 configs = the 25 downselected heliostats at one
-   instant; sun is a single_param, CANNOT vary per config). Once the seat
-   frees: run `python scripts/verify_figure_model.py <built.optx>` (it
-   refuses under any lock). Old model_edit.build_figure_model is dead
-   code — removal offered as a spawned task chip.
-5. Chunk-size probe >120k rays (owner's contrary prior) — needs seat.
+## Queued (in order)
+1. Owner: GUI review of cass30 model; owner runs `git push`.
+2. Seat: verify 25cfg models (verify_figure_model.py) + cassegrain sweep
+   model self-test. Minutes each; do BEFORE any cassegrain sweep.
+3. 4-day fixed-figure runs (owner picks order) — then mean-vs-median call.
+4. run_cassegrain.sh + run_cassegrain_flat.sh (settled design, ~9 h each).
+5. Cross-geometry paper report incl. concentration column (traced r50/r90).
+6. Chunk-size probe >120k rays (needs seat).
 
-## Delegation policy (owner, 2026-07-31)
-Spawn subagents with EXPLICIT model. Haiku/Sonnet: data pulls, searches,
-fact checks. Opus: review, verification, ordinary implementation. Lead
-(Fable): audits, architecture, complex implementation, memory continuity.
-
-## Traps that bite (details in CLAUDE.md / README)
-- ONE licence seat: never workers>1, never retry seat failures, never
-  import quadoa while any analysis_output/.*.lock exists.
-- Never edit config.toml VALUES while a sweep runs (report re-reads it).
-- `--suggest-dates N` ADDS to config's 12 dates (does NOT replace) — use
-  explicit --dates; first axicon_flat launch died to this, 2 min in.
-- `setRayDistributionCount1`: literal on sequences 0/3, grid-density 1/2.
-- Coincident heliostats 144=192, 241=289: ~0.3% double-count, deliberate.
-- cfg.optics.throughput applies at READ time; manifests record the truth.
+## Traps (new this session; older ones in CLAUDE.md/README)
+- Heavy CPU jobs slow a running sweep even at below-normal priority
+  (measured ~30%: 397→533 s/step). Nothing heavy beside a sweep.
+- numpy 2 repr: format CSV cells with float(v), never repr(np scalar).
+- Owner prefs: plain-language summaries; paper plot style; sagittal cap
+  as a hard design rule (see private memory).
