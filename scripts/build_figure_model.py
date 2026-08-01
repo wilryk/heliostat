@@ -343,21 +343,39 @@ def solve_instant(cfg, date: _dt.date, hour: float, flat: bool = False):
     # nothing errors; session.set_sun writes 90 - elevation, and so does this.
     globals_ = {"solaz": float(az), "solze": float(90.0 - el)}
     globals_.update({k: float(v) for k, v in strategy.global_params(cfg.geometry).items()})
-    missing = set(SINGLE_PARAMS) - set(globals_)
-    if missing:
-        raise StructuralSurprise(
-            f"strategy {strategy.describe()!r} does not supply {sorted(missing)}, "
-            f"which this base model carries as <single_param>. Writing a model "
-            f"parameter Quadoa has but Python never sets leaves it at whatever "
-            f"the base happened to hold -- refusing to build."
-        )
-    extra = set(globals_) - set(SINGLE_PARAMS)
-    if extra:
-        raise StructuralSurprise(
-            f"strategy {strategy.describe()!r} supplies {sorted(extra)}, which "
-            f"this base model has no <single_param> for -- Quadoa ignores writes "
-            f"to parameters it does not have, silently. Wrong base model?"
-        )
+
+    # A non-axicon strategy on the axicon base is a deliberate use, not an
+    # accident: the field gets that layout's POINTING while the base keeps its
+    # own scenery. Reconcile the single_params explicitly, out loud, and refuse
+    # anything that is not one of the two understood mismatches.
+    #   - pf_height (prime focus supplies it, this base has no such param):
+    #     dropped. Quadoa would silently ignore the write anyway; the aim
+    #     height lives in the per-config pointing/Zernikes, nowhere else. There
+    #     is no prime-focus detector in this model.
+    #   - axi_angle (this base carries it, non-axicon strategies do not):
+    #     filled from config. The cone stays where the base put it -- for a
+    #     figure/design model it is scenery to replace in the GUI, but a TRACE
+    #     of this file still bounces off it. Do not sweep this model.
+    for k in sorted(set(globals_) - set(SINGLE_PARAMS)):
+        if k != "pf_height":
+            raise StructuralSurprise(
+                f"strategy {strategy.describe()!r} supplies {k!r}, which this "
+                f"base model has no <single_param> for -- Quadoa ignores writes "
+                f"to parameters it does not have, silently. Wrong base model?"
+            )
+        print(f"  note: dropping {k!r} = {globals_.pop(k):g} -- the base has no "
+              f"such single_param; the aim height is carried by the pointing")
+    for k in sorted(set(SINGLE_PARAMS) - set(globals_)):
+        if k != "axi_angle":
+            raise StructuralSurprise(
+                f"strategy {strategy.describe()!r} does not supply {k!r}, which "
+                f"this base model carries as <single_param>. Writing a model "
+                f"parameter Quadoa has but Python never sets leaves it at "
+                f"whatever the base happened to hold -- refusing to build."
+            )
+        globals_[k] = float(cfg.geometry.axicon_angle_deg)
+        print(f"  note: base keeps its axicon cone (axi_angle {globals_[k]:g} "
+              f"from config) -- scenery for GUI design work; do not trace")
 
     return step, idx, provenance, sub, per_config, globals_, strategy
 
@@ -475,6 +493,16 @@ def main(argv=None) -> int:
                    help="local clock hour, decimal (e.g. 12.0, 16.5)")
     p.add_argument("--flat", action="store_true",
                    help="flat heliostats: same pointing, Zernikes zeroed")
+    p.add_argument("--secondary", default=None,
+                   choices=["axicon", "prime_focus", "cassegrain"],
+                   help="override config's layout for the POINTING solve only; "
+                        "the base model (and its axicon cone) is unchanged "
+                        "scenery. prime_focus/cassegrain also need "
+                        "--focus-height-mm.")
+    p.add_argument("--focus-height-mm", type=float, default=None,
+                   help="override [geometry] focus_height_mm: F1 the whole "
+                        "field aims and focuses at (e.g. 36000 = 9 m above "
+                        "the axicon tip)")
     p.add_argument("--base", type=Path, default=BASE)
     p.add_argument("--out", type=Path, default=None,
                    help="default models/figure_model_<n>cfg_<key>[_flat].optx")
@@ -484,9 +512,26 @@ def main(argv=None) -> int:
                    help="re-read the output from disk and re-assert every value")
     a = p.parse_args(argv)
 
-    from beamdown.config import load_config
+    from beamdown.config import load_config, validate_layout
 
     cfg = load_config(a.config)
+    if a.secondary is not None:
+        # Same override mechanism as verify_prime_focus_model.py: mutate the
+        # loaded cfg rather than requiring a config.toml edit (VALUES in that
+        # file must never change while a sweep runs). n_mirrors follows the
+        # layout; it only matters to validate_layout here -- a figure model
+        # carries no throughput.
+        object.__setattr__(cfg.optics, "secondary", a.secondary)
+        object.__setattr__(cfg.optics, "n_mirrors",
+                           1 if a.secondary == "prime_focus" else 2)
+        if a.focus_height_mm is not None:
+            object.__setattr__(cfg.geometry, "focus_height_mm",
+                               float(a.focus_height_mm))
+        validate_layout(cfg)
+    elif a.focus_height_mm is not None:
+        print("--focus-height-mm without --secondary does nothing for the "
+              "axicon; refusing so the intent is explicit.")
+        return 2
     date = _dt.date.fromisoformat(a.date)
 
     step, idx, provenance, sub, per_config, globals_, strategy = solve_instant(
@@ -494,8 +539,15 @@ def main(argv=None) -> int:
     )
     n = len(sub)
 
+    layout_tag = ""
+    if a.secondary is not None:
+        short = {"prime_focus": "pf", "cassegrain": "cass"}.get(a.secondary,
+                                                                a.secondary)
+        fh = cfg.geometry.focus_height_mm
+        layout_tag = f"_{short}" + (f"{fh:.0f}" if fh is not None else "")
     out = a.out or (REPO / "models" /
-                    f"figure_model_{n}cfg_{step.key}{'_flat' if a.flat else ''}.optx")
+                    f"figure_model_{n}cfg_{step.key}{layout_tag}"
+                    f"{'_flat' if a.flat else ''}.optx")
     out = Path(out)
     if out.resolve() == PRISTINE.resolve():
         print(f"refusing to write {out.name}: that is the original artefact this "
