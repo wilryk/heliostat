@@ -1,0 +1,543 @@
+<?xml version="1.0"?>
+<optical_system_definition>
+	<version major="25" minor="9" />
+	<geometry>
+		<pos id="heli_pos" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly1">
+			<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="x" value="posx" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="posy" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<pos id="heliostat" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly4">
+				<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<pos id="heli_coord_shift" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly2">
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="-rot_el" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="rot_az" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<surf id="helio_surf" refe="abs" off_axis="true" order="xyz" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf1" suid="surf_uid1" ghost="true">
+						<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<float_ap name="radius" value="2901.98474179791" is_locked="false" />
+						<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rx" value="-90" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="rz" value="90.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<aperture type="rect" s_x="2500.0" s_y="1500.0" c_x="0.0" c_y="0.0" rot="0.0" is_visible="true" store_hidden="false" />
+						<form type="zernike" normrad="1.0" maxorder="6" is_visible="true" store_hidden="false" active="true">
+							<variable name="z0" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z1" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z2" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z3" value="c3" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z4" value="c4" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="z5" value="c5" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<form type="cosine" axis="y" is_visible="true" store_hidden="false" active="false">
+							<variable name="periode" value="100.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="amplitude" value="0.0232" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="phase_offset" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<form type="cosine" axis="x" is_visible="true" store_hidden="false" active="false">
+							<variable name="periode" value="100.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="amplitude" value="0.0232" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="phase_offset" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+						<coating type="ideal_mirror" is_visible="true" store_hidden="false" active="true" />
+						<form type="biconic" is_visible="true" store_hidden="false" active="false">
+							<variable name="radius_x" value="-134095" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="radius_y" value="-174394" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="conic_x" value="-1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+							<variable name="conic_y" value="-1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						</form>
+					</surf>
+				</pos>
+			</pos>
+			<pos id="source" refe="abs" off_axis="true" order="xyz" posrot="rot" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="assembly5">
+				<variable name="z" value="30000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rx" value="-solze" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="rz" value="-solaz" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<surf id="sun" refe="abs" off_axis="true" order="xyz" posrot="rot" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="false" store_hidden="false" puuid="surf2" suid="surf_uid5" ghost="true">
+					<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="z" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<float_ap name="radius" value="3500.0" is_locked="true" />
+					<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rx" value="180.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				</surf>
+			</pos>
+		</pos>
+		<surf id="prime_focus" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf7" suid="surf_uid7" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="36000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="0.0" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+		<surf id="secondary" refe="abs" off_axis="false" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf3" suid="surf_uid2" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="27151.783007044" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="12441.5053387857" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<form type="asphere" maxorder="0" is_visible="true" store_hidden="false" active="true">
+				<variable name="radius" value="31548.866723837" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<variable name="conic" value="-6.582108634" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			</form>
+					<aperture type="circ" c_x="0.0" c_y="0.0" is_visible="true" store_hidden="false">
+				<float_ap name="radius" value="15000.0" is_locked="true" />
+			</aperture>
+		</surf>
+		<surf id="receiver" refe="abs" off_axis="false" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf4" suid="surf_uid3" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="7000.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="1068.53672950112" is_locked="false" />
+			<variable name="x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+		<surf id="SURFACE 1" refe="abs" off_axis="true" order="zyx" posrot="pos" rot_c_x="0.0" rot_c_y="0.0" rot_c_z="0.0" is_visible="true" store_hidden="false" puuid="surf5" suid="surf_uid4" ghost="true">
+			<variable name="radius" value="inf" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="z" value="42320.9" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<float_ap name="radius" value="0.0" is_locked="false" />
+			<variable name="x" value="-4478.72" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="y" value="12050.37" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rx" value="-55" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="ry" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="rz" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</surf>
+	</geometry>
+	<environment>
+		<material model_type="air" name="" is_substitute="0" is_thermal="false" temp="20.0" scale_thermal="false" is_visible="true" store_hidden="false" press="1.0" model_sub_type="vd">
+			<variable name="c_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="c_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="c_z" value="1.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="index" value="1.5" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="abbe_e" value="50.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="index_error" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="abbe_error" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</material>
+	</environment>
+	<sequences>
+		<sequence name="prime_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid2" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="prime_focus" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="extended" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="0.1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="1000" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid1" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="secondary" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+				<surf id="receiver" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid2" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="plane" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="3500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="10" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="false" store_hidden="false" sequid="seq_uid4" is_ghost="false">
+			<surfaces is_visible="false" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="SURFACE 1" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="false" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="plane" ap_scale_x="1.0" is_visible="false" store_hidden="false">
+				<variable name="aperture_val" value="3500.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="10" rays_2="10" footprinttype="plane" is_visible="false" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="false" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="false" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="false" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="false" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="false" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="false" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="-0.25" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+		<sequence name="secondary_focus" aperturetype="fix" fieldtype="angle" stopsurface="2" opd_ref="exit" opd_chiefref="primary" img_space_type="focal" no_virt="false" is_visible="true" store_hidden="false" sequid="seq_uid3" is_ghost="false">
+			<surfaces is_visible="true" store_hidden="false">
+				<surf id="sun" surf="1" action="source" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid1" hide_to="false" hide_from="false" />
+				<surf id="helio_surf" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid3" hide_to="false" hide_from="false" />
+				<surf id="secondary" surf="1" action="reflection" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid4" hide_to="false" hide_from="false" />
+				<surf id="receiver" surf="1" action="detector" diff_order="1" diff_order_2="0" ray_type="ord" refl_mat="env" jones="Auto" is_visible="true" store_hidden="false" spuid="surfp_uid2" hide_to="false" hide_from="false" />
+			</surfaces>
+			<source sourcetype="extended" ap_scale_x="1.0" is_visible="true" store_hidden="false">
+				<variable name="aperture_val" value="0.1" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+				<dist disttype="grid" rays="1000" rays_2="10" footprinttype="plane" is_visible="true" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<apod apod_type="const" power="38484.5" normed="true" sigma="0.5" pow="1.0" sigma2="0.5" pow2="1.0" is_visible="true" store_hidden="false" />
+				<pol pol_type="none" pol_ref="ideal" ang="0.0" is_visible="true" store_hidden="false" rot_dir="l" ex="1.0" ecx="0.0" ey="0.0" ecy="0.0" ax="1.0" px="0.0" ay="0.0" py="0.0" s_i="1.0" s_q="1.0" s_u="0.0" s_v="0.0" />
+				<wavelengths prim="1" wave_ref="medium" is_visible="true" store_hidden="false">
+					<wavelength val="550.0" wght="1.0" is_visible="true" store_hidden="false" />
+				</wavelengths>
+				<fields is_visible="true" store_hidden="false">
+					<field wght="1.0" vig_x="1.0" vig_y="1.0" vig_dec_x="0.0" vig_dec_y="0.0" is_visible="true" store_hidden="false">
+						<variable name="t_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="t_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_x" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+						<variable name="d_y" value="0.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+					</field>
+				</fields>
+			</source>
+		</sequence>
+	</sequences>
+	<slider columns="4" />
+	<multiconfig columns="25" current="24">
+		<param id="rot_az" tcuid="tr_1">
+			<variable name="val_0" value="15.1841745126056" is_active="0" min="0.0" max="100.0" bound_type="1" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="-35.5053823486488" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="-75.7060328012813" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="58.5592472060233" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="-67.1932542090638" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="-10.5197827859088" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="35.7843835064708" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="93.6638322823342" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="-91.3777382556006" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="17.7179469518581" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="-30.9634476846136" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="-51.8101014608172" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="-150.68795202108" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="-0.404970519190309" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="31.1135835738848" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="100.950179483759" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="-40.2134193696661" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="-11.639879740194" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="10.9625115109877" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="-61.3814520859714" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="73.844213355362" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="-86.2402757808539" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="-25.8097454593767" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="52.4706208521438" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="-136.776219348637" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="rot_el" tcuid="tr_2">
+			<variable name="val_0" value="48.4606222304352" is_active="0" min="-180" max="180.0" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="48.4111708903894" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="81.2212639285265" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="59.9751403648589" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="55.8639426092737" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="38.7915420110798" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="44.2501965695233" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="76.0055089310986" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="66.7574750477898" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="38.175979960863" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="38.5622739255272" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="44.5817564830414" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="82.8761906357946" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="33.5706278930802" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="36.55654639452" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="69.667905607264" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="36.0449142247021" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="32.1812100282595" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="32.9333394496215" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="43.1931147375042" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="55.7430731181101" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="56.4812559536762" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="33.3746637261898" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="44.1942468429027" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="76.3134735614373" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="posx" tcuid="tr_3">
+			<variable name="val_0" value="-23190.3136008821" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="-13399.5144401172" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="34341.822550812" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="20387.3460477936" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="25563.7617909557" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="-49385.3954619717" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="-18135.4350584147" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="50601.0590342049" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="53691.8919726899" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="-49186.3652693638" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="-37742.0255117739" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="3.79628607643517e-12" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="61998.0565674657" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="-78016.0256131066" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="-45375.7919722586" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="78256.4133146317" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="-34749.4168463799" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="-85928.6672426768" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="-81808.4402795253" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="19663.7598314836" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="52027.4931117218" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="66769.3676425449" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="-66769.3676425449" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="7919.69068432093" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="89061.7273046164" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="posy" tcuid="tr_4">
+			<variable name="val_0" value="-19031.7985249093" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="32349.2894905453" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="6831.01322371414" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="-41341.4481238635" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="44277.7342545233" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="13232.7768319269" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="-53425.2688981994" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="-24953.6808150582" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="30999.0282837328" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="-37742.0255117739" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="49186.3652693638" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="61998.0565674657" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="-5.50653359065706e-11" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="-5185.67123335607" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="-77271.5162315649" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="-43655.2802415037" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="82597.3834129824" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="25418.7699098917" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="-36568.1393683906" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="87425.3182271842" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="-72958.8217993166" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="59763.7119199383" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="59763.7119199383" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="-89258.7710944946" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="9892.34286470353" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c3" tcuid="tr_5">
+			<variable name="val_0" value="-4.29490818889418e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="2.7138006526634e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="2.93940006538089e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="8.86579289573174e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="-1.21330164582855e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="-6.48346941497031e-09" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="8.06874824617802e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="4.96477752044403e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="-3.54539418300167e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="4.74588831722934e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="-5.21947098507829e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="-1.08670553305219e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="-6.98634325780494e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="1.22184061731328e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="9.9322050208535e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="5.80125445584675e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="-9.2758683907302e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="-1.49189870393109e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="4.13301552628612e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="-1.74128866449869e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="3.23623804007216e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="-3.34041490591508e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="-5.1097348650966e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="1.84958045828326e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="-6.92709234832707e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c4" tcuid="tr_6">
+			<variable name="val_0" value="-1.54118392160957e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="-1.44099794389485e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="-1.52736379079655e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="-1.28841794431546e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="-1.20050515859632e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="-1.15415230161497e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="-1.08930201347287e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="-1.20081981829014e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="-1.10923903643057e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="-1.00796973387733e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="-1.00844558596449e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="-1.02271672337424e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="-1.14837898140326e-06" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="-8.38495831701443e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="-7.53729567595991e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="-8.78757381296363e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="-7.52592638253404e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="-7.47453515405276e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="-7.47904663668231e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="-7.74710219211667e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="-8.27266551143994e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="-8.30367941134115e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="-7.48306039041649e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="-7.78574488865703e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="-8.95738970182542e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<param id="c5" tcuid="tr_7">
+			<variable name="val_0" value="7.19594027400489e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_1" value="1.48095713399721e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_2" value="6.70073305345337e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_3" value="5.16767256795058e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_4" value="4.51233051654353e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_5" value="1.98446094856176e-10" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_6" value="2.0263015553803e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_7" value="5.58442486178272e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_8" value="5.55374123274725e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_9" value="5.5405408422377e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_10" value="6.7207499693653e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_11" value="2.31097034667168e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_12" value="-3.50392329750173e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_13" value="-1.1304210570437e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_14" value="9.68742583520299e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_15" value="3.0152364285885e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_16" value="8.4971491208682e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_17" value="-1.3561292753148e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_18" value="6.89634623075744e-09" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_19" value="2.30356147786136e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_20" value="3.83458597785032e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_21" value="3.87906029009639e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_22" value="1.85980253051303e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_23" value="2.47345831095565e-07" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+			<variable name="val_24" value="-8.87890243039951e-08" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</param>
+		<single_param id="solaz" tcuid="tr_8">
+			<variable name="val" value="95.5703096164235" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="solze" tcuid="tr_9">
+			<variable name="val" value="47.7562538626353" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="sec_height" tcuid="tr_10">
+			<variable name="val" value="28569.047" is_active="1" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="rec_offset" tcuid="tr_11">
+			<variable name="val" value="-20000" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+		<single_param id="axi_angle" tcuid="tr_12">
+			<variable name="val" value="20.0" is_active="0" min="-inf" max="inf" bound_type="2" bound_weight="1.0" bound_tolerance="1e-08" var_id="" />
+		</single_param>
+	</multiconfig>
+	<optimization active_merit="0">
+		<merit_function v="1.1558e+05" norm="339.97" auto="false" is_visible="true" store_hidden="false" var_id="0">
+			<variable_container>
+				<optivar />
+				<optivar />
+				<optivar />
+				<optivar />
+			</variable_container>
+			<sequence_p seq="4" field="All" wave="1" conf="1" is_visible="true" store_hidden="false">
+				<dist disttype="opt" rays="10" rays_2="10" footprinttype="plane" is_visible="true" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<target_container is_visible="true" store_hidden="false">
+					<spotradius_rms contrib="42966" v="207.28" t="0.0" weight="1.0" wave="All" field="All" surf="4" ign_col="false" ray_weight="none" is_visible="true" store_hidden="false" />
+					<spot_position contrib="11.034" v="33.217" t="0.0" weight="0.01" wave="1" field="1" dir="y pos" is_visible="true" store_hidden="false" />
+				</target_container>
+				<constraint_container is_visible="true" store_hidden="false" />
+			</sequence_p>
+			<sequence_p seq="4" field="All" wave="1" conf="25" is_visible="true" store_hidden="false">
+				<dist disttype="opt" rays="10" rays_2="10" footprinttype="plane" is_visible="true" store_hidden="false" ext_disttype="disk" sigma="0.0" ext_dir_disttype="super_gauss" extend_param1="3500.0" extend_param2="0.1" extend_param3="0.0024" extend_param4="2.0" extend_param5="0.0" extend_param6="0.0" px="0.0" py="0.0" disttype_gauss="gaussian_beam" waist="0.1" m_square="1.0" waist_dz="0.0" waist_x="0.1" m_square_x="1.0" waist_dz_x="0.0" use_paraxial="false" />
+				<target_container is_visible="true" store_hidden="false">
+					<spotradius_rms contrib="72546" v="269.34" t="0.0" weight="1.0" wave="All" field="All" surf="4" ign_col="false" ray_weight="none" is_visible="true" store_hidden="false" />
+					<spot_position contrib="49.546" v="70.389" t="0.0" weight="0.01" wave="1" field="1" dir="y pos" is_visible="true" store_hidden="false" />
+				</target_container>
+				<constraint_container is_visible="true" store_hidden="false" />
+			</sequence_p>
+			<target_container is_visible="true" store_hidden="false">
+				<apert_rad contrib="7.868" v="12195" t="15000.0" weight="1e-06" conf="25" id="secondary" surf="1" is_visible="true" store_hidden="false" />
+			</target_container>
+			<constraint_container is_visible="true" store_hidden="false" />
+		</merit_function>
+		<opti_settings_global max_sub_cycles="0" save_best="10" is_visible="true" store_hidden="false" />
+		<opti_settings_local solver="lm" vign="rem" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="local" />
+		<opti_settings_local solver="lm" vign="error" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="global" />
+		<opti_settings_local solver="lm" vign="rem" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="ext" />
+		<opti_settings_local solver="lm" vign="error" xtol="1e-08" ftol="1e-08" gtol="0.0" max_cycles="1000" is_visible="true" store_hidden="false" purpose="tol" />
+		<opti_settings_ext max_sub_cycles="0" glass_s="fullj" is_visible="true" store_hidden="false" />
+		<opti_settings_plot x_interval_l="10.0" x_interval_g="10.0" y_min_l="0.0" y_min_g="0.0" y_max_l="100.0" y_max_g="100.0" plot_type="global" x_inter_l="last" x_inter_g="all" y_scale_l="auto" y_scale_g="full" axis_type="log" axis_type="log" is_visible="true" store_hidden="true" />
+	</optimization>
+	<substitute_materials />
+	<tolerancing active_merit="0">
+		<element is_visible="true" store_hidden="false" specific="false" />
+		<surf surf="All" nO_lone="true" is_visible="true" store_hidden="false" specific="false" />
+		<assembly is_visible="true" store_hidden="false" specific="false" />
+		<multiconf is_visible="true" store_hidden="false" />
+		<comp_container is_visible="true" store_hidden="false" />
+	</tolerancing>
+	<crypt value="f2ce74a7e54d5447bb8ac0f7a7edf723f7132fb1eb42198f0e59dcd4652c254c" />
+</optical_system_definition>
