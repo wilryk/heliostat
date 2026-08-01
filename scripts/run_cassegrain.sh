@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# cassegrain: focused heliostats aimed at F1 = (0,0,38986) mm -- the hyperboloid's
+# cassegrain: focused heliostats aimed at F1 = (0,0,36000) mm -- the hyperboloid's
 # far (virtual) focus. The hyperboloid relays the bundle to the receiver at its
 # near focus, z = 7000 mm (the beam-down receiver, same as the axicon's).
 #
-#   - Design (scripts/design_cassegrain.py, rim height chosen = the axicon's own
-#     rim): rim r 15,000 mm at z 32,460; F1 z 38,986 (aperture-fill closure);
-#     vertex z 29,589; conic K -5.8789; |R_vertex| 32,181.3 mm.
+#   - Design settled 2026-08-01 (scripts/design_cassegrain.py --rim-height-mm
+#     30000 --f1-height-mm 36000): rim r 15,000 mm at z 30,000; F1 z 36,000
+#     = tip+9m, which reproduces the axicon's blocking almost exactly
+#     (scan_prime_focus_height.py) -- the comparability constraint. The dish
+#     sits as LOW as coverage allows at that F1 (lower rim = less relay
+#     magnification = tightest image the 30 m diameter cap permits;
+#     scan_cassegrain_annual.py has the energy table). Constants:
+#     vertex z 27,151.8; conic K -6.5821; |R_vertex| 31,548.9; sag 2,848.2.
 #   - Model: models/heliostat_field_cassegrain.optx -- built BY HAND in Quadoa
 #     (the hyperboloid's conic constants are literals in the file; the Python
 #     side never sees them, see beamdown/secondary/cassegrain.py). The model
@@ -55,8 +60,8 @@ echo "$$" > "$LOCKDIR/pid"
 say "starting $NAME (7 distinct declinations, focused mirrors, scalar occlusion), pid $$"
 python -u -m beamdown sweep \
     --secondary cassegrain \
-    --focus-height-mm 38986 \
-    --rim-height-mm 32460 \
+    --focus-height-mm 36000 \
+    --rim-height-mm 30000 \
     --n-mirrors 2 \
     --model-file "$MODEL" \
     --all-heliostats \

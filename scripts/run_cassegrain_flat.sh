@@ -31,8 +31,8 @@ echo "$$" > "$LOCKDIR/pid"
 say "starting $NAME (7 distinct declinations, FLAT mirrors, scalar occlusion), pid $$"
 python -u -m beamdown sweep \
     --secondary cassegrain \
-    --focus-height-mm 38986 \
-    --rim-height-mm 32460 \
+    --focus-height-mm 36000 \
+    --rim-height-mm 30000 \
     --n-mirrors 2 \
     --model-file "$MODEL" \
     --flat-mirrors \
