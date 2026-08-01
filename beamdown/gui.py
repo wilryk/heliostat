@@ -63,6 +63,13 @@ from matplotlib.figure import Figure  # noqa: E402
 # actually make, not a second opinion about it.
 from .config import SECONDARY_LAYOUTS, chunk_plan, reflections_for  # noqa: E402
 
+# The one shared paper style. Applied in BeamdownGUI.__init__ before any Figure
+# is built, because constrained_layout is read at figure-construction time --
+# see plot_style.apply's docstring. Every "Save figure…" button goes back out
+# through plot_style.save_figure, so what the GUI shows and what a script writes
+# are the same figure.
+from . import plot_style  # noqa: E402
+
 # The DNI models the Energy tab's selector offers, alongside "whatever
 # config.toml says" -- kept in sync with beamdown.dni's supported modes by
 # hand, since that module has no public list of them to import.
@@ -491,7 +498,13 @@ class BeamdownGUI:
         self._design_busy = False      # guards scale <-> spinbox write-back
         self._design_drawn = False     # has the picture ever been drawn
         self._design_result: dict = {}
+        self._design_section = None    # the drawn cross-section, for CSV export
         self._design_proc_busy = False  # an export subprocess is running
+
+        # Before _build_layout, which constructs every Figure: constrained
+        # layout is a figure-construction-time rcParam, so applying the style
+        # afterwards would leave every tab on matplotlib's default margins.
+        plot_style.apply()
 
         self.root.title("beamdown explorer")
         self.root.geometry("1500x900")
@@ -1129,11 +1142,33 @@ class BeamdownGUI:
         self.book.add(frame, text=name)
         fig = Figure(figsize=(9, 6.4), dpi=100, facecolor="white")
         canvas = FigureCanvasTkAgg(fig, master=frame)
+        self._export_bar(frame, name)          # packed to the bottom, below the toolbar
         canvas.get_tk_widget().pack(fill="both", expand=True)
         NavigationToolbar2Tk(canvas, frame).update()
         if name == "Field":
             canvas.mpl_connect("button_press_event", self._on_field_click)
         return fig, canvas
+
+    def _export_bar(self, parent, name: str, figure: bool = True):
+        """The same two actions, in the same place, on every tab that has data.
+
+        Bottom-right of the tab, under the plot: "Save figure…" and "Save data
+        (CSV)…". Identical wording and order everywhere so there is nothing to
+        learn per tab -- the Table tab, which has no figure, simply omits the
+        first rather than showing a dead button.
+        """
+        bar = ttk.Frame(parent, padding=(6, 2, 6, 4))
+        bar.pack(side="bottom", fill="x")
+        ttk.Label(bar, text=plot_style.describe(), foreground="#888888"
+                  ).pack(side="left")
+        ttk.Button(bar, text="Save data (CSV)…", width=18,
+                   command=lambda n=name: self._save_data_dialog(n)
+                   ).pack(side="right")
+        if figure:
+            ttk.Button(bar, text="Save figure…", width=14,
+                       command=lambda n=name: self._save_figure_dialog(n)
+                       ).pack(side="right", padx=(0, 4))
+        return bar
 
     def _build_energy_tab(self) -> None:
         """Headline numbers above the annual-energy figure, same figure/canvas
@@ -1167,6 +1202,7 @@ class BeamdownGUI:
 
         fig = Figure(figsize=(9, 5.6), dpi=100, facecolor="white")
         canvas = FigureCanvasTkAgg(fig, master=frame)
+        self._export_bar(frame, "Energy")
         canvas.get_tk_widget().pack(fill="both", expand=True)
         NavigationToolbar2Tk(canvas, frame).update()
         self.figures["Energy"] = fig
@@ -1278,9 +1314,16 @@ class BeamdownGUI:
         self.txt_design_log = tk.Text(box, height=9, wrap="none", font=("Consolas", 8))
         self.txt_design_log.pack(fill="both", expand=True, pady=(5, 0))
 
+        # The picture and its export bar share a right-hand frame, so the bar
+        # lands under the plot exactly as it does on every other tab rather than
+        # under the controls column.
+        right = ttk.Frame(frame)
+        right.pack(side="right", fill="both", expand=True)
         fig = Figure(figsize=(9, 6.4), dpi=100, facecolor="white")
-        canvas = FigureCanvasTkAgg(fig, master=frame)
-        canvas.get_tk_widget().pack(side="right", fill="both", expand=True)
+        canvas = FigureCanvasTkAgg(fig, master=right)
+        self._export_bar(right, "Design")
+        canvas.get_tk_widget().pack(fill="both", expand=True)
+        NavigationToolbar2Tk(canvas, right).update()
         self.figures["Design"] = fig
         self.canvases["Design"] = canvas
 
@@ -1507,6 +1550,10 @@ class BeamdownGUI:
         rays: list[tuple[float, float, float, float]] = []   # heliostat -> hit
         refl: list[tuple[float, float, float, float]] = []   # hit -> receiver
         ghost: list[tuple[float, float, float, float]] = []  # dashed continuation
+        # The secondary's own profile, sampled as drawn -- kept so "Save data
+        # (CSV)" exports the curve that is on screen rather than re-deriving a
+        # second version of it that could differ.
+        profile: list[tuple[float, float]] = []
 
         if layout == "axicon" and res.get("feasible"):
             tip = res["tip_mm"] / 1000.0
@@ -1521,6 +1568,7 @@ class BeamdownGUI:
             top = max(top, aim[1] + 4.0)
 
             # The cone flank, tip on the axis, rim at 15 m.
+            profile = [(0.0, tip), (rim_r, rim_z)]
             ax.plot([0.0, rim_r], [tip, rim_z], color=C_SEC, lw=3, zorder=5)
             ax.annotate(f"cone flank, {ang:.1f}° half-angle",
                         (rim_r * 0.55, tip + rim_r * 0.55 * _np.tan(_np.deg2rad(ang))),
@@ -1551,8 +1599,9 @@ class BeamdownGUI:
             top = max(top, f1 + 5.0)
 
             rr = _np.linspace(0.0, rim_r, 200)
-            ax.plot(rr, des.surface_z(rr * 1000.0) / 1000.0, color=C_SEC, lw=3,
-                    zorder=5)
+            zz = des.surface_z(rr * 1000.0) / 1000.0
+            profile = list(zip(rr.tolist(), _np.asarray(zz, float).tolist()))
+            ax.plot(rr, zz, color=C_SEC, lw=3, zorder=5)
             ax.annotate(f"hyperboloid dish, K {res['K']:.2f}\n"
                         f"{res['sag_mm']/1000:.2f} m deep, 15 m rim",
                         (rim_r * 0.6, des.surface_z(rim_r * 600.0) / 1000.0),
@@ -1647,7 +1696,20 @@ class BeamdownGUI:
         ax.set_ylabel("height (m)", fontsize=9)
         title = dict(self.DESIGN_LAYOUTS)[layout] if layout else "design"
         ax.set_title(title, fontsize=10, pad=8)
-        fig.tight_layout()
+
+        # Everything drawn, as points, for the CSV export: one row per vertex,
+        # tagged by which part of the picture it belongs to. Two-point entries
+        # are straight segments; "secondary" is the sampled profile.
+        section = [("secondary", r, z) for r, z in profile]
+        for tag, segs in (("beam_up", rays), ("beam_down", refl),
+                          ("construction", ghost)):
+            for i, (x0, z0, x1, z1) in enumerate(segs):
+                section.append((f"{tag}_{i}", x0, z0))
+                section.append((f"{tag}_{i}", x1, z1))
+        self._design_section = pd.DataFrame(
+            section, columns=["part", "radius_m", "height_m"])
+
+        plot_style.finish(fig)
         self.canvases["Design"].draw_idle()
 
     # -- exporting a model ----------------------------------------------
@@ -1954,8 +2016,13 @@ class BeamdownGUI:
         self.tree_row.pack(fill="both", expand=True)
 
     def _build_table_tab(self) -> None:
-        frame = ttk.Frame(self.book)
-        self.book.add(frame, text="Table")
+        outer = ttk.Frame(self.book)
+        self.book.add(outer, text="Table")
+        # No figure here, so only the CSV half of the export bar -- but in the
+        # same place, with the same wording, as on every plot tab.
+        self._export_bar(outer, "Table", figure=False)
+        frame = ttk.Frame(outer)
+        frame.pack(fill="both", expand=True)
         cols = ["heliostat_id"] + [c for c in self.columns if c != "heliostat_id"]
         self.table_cols = cols[:14]
         self.tree = ttk.Treeview(frame, columns=self.table_cols, show="headings")
@@ -3126,11 +3193,256 @@ class BeamdownGUI:
             traceback.print_exc()
 
     def _style(self, ax) -> None:
-        for side in ("top", "right"):
-            ax.spines[side].set_visible(False)
-        for side in ("left", "bottom"):
-            ax.spines[side].set_color("#bbbbbb")
-        ax.tick_params(labelsize=8, color="#bbbbbb")
+        """Minimal frame, from the shared paper style -- see beamdown.plot_style."""
+        plot_style.style_axes(ax)
+
+    # ------------------------------------------------------------------
+    # export: the figure as drawn, and the numbers behind it
+    # ------------------------------------------------------------------
+    #
+    # Two actions per tab, one implementation. The dialogs are thin wrappers
+    # over ``_export_figure_to`` / ``_export_data_to``, which take a path -- so
+    # the tests exercise the real export into a temp directory without a file
+    # dialog, and what the tests check is what the buttons do.
+
+    @staticmethod
+    def _safe(text: str) -> str:
+        """A filename fragment: no separators, no spaces, no surprises."""
+        keep = [c if (c.isalnum() or c in "-_.") else "_" for c in str(text)]
+        return "".join(keep).strip("_") or "untitled"
+
+    def _export_stem(self, name: str) -> str:
+        """A default filename that says what the file contains.
+
+        Run name, view, timestep and whatever the view is keyed on -- never
+        "figure1". Two exports from different tabs, different timesteps or
+        different metrics cannot collide, so a directory of these stays
+        readable a month later.
+        """
+        if name == "Design":
+            res = self._design_result or {}
+            layout = res.get("layout", "design")
+            if layout == "axicon":
+                tail = f"tip{res.get('tip_mm', 0)/1000:g}m_ang{res.get('angle_deg', 0):g}"
+            elif layout == "cassegrain":
+                tail = f"rim{res.get('rim_z_mm', 0)/1000:g}m_f1{res.get('f1_mm', 0)/1000:g}m"
+            else:
+                tail = f"f1{res.get('f1_mm', 0)/1000:g}m"
+            return self._safe(f"design_{layout}_{tail}")
+
+        run = self.store.root.name if self.store is not None else "run"
+        parts = [run, name.lower().replace(" ", "")]
+        if name in ("Field", "Spot", "Distribution", "Table"):
+            parts.append(self.key)
+        if name == "Field" or name == "Distribution":
+            parts.append(self.var_colour.get())
+        elif name == "Spot":
+            parts.append(self.var_spotview.get())
+            parts.append(f"h{self.selected}" if self.selected is not None else "field")
+        elif name == "Through day":
+            parts.append(self.var_metric.get())
+        elif name == "Energy":
+            # _dni_mode() is None when the selector is on "(config default)",
+            # whose literal text makes an ugly filename -- name the config
+            # rather than the placeholder.
+            parts.append("dni_" + (self._dni_mode() or "config"))
+        return self._safe("_".join(str(p) for p in parts))
+
+    def _export_figure_to(self, name: str, path) -> list:
+        """Write the named tab's figure as PNG (600 dpi) + PDF. Returns the paths."""
+        fig = self.figures.get(name)
+        if fig is None:
+            raise KeyError(f"{name} has no figure to save")
+        return plot_style.save_figure(fig, path)
+
+    def _export_data_to(self, name: str, path) -> list:
+        """Write the numbers behind the named tab. Returns the paths written.
+
+        One CSV per logical table. Most views have exactly one; the Design tab
+        has two (the readout, and the cross-section curve), which are written
+        beside each other with a suffix rather than crammed into one file with
+        a discriminator column no spreadsheet would thank you for.
+        """
+        base = Path(path)
+        if base.suffix.lower() == ".csv":
+            base = base.with_suffix("")
+        if base.parent and str(base.parent) not in ("", "."):
+            base.parent.mkdir(parents=True, exist_ok=True)
+
+        written = []
+        for suffix, frame in self._export_frames(name):
+            out = base.with_name(base.name + suffix).with_suffix(".csv")
+            frame.to_csv(out, index=False)
+            written.append(out)
+        return written
+
+    def _export_frames(self, name: str) -> list:
+        """``[(filename suffix, DataFrame)]`` -- the processed data behind a view.
+
+        Deliberately the *displayed* numbers, not the raw store: the aperture,
+        the DNI override and the shading toggle are all applied, so the CSV
+        matches the picture beside it. Reading the sweep's untouched output is
+        what ``store.summary()`` is for.
+        """
+        if name in ("Field", "Table"):
+            rows = self._rows_for_display().reset_index()
+            if name == "Table":
+                col, desc = self._sort_state
+                if col and col in rows.columns:
+                    rows = rows.sort_values(col, ascending=not desc)
+            return [("", rows)]
+
+        if name == "Spot":
+            if self.var_spotview.get() == "encircled":
+                return [("", self._encircled_frame())]
+            return [("", self._flux_frame())]
+
+        if name == "Through day":
+            return [("", self._through_day_frame())]
+
+        if name == "Distribution":
+            return [("", self._histogram_frame())]
+
+        if name == "Energy":
+            return [("", self._energy_frame())]
+
+        if name == "Design":
+            res = dict(self._design_result or {})
+            notes = res.pop("notes", [])
+            rows = [{"quantity": k, "value": v} for k, v in res.items()]
+            rows += [{"quantity": f"note_{i}", "value": n}
+                     for i, n in enumerate(notes)]
+            summary = pd.DataFrame(rows, columns=["quantity", "value"])
+            section = self._design_section
+            frames = [("", summary)]
+            if section is not None and len(section):
+                frames.append(("_section", section))
+            return frames
+
+        raise KeyError(f"no data export defined for {name!r}")
+
+    # -- the per-view tables --------------------------------------------
+    def _flux_frame(self):
+        """The receiver flux map(s) as a long table: x_mm, y_mm, flux_w_m2."""
+        w = self.cfg.receiver.window_mm
+        bins = self._bins()
+        edges = np.linspace(-w, w, bins + 1)
+        mid = 0.5 * (edges[:-1] + edges[1:])
+        # imshow was given origin="lower" and extent [-w, w, -w, w], so
+        # flux[j, i] sits at (x = mid[i], y = mid[j]) -- meshgrid in that order.
+        X, Y = np.meshgrid(mid, mid)
+        parts = []
+        for label, flux in self._spot_pair():
+            if flux is None:
+                continue
+            parts.append(pd.DataFrame({
+                "panel": label,
+                "x_mm": X.ravel(),
+                "y_mm": Y.ravel(),
+                "flux_w_m2": np.asarray(flux, float).ravel(),
+            }))
+        return (pd.concat(parts, ignore_index=True) if parts
+                else pd.DataFrame(columns=["panel", "x_mm", "y_mm", "flux_w_m2"]))
+
+    def _encircled_frame(self):
+        """Cumulative power against aperture radius -- the curve as plotted."""
+        from .metrics import bin_radius
+
+        rr = bin_radius(self.cfg, self._bins()).ravel()
+        order = np.argsort(rr)
+        grid = np.linspace(0.0, self.cfg.receiver.window_mm, 240)
+        area = self.bin_area_m2
+        parts = []
+        for label, flux in self._spot_pair():
+            if flux is None:
+                continue
+            cum = np.concatenate(([0.0], np.cumsum(flux.ravel()[order] * area)))
+            power = cum[np.searchsorted(rr[order], grid, side="right")]
+            parts.append(pd.DataFrame({
+                "panel": label,
+                "radius_mm": grid,
+                "enclosed_power_w": power,
+            }))
+        return (pd.concat(parts, ignore_index=True) if parts
+                else pd.DataFrame(columns=["panel", "radius_mm", "enclosed_power_w"]))
+
+    def _through_day_frame(self):
+        """One row per timestep: the field curve, and the selected heliostat's."""
+        metric = self.var_metric.get()
+        adjusted = pd.concat([self._rows_for_display(k).assign(timestep=k)
+                              for k in self.keys]).reset_index()
+        out = (adjusted.groupby(["date", "hour", "timestep"], as_index=False)
+               .agg(field_power_w=("power_w", "sum")))
+        out["field_power_kw"] = out["field_power_w"] / 1000.0
+        if self.selected is not None and metric in adjusted.columns:
+            mine = (adjusted[adjusted.heliostat_id == self.selected]
+                    [["timestep", metric]]
+                    .rename(columns={metric: f"heliostat_{metric}"}))
+            out = out.merge(mine, on="timestep", how="left")
+            out.insert(0, "heliostat_id", self.selected)
+        return out.sort_values(["date", "hour"]).reset_index(drop=True)
+
+    def _histogram_frame(self):
+        """The bars as drawn: bin edges and how many heliostats fell in each."""
+        col = self.var_colour.get()
+        vals = self._rows_for_display()[col].to_numpy(float)
+        vals = vals[np.isfinite(vals)]
+        nbins = min(50, max(8, len(vals) // 8))
+        counts, edges = np.histogram(vals, bins=nbins)
+        return pd.DataFrame({
+            "column": col,
+            "bin_left": edges[:-1],
+            "bin_right": edges[1:],
+            "bin_centre": 0.5 * (edges[:-1] + edges[1:]),
+            "heliostats": counts,
+        })
+
+    def _energy_frame(self):
+        """The annual curve: one row per day, plus the fitted sinusoid on it."""
+        result = self._energy_cache.get(self._energy_key())
+        if result is None:
+            raise RuntimeError("annual energy is still computing -- try again "
+                               "once the Energy tab has drawn")
+        daily = result["annual"]["daily"].copy()
+        traced = set(self.dates_as_dates)
+        daily["traced"] = daily["date"].isin(traced)
+        daily["energy_mwh"] = daily["energy_kwh"] / 1000.0
+        sine = result.get("sine")
+        if sine is not None:
+            doy = pd.to_datetime(daily["date"]).dt.dayofyear.to_numpy(float)
+            daily["fitted_energy_mwh"] = sine["predict"](doy) / 1000.0
+        return daily.reset_index(drop=True)
+
+    # -- the dialogs ----------------------------------------------------
+    def _save_figure_dialog(self, name: str) -> None:
+        stem = self._export_stem(name)
+        path = filedialog.asksaveasfilename(
+            title=f"Save the {name} figure — {plot_style.describe()}",
+            initialfile=stem + ".png", defaultextension=".png",
+            filetypes=[("PNG and PDF together", "*.png"), ("all files", "*.*")])
+        if not path:
+            return
+        try:
+            written = self._export_figure_to(name, path)
+        except Exception as exc:
+            messagebox.showerror("could not save", f"{type(exc).__name__}: {exc}")
+            return
+        self._status("wrote " + ", ".join(str(p) for p in written))
+
+    def _save_data_dialog(self, name: str) -> None:
+        stem = self._export_stem(name)
+        path = filedialog.asksaveasfilename(
+            title=f"Save the numbers behind the {name} view",
+            initialfile=stem + ".csv", defaultextension=".csv",
+            filetypes=[("CSV", "*.csv"), ("all files", "*.*")])
+        if not path:
+            return
+        try:
+            written = self._export_data_to(name, path)
+        except Exception as exc:
+            messagebox.showerror("could not save", f"{type(exc).__name__}: {exc}")
+            return
+        self._status("wrote " + ", ".join(str(p) for p in written))
 
     def _draw_field(self) -> None:
         """The field seen from directly above, mirror by mirror.
@@ -3268,7 +3580,7 @@ class BeamdownGUI:
 
         self._field_xy = rows[["x_m", "y_m"]].to_numpy()
         self._field_ids = rows.heliostat_id.to_numpy()
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Field"].draw_idle()
 
     def _weights_label(self) -> str:
@@ -3357,7 +3669,7 @@ class BeamdownGUI:
 
         fig.suptitle(f"{self.step_label(self.key)}   ·   {self._weights_label()}",
                      fontsize=9)
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Spot"].draw_idle()
 
     def _draw_encircled(self) -> None:
@@ -3394,7 +3706,7 @@ class BeamdownGUI:
 
         fig.suptitle(f"{self.step_label(self.key)}   ·   {self._weights_label()}   ·   "
                      f"encircled energy about the axis, not the centroid", fontsize=9)
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Spot"].draw_idle()
 
     def _draw_curve(self) -> None:
@@ -3445,10 +3757,12 @@ class BeamdownGUI:
             ax1.set_title(f"heliostat {self.selected} — {metric}   "
                           f"(highlighted {current_date}; grey = other dates)",
                           fontsize=9.5)
-        ax2.set_ylabel("field total (kW)", fontsize=8.5)
+        # The heliostat count rides in the ylabel rather than in a title of its
+        # own: it is the same one line of information, and a title between two
+        # stacked panels costs a band of white space across the whole figure.
+        ax2.set_ylabel(f"field total, {len(self.ids)} heliostats (kW)", fontsize=8.5)
         ax2.set_xlabel("local hour", fontsize=8.5)
-        ax2.set_title(f"whole field, {len(self.ids)} heliostats", fontsize=9.5)
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Through day"].draw_idle()
 
     def _draw_hist(self) -> None:
@@ -3480,7 +3794,7 @@ class BeamdownGUI:
         self._style(ax)
         ax.grid(True, axis="y", color="#eeeeee", linewidth=0.5)
         ax.set_axisbelow(True)
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Distribution"].draw_idle()
 
     def _draw_energy(self) -> None:
@@ -3557,7 +3871,7 @@ class BeamdownGUI:
                            hourly=annual["hourly"])
         if len(row):
             ax.axvline(pd.Timestamp(date), color="#d6604d", linewidth=1.4, zorder=5)
-        fig.tight_layout()
+        plot_style.finish(fig)
         self.canvases["Energy"].draw_idle()
 
     def _draw_table(self) -> None:

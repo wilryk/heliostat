@@ -32,6 +32,10 @@ class Explorer:
         import matplotlib.pyplot as plt
         from matplotlib.gridspec import GridSpec
 
+        from . import plot_style
+
+        plot_style.apply()
+
         self.store = store
         self.cfg = cfg
         self.crop_mm = crop_mm

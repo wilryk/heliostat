@@ -404,6 +404,10 @@ def make_figures(out_dir, per_ts, per_h, morph, traced_names, scalar_name,
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    from beamdown import plot_style
+
+    plot_style.apply()
+
     colours = {t: c for t, c in zip(traced_names, ["#c1272d", "#1b6ca8"])}
     colours["union"] = "#2a8f4b"
     last = traced_names[-1]
@@ -430,9 +434,9 @@ def make_figures(out_dir, per_ts, per_h, morph, traced_names, scalar_name,
     axes[0].set_ylabel("traced $-$ scalar (%)")
     axes[0].legend(fontsize=8, loc="upper right")
     fig.suptitle("Traced occlusion vs analytic scalars, per timestep")
-    fig.tight_layout()
+    plot_style.finish(fig)
     f1 = out_dir / "fig1_ratio_vs_elevation.png"
-    fig.savefig(f1, dpi=150)
+    plot_style.save_figure(fig, f1)
     plt.close(fig)
 
     # --- 2. per-heliostat scatter ----------------------------------------
@@ -474,9 +478,9 @@ def make_figures(out_dir, per_ts, per_h, morph, traced_names, scalar_name,
     axes[1].set_title("where the difference sits")
     axes[1].legend(fontsize=8)
     axes[1].grid(alpha=0.3)
-    fig.tight_layout()
+    plot_style.finish(fig)
     f2 = out_dir / "fig2_per_heliostat.png"
-    fig.savefig(f2, dpi=150)
+    plot_style.save_figure(fig, f2)
     plt.close(fig)
 
     # --- 3. spot morphology ----------------------------------------------
@@ -503,9 +507,9 @@ def make_figures(out_dir, per_ts, per_h, morph, traced_names, scalar_name,
     axes[0].legend(fontsize=8)
     fig.suptitle("Per-heliostat spot morphology at the receiver: traced occlusion "
                  "minus scalar (median, 5-95%)")
-    fig.tight_layout()
+    plot_style.finish(fig)
     f3 = out_dir / "fig3_spot_morphology.png"
-    fig.savefig(f3, dpi=150)
+    plot_style.save_figure(fig, f3)
     plt.close(fig)
 
     for f in (f1, f2, f3):

@@ -232,8 +232,13 @@ def cmd_figures(args) -> int:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    from . import plots, dni as D
+    from . import plot_style, plots, dni as D
     from .store import RunStore
+
+    # The shared paper style, before any figure exists. Every save_path below
+    # now writes a 600 dpi PNG *and* a vector PDF beside it -- see
+    # plot_style.save_figure.
+    plot_style.apply()
 
     cfg = _load(args)
     store = RunStore(cfg.output_root, cfg=cfg, mode="r")
@@ -289,7 +294,8 @@ def cmd_figures(args) -> int:
             plt.close(fig); made.append(f"field_{col}.png")
 
     for name in made:
-        print(f"  wrote {name}")
+        print(f"  wrote {name} (+ {Path(name).with_suffix('.pdf').name})")
+    print(f"  {plot_style.describe()}")
     return 0
 
 

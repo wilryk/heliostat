@@ -13,7 +13,13 @@ on a single shared colourbar.
 ones, and it is perceptually uniform, which a rainbow map is not. Built through
 the modern colormap API -- ``cm.get_cmap`` is removed in matplotlib 3.11.
 
-**Axes recede, data dominates.** Thin spines, muted ticks, no chartjunk.
+**Axes recede, data dominates.** Thin spines, muted ticks, no chartjunk. Those
+choices now live in :mod:`beamdown.plot_style`, which this module applies on
+every entry point, so a figure written here and a figure written by the GUI or
+by a script are the same figure. ``save_path`` goes through
+:func:`beamdown.plot_style.save_figure`, so every saved figure is a 600 dpi PNG
+**and** a vector PDF beside it -- pass ``plots/foo`` or ``plots/foo.png``, both
+produce the pair.
 """
 
 from __future__ import annotations
@@ -22,6 +28,8 @@ import datetime as _dt
 
 import numpy as np
 import pandas as pd
+
+from . import plot_style
 
 _FLUX_CMAP = None
 
@@ -40,12 +48,8 @@ def flux_colormap():
 
 
 def _style_axis(ax):
-    for side in ("top", "right"):
-        ax.spines[side].set_visible(False)
-    for side in ("left", "bottom"):
-        ax.spines[side].set_linewidth(0.6)
-        ax.spines[side].set_color("#888888")
-    ax.tick_params(colors="#555555", labelsize=8, width=0.6)
+    """Minimal frame, from the shared paper style."""
+    plot_style.style_axes(ax)
 
 
 def _parse_key_date(key: str) -> _dt.date:
@@ -75,6 +79,8 @@ def through_day_panels(
     array (shading x blocking); omit it for the unshaded case.
     """
     import matplotlib.pyplot as plt
+
+    plot_style.apply()
 
     keys = list(keys) if keys is not None else store.timestep_keys()
     if not keys:
@@ -153,7 +159,7 @@ def through_day_panels(
     fig.text(0.5, 0.005, note, ha="center", fontsize=7.5, color="#777777")
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig
 
 
@@ -161,6 +167,8 @@ def single_vs_field(store, cfg, key, heliostat_row=0, heliostat_id=None,
                     crop_mm=None, save_path=None):
     """One heliostat beside the whole field: 'the focus is not just a point'."""
     import matplotlib.pyplot as plt
+
+    plot_style.apply()
 
     single = store.heliostat_flux(key, heliostat_row, cfg=cfg)
     combined = store.field_flux(key, cfg=cfg)
@@ -187,10 +195,10 @@ def single_vs_field(store, cfg, key, heliostat_row=0, heliostat_id=None,
         cb.ax.tick_params(labelsize=7)
     axes[0].set_ylabel("y (mm)", fontsize=9)
     fig.suptitle(f"Receiver flux — {key}", fontsize=11)
-    fig.tight_layout()
+    plot_style.finish(fig)
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig
 
 
@@ -318,13 +326,15 @@ def annual_energy_figure(daily, sine_fit=None, traced_dates=(), hourly=None,
     """Standalone figure wrapping :func:`annual_energy_axes`, for direct use outside the GUI."""
     import matplotlib.pyplot as plt
 
+    plot_style.apply()
+
     fig, ax = plt.subplots(figsize=(9.0, 4.6))
     annual_energy_axes(ax, daily, sine_fit=sine_fit, traced_dates=traced_dates,
                        hourly=hourly, title=title)
-    fig.tight_layout()
+    plot_style.finish(fig)
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig
 
 
@@ -332,6 +342,8 @@ def field_scatter(summary, column, timestep=None, cfg=None, title=None,
                   cmap="viridis", save_path=None):
     """All heliostats, positioned as in the field, coloured by any metric."""
     import matplotlib.pyplot as plt
+
+    plot_style.apply()
 
     data = summary[summary.timestep == timestep] if timestep else (
         summary.groupby("heliostat_id", as_index=False).agg(
@@ -353,10 +365,10 @@ def field_scatter(summary, column, timestep=None, cfg=None, title=None,
     cb = fig.colorbar(sc, ax=ax, fraction=0.046, pad=0.03)
     cb.set_label(column, fontsize=9)
     cb.ax.tick_params(labelsize=8)
-    fig.tight_layout()
+    plot_style.finish(fig)
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig
 
 
@@ -364,6 +376,8 @@ def power_through_day(summary, value="power_w", ylabel="Receiver power (kW)",
                       scale=1e-3, save_path=None, title="Delivered power through the day"):
     """One line per date. Direct-labelled, so no legend box is needed."""
     import matplotlib.pyplot as plt
+
+    plot_style.apply()
 
     grouped = (summary.groupby(["date", "hour"], as_index=False)[value].sum())
     dates = sorted(grouped["date"].unique())
@@ -388,16 +402,18 @@ def power_through_day(summary, value="power_w", ylabel="Receiver power (kW)",
     _style_axis(ax)
     ax.grid(True, axis="y", color="#eeeeee", linewidth=0.5)
     ax.set_axisbelow(True)
-    fig.tight_layout()
+    plot_style.finish(fig)
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig
 
 
 def efficiency_breakdown(summary, save_path=None):
     """Cosine, shading and blocking through the day -- where the losses are."""
     import matplotlib.pyplot as plt
+
+    plot_style.apply()
 
     grouped = summary.groupby(["date", "hour"], as_index=False).agg(
         cosine=("cosine_efficiency", "mean"),
@@ -427,8 +443,8 @@ def efficiency_breakdown(summary, save_path=None):
     axes[0][0].set_ylabel("Efficiency", fontsize=9)
     axes[0][0].legend(frameon=False, fontsize=8.5, loc="lower center")
     fig.suptitle("Loss mechanisms through the day", fontsize=11)
-    fig.tight_layout()
+    plot_style.finish(fig)
 
     if save_path:
-        fig.savefig(save_path, dpi=200, bbox_inches="tight", facecolor="white")
+        plot_style.save_figure(fig, save_path)
     return fig

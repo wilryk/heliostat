@@ -553,6 +553,160 @@ def check_cli_overrides() -> bool:
     return ok
 
 
+def check_exports(root, g, cfg) -> bool:
+    """Every tab's two exports, run for real into a temp directory.
+
+    The dialogs are skipped, not faked: ``_save_figure_dialog`` is a
+    ``filedialog`` call wrapping ``_export_figure_to(name, path)``, and it is
+    that inner function -- the one the button actually does its work in -- which
+    is exercised here. Nothing is written outside ``tempfile``; in particular
+    nothing goes near ``analysis_output/``.
+
+    What is checked for each tab: a PNG and a PDF land with plausible sizes, the
+    PNG really is 600 dpi (read back out of the file rather than trusted), the
+    CSV parses with pandas and is not empty, and the default filename says what
+    the file contains rather than "figure1".
+    """
+    import tempfile
+
+    import pandas as pd
+
+    from beamdown import plot_style
+
+    ok = True
+
+    def check(label, condition):
+        nonlocal ok
+        ok &= bool(condition)
+        print(f"    {'OK  ' if condition else 'FAIL'} {label}")
+
+    # The Energy tab exports the cached annual walk; make sure it is there
+    # before asking for it, exactly as the tab itself does.
+    if not g._energy_cache:
+        g._ensure_energy()
+        for _ in range(600):
+            if g._energy_cache:
+                break
+            pump(root, 1)
+
+    # -- the style is actually installed --------------------------------
+    import matplotlib
+
+    rc = matplotlib.rcParams
+    check(f"paper style applied: white figure, {rc['lines.linewidth']:g} pt data "
+          f"lines, constrained layout, savefig {rc['savefig.dpi']:g} dpi",
+          rc["figure.facecolor"] == "white" and rc["savefig.facecolor"] == "white"
+          and float(rc["lines.linewidth"]) >= 2.0
+          and bool(rc["figure.constrained_layout.use"])
+          and float(rc["savefig.dpi"]) == plot_style.EXPORT_DPI)
+    check("every GUI figure carries a layout engine, so none uses the "
+          "default margins",
+          all(f.get_layout_engine() is not None for f in g.figures.values()))
+
+    tabs = ["Field", "Spot", "Through day", "Distribution", "Energy", "Design",
+            "Table"]
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        for name in tabs:
+            stem = g._export_stem(name)
+            # The name has to identify the content: run or layout, the view, and
+            # whatever the view is keyed on. "figure1" would pass a len() check,
+            # so this asserts the actual parts are in it.
+            keyed = (name == "Design" or stem.startswith(Path(RUN).name))
+            check(f"{name:<13s} default name {stem!r}",
+                  keyed and " " not in stem and len(stem) > 8)
+
+            written = []
+            if name in g.figures:
+                written = g._export_figure_to(name, tmp / stem)
+                exts = sorted(p.suffix for p in written)
+                png = [p for p in written if p.suffix == ".png"][0]
+                pdf = [p for p in written if p.suffix == ".pdf"][0]
+                # 600 dpi is read back out of the PNG's own pHYs chunk (pixels
+                # per metre), not taken on trust from the call we just made.
+                from PIL import Image
+
+                with Image.open(png) as im:
+                    dpi_x = im.info.get("dpi", (0, 0))[0]
+                    size = im.size
+                check(f"{name:<13s} PNG+PDF {exts}, {size[0]}x{size[1]} px at "
+                      f"{dpi_x:.0f} dpi, {png.stat().st_size//1024} kB / "
+                      f"{pdf.stat().st_size//1024} kB",
+                      exts == [".pdf", ".png"] and abs(dpi_x - 600) < 1
+                      and png.stat().st_size > 5000 and pdf.stat().st_size > 1000)
+
+            csvs = g._export_data_to(name, tmp / stem)
+            frames = [pd.read_csv(c) for c in csvs]
+            shapes = ", ".join(f"{c.name} {f.shape[0]}x{f.shape[1]}"
+                               for c, f in zip(csvs, frames))
+            check(f"{name:<13s} CSV parses: {shapes}",
+                  bool(csvs) and all(len(f) > 0 and len(f.columns) > 1
+                                     for f in frames))
+
+        # -- the flux CSV must BE the flux map, not a re-derivation -------
+        #
+        # The whole point of "save the processed data" is that it is the same
+        # numbers as the picture beside it. Summing the exported grid over its
+        # bin area has to reproduce the power the tab reports.
+        g.var_spotview.set("image")
+        g._draw_spot()
+        flux = g._flux_frame()
+        field_panel = flux[flux.panel.str.startswith("all ")]
+        exported_w = float(field_panel.flux_w_m2.sum()) * g.bin_area_m2
+        shown_w = float(g._field_flux().sum()) * g.bin_area_m2
+        print(f"    flux CSV total {exported_w/1e3:,.1f} kW vs the map's "
+              f"{shown_w/1e3:,.1f} kW")
+        check("the exported flux grid is the drawn flux map",
+              abs(exported_w - shown_w) < 1e-6 * max(shown_w, 1.0)
+              and len(field_panel) == g._bins() ** 2)
+
+        # -- and the encircled CSV must be the encircled curve -------------
+        #
+        # Not "ends at the field total": the curve runs to the window radius,
+        # and the square grid's corner bins lie outside that circle, so the last
+        # point is legitimately a hair under the total. The check that means
+        # something is the physical one -- power inside radius r, off the
+        # exported curve, must equal power inside the same circular mask of the
+        # drawn map, which is the identity main() already pins for the plot.
+        import numpy as _np
+
+        from beamdown.metrics import radial_mask
+
+        g.var_spotview.set("encircled")
+        g._draw_spot()
+        enc = g._encircled_frame()
+        field_curve = enc[enc.panel.str.startswith("all ")]
+        r_test = 700.0
+        from_csv = float(_np.interp(r_test, field_curve.radius_mm,
+                                    field_curve.enclosed_power_w))
+        from_map = float(g._field_flux()[radial_mask(cfg, r_test, g._bins())].sum()
+                         * g.bin_area_m2)
+        last = float(field_curve.enclosed_power_w.iloc[-1])
+        print(f"    encircled CSV at r{r_test:.0f} {from_csv/1e3:,.1f} kW vs the "
+              f"map inside the same circle {from_map/1e3:,.1f} kW; curve ends at "
+              f"{last/1e3:,.1f} kW of {shown_w/1e3:,.1f} kW total (corner bins "
+              f"lie outside the window radius)")
+        check("the exported encircled curve is the drawn map's enclosed power",
+              abs(from_csv - from_map) < 2e-3 * max(from_map, 1.0)
+              and last <= shown_w * (1 + 1e-12)
+              and (shown_w - last) < 1e-2 * shown_w)
+        g.var_spotview.set("image")
+
+        # -- plot_style's own contract ------------------------------------
+        #
+        # save_figure is what every button and every script goes through, so its
+        # extension handling is load-bearing: a path that came from a "Save
+        # as..." dialog arrives with .png already on it and must not become
+        # "name.png.pdf".
+        written = plot_style.save_figure(g.figures["Distribution"],
+                                         tmp / "already.png")
+        check(f"save_figure strips an existing extension: "
+              f"{[p.name for p in written]}",
+              sorted(p.name for p in written) == ["already.pdf", "already.png"])
+
+    return ok
+
+
 def check_design_tab(root, g) -> bool:
     """The Design tab: it evaluates geometry, never the loaded run.
 
@@ -1515,6 +1669,8 @@ def main() -> int:
     ok &= check_cli_overrides()
     print("\n  Design tab (licence-free, run-independent):")
     ok &= check_design_tab(root, g)
+    print("\n  Figure and data export (into a temp dir, never analysis_output):")
+    ok &= check_exports(root, g, cfg)
     print("\n  Trace tab:")
     ok &= check_trace_tab(root, g, cfg)
 
