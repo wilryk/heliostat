@@ -711,7 +711,12 @@ for that heliostat, not a reconstruction of it.
 - Quadoa's tracer already runs at ~4x parallelism, so extra worker processes add
   little on an 8-core machine.
 - The API can select configurations and read/write their parameters, but cannot
-  create one; `beamdown/model_edit.py` adds columns by editing the `.optx`.
+  create one; `beamdown/model_edit.py` adds columns by editing the `.optx`
+  (used by the inspect/export path). The 25-config **figure model** is built
+  entirely by guarded text surgery and needs **no licence seat**:
+  `python scripts/build_figure_model.py --date D --hour H [--flat] --check`;
+  `scripts/verify_figure_model.py` is the seat-gated confirmation, and refuses
+  to run under any `analysis_output/.*.lock`.
 
 ## Configuration
 

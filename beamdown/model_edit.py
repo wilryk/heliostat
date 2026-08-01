@@ -1,7 +1,7 @@
 """Edit the Quadoa .optx multiconfig block.
 
-The shipped ``heliostat_field_model_mcfg.optx`` has 24 configuration columns; 25
-are wanted for the figure model.
+The shipped ``heliostat_field_model_mcfg.optx`` has 24 configuration columns;
+an export may want more (one per heliostat being inspected).
 
 Why edit the file rather than call the API: checked against the complete
 QuadoaCore surface (256 public methods, dumped by ``tools/dump_api.py``). The
@@ -23,7 +23,17 @@ care about. Here only the multiconfig header and the per-param variable lists ar
 touched, and the result is verified by loading it back and reading the new column.
 
 The bulk 645-heliostat sweep does not need any of this -- it reuses a single
-configuration. This is only for building the small model used for 3D views.
+configuration. The live caller is :func:`beamdown.inspect_model.
+export_for_inspection`, which grows a copy of the model so each inspected
+heliostat gets its own configuration.
+
+The 25-configuration *figure* model is NOT built here. This module once carried
+a ``build_figure_model`` that did the column surgery in Python and then needed a
+licence seat to write the per-config values through ``setMulticonfParam``; the
+second half never ran anywhere, which is why the shipped
+``models/figure_model_25cfg.optx`` has configs 1-24 all zeros. The working,
+licence-free generator is ``scripts/build_figure_model.py`` (with
+``scripts/verify_figure_model.py`` for the seat-gated half).
 """
 
 from __future__ import annotations
@@ -103,70 +113,3 @@ def expand_multiconfig(src: Path, dst: Path, n_columns: int, backup: bool = True
         "params": extended,
         "path": str(dst),
     }
-
-
-def verify_columns(cfg, model_path: Path, expect: int) -> dict:
-    """Load the edited model and confirm the new columns are really there."""
-    from .session import _import_quadoa
-
-    quadoa = _import_quadoa(cfg.trace.quadoa_folder)
-    core = quadoa.QuadoaCore()
-    try:
-        core.loadModelFile(str(model_path))
-        core.applyChangesAndInitModel()
-        n = core.getNrConfigs()
-
-        probe = expect - 1
-        core.setMulticonfParam("posx", probe, 12345.0)
-        readback = core.getMulticonfParam("posx", probe)
-        return {
-            "nr_configs": n,
-            "matches_expected": n == expect,
-            "write_readback_ok": abs(readback - 12345.0) < 1e-6,
-            "probe_column": probe,
-        }
-    finally:
-        import gc
-
-        del core
-        gc.collect()
-
-
-def build_figure_model(cfg, indices, step, out_path=None, strategy=None):
-    """Write an .optx holding the downselected heliostats for 3D viewing.
-
-    Uses the figure sequence (few rays, fast redraw) rather than the analysis
-    sequence, and one configuration per selected heliostat.
-    """
-    from . import field as F
-    from .secondary import get_strategy
-    from .session import QuadoaSession
-
-    strategy = strategy or get_strategy(cfg)
-    fld = F.load_field(cfg).subset(indices)
-    n = len(fld)
-
-    out_path = Path(out_path) if out_path else cfg.path(f"models/figure_model_{n}cfg.optx")
-    report = expand_multiconfig(cfg.model_path, out_path, n)
-
-    session = QuadoaSession(cfg, seq=cfg.trace.figure_seq)
-    try:
-        session.core.loadModelFile(str(out_path))
-        session.core.applyChangesAndInitModel()
-        session.set_global_geometry()
-        session.set_sun(step.solar_az_deg, step.solar_el_deg)
-
-        for i in range(n):
-            sol = strategy.solve(float(fld.x_mm[i]), float(fld.y_mm[i]),
-                                 step.solar_az_deg, step.solar_el_deg, cfg.geometry)
-            session.set_heliostat(float(fld.x_mm[i]), float(fld.y_mm[i]), sol, i)
-
-        session.core.setConfig(0)
-        session.core.saveModelFile(str(out_path))
-    finally:
-        session.close()
-
-    report["heliostats"] = n
-    report["timestep"] = step.key
-    report["sequence"] = cfg.trace.figure_seq
-    return report

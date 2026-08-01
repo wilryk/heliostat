@@ -28,17 +28,19 @@ does not have its own opinion.
 
 Why this script exists
 ----------------------
-``beamdown.model_edit.build_figure_model`` was the generator, and it has NEVER
-been called from anywhere in the repository -- no CLI verb, no GUI action, no
-test.  It also could not have produced a usable file without a licence seat: it
-does the column surgery in Python but then opens a ``QuadoaSession`` to write
-the per-config values through ``setMulticonfParam`` and ``saveModelFile``.  The
+``beamdown.model_edit.build_figure_model`` was the generator, and it was NEVER
+called from anywhere in the repository -- no CLI verb, no GUI action, no test.
+It also could not have produced a usable file without a licence seat: it did
+the column surgery in Python but then opened a ``QuadoaSession`` to write the
+per-config values through ``setMulticonfParam`` and ``saveModelFile``.  The
 shipped ``models/figure_model_25cfg.optx`` shows that second half never
 happened.  It is byte-for-byte ``heliostat_field_model_mcfg.optx`` plus seven
 ``val_24`` lines and ``columns="24"`` -> ``"25"``, and nothing else: config 0
 holds one stale heliostat at (22300, -60000) and configs 1..24 are all zeros.
 A zero heliostat is not "off" -- it is a mirror at the origin pointing at the
-horizon, so the file opens fine in the GUI and shows 24 wrong mirrors.
+horizon, so the file opens fine in the GUI and shows 24 wrong mirrors.  That
+superseded function has since been deleted from ``beamdown/model_edit.py``;
+only its column-surgery helpers survive there, for the inspect/export path.
 
 So this script does the whole job by text surgery and needs NO licence.  The
 values a ``setMulticonfParam`` + ``saveModelFile`` round trip would have left in
