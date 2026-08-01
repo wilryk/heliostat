@@ -1,15 +1,28 @@
-# STATE — beamdown (rewritten 2026-08-01 ~13:00)
+# STATE — beamdown (rewritten 2026-08-01 ~13:15)
 
 ## Git / location
 **Home is C:\gitlab\heliostats.** Remote https://github.com/wilryk/heliostat.git
-(main). 2026-08-01 work is committed LOCALLY through 7bc0790 + this commit —
-**NOT pushed** (classifier blocks agents; owner runs `git push`). Owner still
-to hand-delete stale C:\gitlab code + .git.
+(main), **pushed through 4e85cae** (owner authorized push 2026-08-01; .uix
+files now gitignored+untracked). Owner still to hand-delete stale C:\gitlab
+code + .git.
+
+## Running RIGHT NOW (launched ~13:15 Sat 2026-08-01)
+**scripts/run_weekend_chain.sh** (background child of the 08-01 session;
+survives session end — proven pattern). Queue: cassegrain → cassegrain_flat
+→ prime_focus_f36 → _sphere → _meancos → _median (~6-9 h each; seat held).
+**SUNDAY RULE (hard, religious): no runs Sunday 00:00–24:00 local.** The
+chain stops a live sweep Sat 23:55 (kill tree + rm lock = documented
+stale-lock recovery; sweeps resume from stored steps) and relaunches after
+Mon 00:05. Chain log: analysis_output/weekend_chain.log. If a later session
+finds a lock but NO live python: rm the lock dir, rerun the chain script
+(idempotent; skips runs whose log ends "done"). NEVER retry a seat failure.
+Owner validated the cassegrain model by GUI trace before launch: ~90%
+energy inside ~700 mm radius (ideal prediction was 636 — real optics cost
+only ~10%). No formal verify_figure_model run; owner's trace stands in.
 
 ## Seat / runs
-**Seat FREE since 2026-08-01 12:23** — the axicon_flat → prime_focus →
-prime_focus_flat chain drained cleanly, no intervention ever needed.
-All four comparison runs traced (94 steps, 7 declinations, scalar UNION):
+The overnight chain drained cleanly at 12:23 (no intervention all day).
+All four first-family runs traced (94 steps, 7 declinations, scalar UNION):
 - axicon full8 **10,152.2 MWh** (eta 0.5990, traced occluders; reference)
 - axicon_flat **3,781.2** (0.2231) — flat keeps 37%
 - prime_focus **12,096.3** (0.7137, F1 47,000)
@@ -64,14 +77,12 @@ every tab: "Save figure…" (600 dpi PNG + vector PDF) + "Save data (CSV)".
 verify --no-quadoa 12/12 (figure stage 21 checks); test_gui full7 PASS
 (new Design-tab + export sections). Axicon solve() bit-identical pin holds.
 
-## Queued (in order)
-1. Owner: GUI review of cass30 model; owner runs `git push`.
-2. Seat: verify 25cfg models (verify_figure_model.py) + cassegrain sweep
-   model self-test. Minutes each; do BEFORE any cassegrain sweep.
-3. 4-day fixed-figure runs (owner picks order) — then mean-vs-median call.
-4. run_cassegrain.sh + run_cassegrain_flat.sh (settled design, ~9 h each).
-5. Cross-geometry paper report incl. concentration column (traced r50/r90).
-6. Chunk-size probe >120k rays (needs seat).
+## Queued (after the weekend chain drains, ~Tue morning)
+1. Read the six new run reports; mean-vs-median fixed-figure call.
+2. Cross-geometry paper report incl. concentration column (traced r50/r90).
+   Key traced concentration anchors: pf r90 474 mm / axicon 595 / cass TBD.
+3. Chunk-size probe >120k rays (needs seat).
+4. Owner deletes stale C:\gitlab code + .git.
 
 ## Traps (new this session; older ones in CLAUDE.md/README)
 - Heavy CPU jobs slow a running sweep even at below-normal priority
