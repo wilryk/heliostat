@@ -553,6 +553,167 @@ def check_cli_overrides() -> bool:
     return ok
 
 
+def check_design_tab(root, g) -> bool:
+    """The Design tab: it evaluates geometry, never the loaded run.
+
+    **Nothing here builds a model.** The export buttons shell out to the
+    ``scripts/build_*_model.py`` programs, which write into ``models/``; what is
+    checked is the argv they would be handed, exactly as ``check_command_builder``
+    does for the Trace tab, so the test stays side-effect free.
+
+    The tab is also the one view that must work with no run at all -- it reads
+    the field file and config through ``beamdown.design_eval`` and nothing else
+    -- so the first check removes the summary outright and re-evaluates.
+    """
+    from beamdown import design_eval as DE
+
+    ok = True
+
+    def check(label, condition):
+        nonlocal ok
+        ok &= bool(condition)
+        print(f"    {'OK  ' if condition else 'FAIL'} {label}")
+
+    # -- the tab must not need a loaded run -----------------------------
+    summary, store = g.summary, g.store
+    g.summary, g.store = None, None
+    try:
+        g._design_refresh()
+        independent = bool(g._design_result) and g._design_drawn
+    except Exception as exc:
+        independent = False
+        print(f"    Design tab touched the run: {type(exc).__name__}: {exc}")
+    finally:
+        g.summary, g.store = summary, store
+    check("the tab evaluates and draws with no run loaded", independent)
+
+    # -- the built axicon is the reference, and it is computed, not typed ----
+    built = DE.built_axicon()
+    check(f"built axicon indexes to exactly 1.0 "
+          f"(cap {built['max_sagittal_correction']:.4e} /mm, "
+          f"r90 {built['r90_mm']:.1f} mm)",
+          abs(DE.eval_axicon(DE.BUILT_TIP_MM, DE.BUILT_ANGLE_DEG)["energy_index"]
+              - 1.0) < 1e-12
+          and abs(built["max_sagittal_correction"] - 7.115e-06) < 1e-9)
+
+    # -- every layout evaluates, and the GUI shows what design_eval returned --
+    for layout, params, want in (
+            ("axicon", {"tip": 27.0, "angle": 20.0},
+             DE.eval_axicon(27000.0, 20.0)),
+            ("cassegrain", {"rim": 30.0, "f1": 36.0},
+             DE.eval_cassegrain(30000.0, 36000.0)),
+            ("prime_focus", {"pf": 36.0}, DE.eval_prime_focus(36000.0))):
+        g.var_design_layout.set(layout)
+        for key, value in params.items():
+            g._design_vars[key].set(value)
+        g._design_layout_changed()
+        g._design_refresh()
+        pump(root, 3)
+        got = g._design_result
+        check(f"{layout:<12s} energy {got.get('energy_index', float('nan')):.4f}x, "
+              f"occlusion {got.get('occlusion', 0)*100:.1f}%, "
+              f"r90 {got.get('r90_mm', 0):.0f} mm -- matches design_eval",
+              got.get("layout") == layout and got.get("feasible")
+              and got["energy_index"] == want["energy_index"]
+              and got["r90_mm"] == want["r90_mm"])
+        shown = [lbl.cget("text") for lbl in g._design_lines if lbl.cget("text")]
+        check(f"{layout:<12s} readout is written out ({len(shown)} lines, "
+              f"first: {shown[0] if shown else '<empty>'})", len(shown) >= 4)
+
+    # -- an impossible design refuses, in words, rather than drawing a lie ---
+    g.var_design_layout.set("cassegrain")
+    g._design_vars["rim"].set(30.0)
+    g._design_vars["f1"].set(41.0)
+    g._design_layout_changed()
+    g._design_refresh()
+    bad = g._design_result
+    check(f"F1 above the aperture-fill limit is refused: "
+          f"{(bad.get('notes') or ['<silent>'])[0][:60]}…",
+          not bad.get("feasible") and bool(bad.get("notes")))
+    check("the full-field cassegrain button is disabled while infeasible",
+          str(g.btn_design_full.cget("state")) == "disabled")
+
+    # -- the export argv, without exporting anything ------------------------
+    #
+    # Same contract as the Trace tab's command builder: what the button hands to
+    # the builder is checked, the builder is never run. --force never appears --
+    # an existing target must draw the script's own refusal.
+    seen = {}
+    real_run = g._design_run
+    g._design_run = lambda cmds, chain_on_output=None, chain_suffix="_dish": \
+        seen.update(cmds=cmds, chain=chain_on_output, suffix=chain_suffix)
+    try:
+        g.var_design_date.set("2026-02-20")
+        g.var_design_hour.set("9.454")
+
+        g.var_design_layout.set("axicon")
+        g._design_vars["tip"].set(29.0)
+        g._design_vars["angle"].set(18.5)
+        g._design_layout_changed()
+        g._design_refresh()
+        g._design_export_figure()
+        argv = seen["cmds"][0]
+        print(f"    {' '.join(argv[1:])}")
+        check("axicon export carries the cone overrides",
+              argv[1].endswith("build_figure_model.py")
+              and argv[argv.index("--tip-height-mm") + 1] == "29000.0"
+              and argv[argv.index("--axicon-angle-deg") + 1] == "18.5"
+              and argv[argv.index("--date") + 1] == "2026-02-20"
+              and argv[argv.index("--hour") + 1] == "9.454")
+        check("axicon export chains nothing", seen["chain"] is None)
+        check("no --force is ever passed", "--force" not in argv)
+
+        g.var_design_layout.set("cassegrain")
+        g._design_vars["rim"].set(30.0)
+        g._design_vars["f1"].set(36.0)
+        g._design_layout_changed()
+        g._design_refresh()
+        g._design_export_figure()
+        argv, chain = seen["cmds"][0], seen["chain"]
+        print(f"    {' '.join(argv[1:])}")
+        print(f"    then {' '.join(chain[1:])} --base <written> --out <+{seen['suffix']}>")
+        check("cassegrain export sets the layout, F1 and the rim",
+              argv[argv.index("--secondary") + 1] == "cassegrain"
+              and argv[argv.index("--focus-height-mm") + 1] == "36000.0"
+              and argv[argv.index("--rim-height-mm") + 1] == "30000.0")
+        check("cassegrain export chains the dish builder at the same geometry",
+              chain is not None and chain[1].endswith("build_cassegrain_model.py")
+              and chain[chain.index("--rim-z-mm") + 1] == "30000.0"
+              and chain[chain.index("--f1-mm") + 1] == "36000.0"
+              and "--force" not in chain and seen["suffix"] == "_dish30")
+
+        g.var_design_layout.set("prime_focus")
+        g._design_vars["pf"].set(38.0)
+        g._design_layout_changed()
+        g._design_refresh()
+        g._design_export_figure()
+        argv = seen["cmds"][0]
+        print(f"    {' '.join(argv[1:])}")
+        check("prime-focus export sets the layout and F1, and chains nothing",
+              argv[argv.index("--secondary") + 1] == "prime_focus"
+              and argv[argv.index("--focus-height-mm") + 1] == "38000.0"
+              and seen["chain"] is None)
+    finally:
+        g._design_run = real_run
+
+    # -- the builders really do accept those flags --------------------------
+    #
+    # The argv above is only worth checking if the scripts define those flags --
+    # the same worry check_command_builder answers by parsing its line with
+    # beamdown's own parser. Reading the source rather than importing the
+    # scripts, because importing them runs their module-level sys.path surgery.
+    for script, flags in (
+            ("build_figure_model.py",
+             ("--tip-height-mm", "--axicon-angle-deg", "--rim-height-mm",
+              "--secondary", "--focus-height-mm")),
+            ("build_cassegrain_model.py", ("--rim-z-mm", "--f1-mm", "--force"))):
+        src = (REPO / "scripts" / script).read_text(encoding="utf-8")
+        check(f"{script} defines {', '.join(flags)}",
+              all(f'"{f}"' in src for f in flags))
+
+    return ok
+
+
 def check_trace_tab(root, g, cfg) -> bool:
     """The Trace tab: form -> command, and the launch path with Popen faked.
 
@@ -1352,6 +1513,8 @@ def main() -> int:
     ok &= check_command_builder()
     print("\n  CLI overrides the Trace tab depends on:")
     ok &= check_cli_overrides()
+    print("\n  Design tab (licence-free, run-independent):")
+    ok &= check_design_tab(root, g)
     print("\n  Trace tab:")
     ok &= check_trace_tab(root, g, cfg)
 

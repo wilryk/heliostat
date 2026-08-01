@@ -34,33 +34,21 @@ sys.path.insert(0, str(REPO))
 
 import numpy as np  # noqa: E402
 
-TRACED_DATES = ["2026-12-21", "2026-01-21", "2026-02-20", "2026-03-20",
-                "2026-04-21", "2026-05-21", "2026-06-21"]
-F2_MM, AP_R_MM, TIP_RAD_MM = 7000.0, 15000.0, 500.0
-BUILT = (27000.0, 20.0)
-
-# Exact union occlusion at the representative instant vs shared-focus aim
-# height (scan_prime_focus_height.py, disc at 32,460).  Monotone; used as a
-# RELATIVE transfer curve over mean aim height.
-OCC_H = np.array([30000., 32000., 33000., 34000., 35000., 36000., 38000.,
-                  40000., 43000., 47000.])
-OCC_V = np.array([0.9226, 0.9307, 0.9345, 0.9382, 0.9412, 0.9445, 0.9494,
-                  0.9534, 0.9582, 0.9626])
-
-
-def geometry_terms(R, tip, ang_deg):
-    """Vectorised copy of the axicon solve's sun-independent geometry."""
-    from beamdown.secondary.axicon import receiver_correction
-
-    drop = tip - F2_MM
-    x_r, y_r, x_a, y_a = receiver_correction(R, tip, drop, ang_deg)
-    alpha = np.deg2rad(ang_deg)
-    cone_dist = np.hypot(x_a, y_a)
-    s_prime = -np.hypot(drop + y_a, x_a)
-    radius_axicon = cone_dist / np.tan(alpha)
-    axicon_aoi = np.arctan2(x_a, drop + y_a) + alpha
-    s = 1.0 / (2.0 * np.cos(axicon_aoi) / radius_axicon - 1.0 / s_prime)
-    return x_r, y_r, x_a, y_a, s, s_prime
+# Geometry, the occlusion transfer curve and the fixed plant dimensions are
+# single-sourced in beamdown.design_eval, which the GUI's Design tab also uses,
+# so the two can never disagree about what a candidate is worth. TRACED_DATES,
+# F2_MM/AP_R_MM/TIP_RAD_MM, BUILT, OCC_H/OCC_V and geometry_terms all lived
+# here first; the numbers this script prints are unchanged.
+from beamdown.design_eval import (  # noqa: E402
+    BUILT,
+    OCC_H,
+    OCC_V,
+    RIM_RADIUS_MM as AP_R_MM,
+    F2_MM,
+    TIP_RAD_MM,
+    TRACED_DATES,
+    geometry_terms,
+)
 
 
 def main(argv=None) -> int:

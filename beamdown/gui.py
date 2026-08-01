@@ -13,6 +13,13 @@ stored counts, so toggling them is instant, and the "Open in Quadoa" button
 exports an ``.optx`` with the selected heliostat's pointing, shape and sun
 already loaded.
 
+The **Design** tab is the odd one out: it is not a view of the loaded run at
+all. It evaluates candidate secondaries -- cone, dish, or no secondary --
+straight from :mod:`beamdown.design_eval`, draws the cross-section that says
+where the light goes, and can hand the current sliders to the ``.optx``
+builders. All of that is geometry over config plus the field file, so it costs
+no licence seat and works with no run loaded.
+
 The **Trace** tab is the exception, and the only place a licence seat is spent:
 it composes a ``beamdown sweep`` command line from a form, shows exactly what it
 will run, and either copies it or launches it as a detached subprocess with a log
@@ -475,6 +482,16 @@ class BeamdownGUI:
         self._trace_lock_dir: Path | None = None
         self._trace_argv: list[str] = []
         self._trace_estimate_cache: dict = {}
+
+        # -- Design tab state -----------------------------------------------
+        # The Design tab evaluates geometry, not the loaded run: it reads the
+        # field file and config through beamdown.design_eval and never touches
+        # the store, so it works with no run loaded and spends no licence seat.
+        self._design_after = None      # pending debounce callback id
+        self._design_busy = False      # guards scale <-> spinbox write-back
+        self._design_drawn = False     # has the picture ever been drawn
+        self._design_result: dict = {}
+        self._design_proc_busy = False  # an export subprocess is running
 
         self.root.title("beamdown explorer")
         self.root.geometry("1500x900")
@@ -1090,6 +1107,7 @@ class BeamdownGUI:
         for name in ("Field", "Spot", "Through day", "Distribution"):
             self.figures[name], self.canvases[name] = self._add_figure_tab(name)
         self._build_energy_tab()
+        self._build_design_tab()
         self._build_table_tab()
         self._build_trace_tab()
 
@@ -1153,6 +1171,629 @@ class BeamdownGUI:
         NavigationToolbar2Tk(canvas, frame).update()
         self.figures["Energy"] = fig
         self.canvases["Energy"] = canvas
+
+    # ------------------------------------------------------------------
+    # Design tab
+    # ------------------------------------------------------------------
+    #
+    # Everything below is licence-free and run-independent. It answers "what
+    # would this secondary do?" from geometry alone (beamdown.design_eval), so
+    # it works while a sweep holds the seat and works with no run loaded at all.
+    # The two things it can produce are a picture and an .optx to validate in
+    # Quadoa; it never writes into analysis_output/.
+
+    # Slider ranges, in the units the labels show. Chosen to bracket the built
+    # design and the settled candidates with room either side, not to encode a
+    # feasibility limit -- the readout says when a setting is infeasible, the
+    # slider does not silently prevent it.
+    DESIGN_PARAMS = {
+        "axicon": [
+            ("tip", "Cone tip height", 24.0, 34.0, 0.1, "m", 1),
+            ("angle", "Cone half-angle", 13.0, 25.0, 0.1, "°", 1),
+        ],
+        "cassegrain": [
+            ("rim", "Dish rim height", 28.0, 35.0, 0.1, "m", 1),
+            ("f1", "Prime focus height", 34.0, 42.0, 0.1, "m", 1),
+        ],
+        "prime_focus": [
+            ("pf", "Focus height", 34.0, 50.0, 0.1, "m", 1),
+        ],
+    }
+
+    DESIGN_LAYOUTS = [
+        ("axicon", "Cone (axicon) — the built design"),
+        ("cassegrain", "Dish (cassegrain) — hyperboloid relay"),
+        ("prime_focus", "Prime focus — no secondary at all"),
+    ]
+
+    def _build_design_tab(self) -> None:
+        frame = ttk.Frame(self.book)
+        self.book.add(frame, text="Design")
+
+        # Defaults are the built axicon and the settled cassegrain/prime-focus
+        # candidates, so the tab opens on numbers the owner already knows.
+        self._design_vars = {
+            "tip": tk.DoubleVar(value=27.0),
+            "angle": tk.DoubleVar(value=20.0),
+            "rim": tk.DoubleVar(value=30.0),
+            "f1": tk.DoubleVar(value=36.0),
+            "pf": tk.DoubleVar(value=36.0),
+        }
+        self.var_design_layout = tk.StringVar(value="axicon")
+        self.var_design_date = tk.StringVar(value="2026-02-20")
+        self.var_design_hour = tk.StringVar(value="9.454")
+
+        left = ttk.Frame(frame, width=430, padding=(8, 8, 4, 8))
+        left.pack(side="left", fill="y")
+        left.pack_propagate(False)
+
+        # -- which secondary ------------------------------------------------
+        box = ttk.LabelFrame(left, text="What sits above the field", padding=6)
+        box.pack(fill="x")
+        for value, label in self.DESIGN_LAYOUTS:
+            ttk.Radiobutton(box, text=label, value=value,
+                            variable=self.var_design_layout,
+                            command=self._design_layout_changed).pack(anchor="w")
+
+        # -- the knobs -------------------------------------------------------
+        self.frm_design_params = ttk.LabelFrame(left, text="Shape it", padding=6)
+        self.frm_design_params.pack(fill="x", pady=(6, 0))
+
+        # -- what it does ----------------------------------------------------
+        box = ttk.LabelFrame(left, text="What that gives you", padding=6)
+        box.pack(fill="x", pady=(6, 0))
+        self._design_lines = []
+        for _ in range(9):
+            lbl = ttk.Label(box, text="", wraplength=390, justify="left",
+                            anchor="w")
+            lbl.pack(fill="x", anchor="w")
+            self._design_lines.append(lbl)
+
+        from .design_eval import HONESTY_FOOTER
+
+        ttk.Label(left, text=HONESTY_FOOTER, wraplength=410, justify="left",
+                  foreground="#777777").pack(fill="x", pady=(6, 0))
+
+        # -- export ----------------------------------------------------------
+        box = ttk.LabelFrame(left, text="Export a model to check in Quadoa",
+                             padding=6)
+        box.pack(fill="x", pady=(6, 0))
+        row = ttk.Frame(box); row.pack(fill="x")
+        ttk.Label(row, text="date").pack(side="left")
+        ttk.Entry(row, textvariable=self.var_design_date, width=11
+                  ).pack(side="left", padx=(3, 8))
+        ttk.Label(row, text="hour").pack(side="left")
+        ttk.Entry(row, textvariable=self.var_design_hour, width=8
+                  ).pack(side="left", padx=3)
+        self.btn_design_figure = ttk.Button(
+            box, text="Write 25-heliostat model (.optx) at date/hour…",
+            command=self._design_export_figure)
+        self.btn_design_figure.pack(fill="x", pady=(5, 0))
+        self.btn_design_full = ttk.Button(
+            box, text="Write full-field cassegrain model (.optx)",
+            command=self._design_export_cassegrain)
+        self.btn_design_full.pack(fill="x", pady=(3, 0))
+        # No --force is ever passed: if the target exists the builder refuses,
+        # and its refusal is what shows up in the box below, word for word.
+        self.txt_design_log = tk.Text(box, height=9, wrap="none", font=("Consolas", 8))
+        self.txt_design_log.pack(fill="both", expand=True, pady=(5, 0))
+
+        fig = Figure(figsize=(9, 6.4), dpi=100, facecolor="white")
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas.get_tk_widget().pack(side="right", fill="both", expand=True)
+        self.figures["Design"] = fig
+        self.canvases["Design"] = canvas
+
+        self._design_build_params()
+
+    def _design_build_params(self) -> None:
+        """Rebuild the slider rows for the selected layout."""
+        for child in self.frm_design_params.winfo_children():
+            child.destroy()
+        for key, label, lo, hi, step, unit, dec in \
+                self.DESIGN_PARAMS[self.var_design_layout.get()]:
+            var = self._design_vars[key]
+            row = ttk.Frame(self.frm_design_params)
+            row.pack(fill="x", pady=(4, 0))
+            ttk.Label(row, text=label).pack(side="left")
+            ttk.Label(row, text=unit, foreground="#666666", width=2
+                      ).pack(side="right")
+            spin = ttk.Spinbox(row, textvariable=var, from_=lo, to=hi,
+                               increment=step, width=8, format=f"%.{dec}f",
+                               command=self._design_changed)
+            spin.pack(side="right")
+            spin.bind("<Return>", lambda e: self._design_changed())
+            scale = ttk.Scale(self.frm_design_params, from_=lo, to=hi,
+                              variable=var,
+                              command=lambda v, k=key, s=step:
+                                  self._design_scale(k, s, v))
+            scale.pack(fill="x")
+
+    def _design_scale(self, key: str, step: float, value) -> None:
+        """Snap a dragged scale onto the spinbox's own increment.
+
+        A ttk.Scale writes continuous floats into the shared variable, which
+        would show as ``29.372814...`` in the Spinbox beside it. Snapping writes
+        back into the same variable, which fires this callback again -- hence
+        the guard rather than a second variable, which would let the two widgets
+        disagree about what the design currently is.
+        """
+        if self._design_busy:
+            return
+        try:
+            v = float(value)
+        except (TypeError, ValueError):
+            return
+        snapped = round(round(v / step) * step, 6)
+        self._design_busy = True
+        try:
+            if abs(snapped - self._design_vars[key].get()) > 1e-12:
+                self._design_vars[key].set(snapped)
+        except tk.TclError:
+            pass
+        finally:
+            self._design_busy = False
+        self._design_changed()
+
+    def _design_changed(self, *_args) -> None:
+        """Coalesce a burst of slider motion into one evaluation."""
+        if self._design_after is not None:
+            try:
+                self.root.after_cancel(self._design_after)
+            except Exception:
+                pass
+        self._design_after = self.root.after(100, self._design_refresh)
+
+    def _design_layout_changed(self) -> None:
+        self._design_build_params()
+        self._design_changed()
+
+    def _design_value(self, key: str) -> float:
+        """The current value of one knob, tolerating a half-typed Spinbox."""
+        try:
+            return float(self._design_vars[key].get())
+        except (tk.TclError, ValueError):
+            return float("nan")
+
+    def _design_evaluate(self) -> dict:
+        """Evaluate the current design. Pure geometry -- no run, no licence."""
+        from . import design_eval as DE
+
+        # Explicitly the config this window was opened with, not design_eval's
+        # default: a GUI started with --config other.toml must not evaluate one
+        # field while drawing another.
+        field = DE.load_field_data(self.config_path)
+        layout = self.var_design_layout.get()
+        if layout == "axicon":
+            return DE.eval_axicon(self._design_value("tip") * 1000.0,
+                                  self._design_value("angle"), field)
+        if layout == "cassegrain":
+            return DE.eval_cassegrain(self._design_value("rim") * 1000.0,
+                                      self._design_value("f1") * 1000.0, field)
+        return DE.eval_prime_focus(self._design_value("pf") * 1000.0, field)
+
+    def _design_refresh(self) -> None:
+        self._design_after = None
+        try:
+            res = self._design_evaluate()
+        except Exception as exc:
+            self._status(f"Design: {type(exc).__name__}: {exc}")
+            traceback.print_exc()
+            return
+        self._design_result = res
+        self._design_readout(res)
+        try:
+            self._draw_design(res)
+        except Exception as exc:
+            self._status(f"Design picture: {type(exc).__name__}: {exc}")
+            traceback.print_exc()
+        self._design_drawn = True
+        # The full-field cassegrain builder only has a dish to build for the
+        # cassegrain layout; disabling it is honest, a refusal dialog is not.
+        self.btn_design_full.config(
+            state=("normal" if res.get("layout") == "cassegrain"
+                   and res.get("feasible") else "disabled"))
+
+    # -- the words ------------------------------------------------------
+    def _design_readout(self, res: dict) -> None:
+        """Plain language only: no repo jargon, no symbol names without a gloss."""
+        lines: list[tuple[str, str]] = []          # (text, colour)
+        grey, ink, good, warn, bad = "#777777", "#222222", "#1a7f37", "#b26a00", "#b3261e"
+
+        if not res.get("feasible"):
+            lines.append(("This shape does not work:", bad))
+            for note in res.get("notes", []):
+                lines.append(("  " + note, bad))
+            if res.get("layout") == "cassegrain" and "K" in res:
+                lines.append((f"Dish shape would be: K {res['K']:.3f}, vertex "
+                              f"radius {res['R_v_mm']/1000:.2f} m", grey))
+        else:
+            lines.append((f"Yearly energy (relative to the built axicon): "
+                          f"{res['energy_index']:.3f}×", ink))
+            lines.append((f"Estimated field blocking+shading kept: "
+                          f"{res['occlusion']*100:.1f}%", ink))
+            lines.append((f"Sun image at receiver (ideal): {res['r90_mm']:.0f} mm "
+                          f"r90; inner {res['r90_inner_mm']:.0f} / outer "
+                          f"{res['r90_outer_mm']:.0f}", ink))
+            lines.append(("", ink))
+
+            layout = res["layout"]
+            if layout == "axicon":
+                ratio = res["correction_ratio"]
+                colour = good if ratio <= 0.95 else (warn if ratio <= 1.0 else bad)
+                lines.append((f"Inner beams hit the cone "
+                              f"{res['inner_hit_mm']/1000:.2f} m from the axis — "
+                              f"sagittal correction at {ratio*100:.0f}% of the "
+                              f"built design's limit", colour))
+                lines.append((f"Cone: tip {res['tip_mm']/1000:.1f} m, rim "
+                              f"{res['rim_z_mm']/1000:.2f} m, "
+                              f"{res['cone_depth_mm']/1000:.2f} m tall", ink))
+            elif layout == "cassegrain":
+                lines.append((f"Hyperboloid: K {res['K']:.3f}, vertex radius "
+                              f"{res['R_v_mm']/1000:.2f} m, vertex at "
+                              f"{res['vertex_z_mm']/1000:.2f} m, dish "
+                              f"{res['sag_mm']/1000:.2f} m deep", ink))
+                fill = res["fill_fraction"]
+                lines.append((f"Beam fills {fill*100:.1f}% of the dish",
+                              good if fill > 0.9 else warn))
+                lines.append((f"Relay magnification {res['magnification_min']:.2f}"
+                              f"–{res['magnification_max']:.2f}×; solar disk at "
+                              f"the receiver {res['disk_outer_mm']:.0f} mm from "
+                              f"the outer ring", ink))
+                lines.append((res["blocking_note"], grey))
+            else:
+                gain = (res["bounce_gain"] - 1.0) * 100.0
+                lines.append((f"Receiver hangs at the focus, "
+                              f"{res['f1_mm']/1000:.1f} m up — no secondary "
+                              f"mirror, so one reflection instead of two "
+                              f"(+{gain:.0f}% energy for free)", good))
+                lines.append((f"Solar disk: {res['disk_inner_mm']:.0f} mm from "
+                              f"the inner ring, {res['disk_outer_mm']:.0f} mm "
+                              f"from the outer", ink))
+                lines.append((f"Beams arrive {res['tilt_inner_deg']:.0f}°–"
+                              f"{res['tilt_outer_deg']:.0f}° off vertical, "
+                              f"stretching the spot {res['stretch_inner']:.2f}×–"
+                              f"{res['stretch_outer']:.2f}×", ink))
+                lines.append((res["blocking_note"], grey))
+
+        for lbl, (text, colour) in zip(self._design_lines,
+                                       lines + [("", ink)] * len(self._design_lines)):
+            lbl.config(text=text, foreground=colour)
+
+    # -- the picture ----------------------------------------------------
+    def _draw_design(self, res: dict) -> None:
+        """A radial cut through the tower axis: where the light actually goes.
+
+        Half a section (radius >= 0 on the right, with a little of the far side
+        shown where the axicon's aim image needs it) rather than a full one:
+        the field is 90 m wide and the optics are 40 m tall, so a full section
+        halves the scale for a mirror image that adds nothing. Drawn at equal
+        aspect, because the whole point is that the angles are real.
+        """
+        import numpy as _np
+
+        from . import design_eval as DE
+
+        fig = self.figures["Design"]
+        fig.clear()
+        ax = fig.add_subplot(111)
+        self._style(ax)
+
+        field = DE.load_field_data(self.config_path)
+        r_in, r_out = field.R_min / 1000.0, field.R_max / 1000.0
+        f2 = DE.F2_MM / 1000.0
+        rim_r = DE.RIM_RADIUS_MM / 1000.0
+        try:
+            ap = abs(float(self.var_aperture.get())) / 1000.0
+        except (ValueError, tk.TclError):
+            ap = 0.7
+        ap = max(ap, 0.4)                       # or it is invisible at this scale
+
+        C_RAY, C_REFL, C_SEC = "#c2701c", "#1b4f9c", "#333333"
+        C_GHOST = "#aaaaaa"
+        x_lo = -1.0
+        top = 40.0
+
+        # -- ground and the two heliostats we follow -------------------------
+        ax.axhline(0.0, color="#999999", lw=1.0, zorder=1)
+        for r, name in ((r_in, f"inner heliostat\n{r_in:,.0f} m"),
+                        (r_out, f"outer heliostat\n{r_out:,.1f} m")):
+            ax.plot([r, r], [0.0, 2.2], color="#444444", lw=3, solid_capstyle="butt",
+                    zorder=4)
+            ax.annotate(name, (r, 0.0), xytext=(0, -8), textcoords="offset points",
+                        ha="center", va="top", fontsize=8, color="#444444")
+
+        layout = res.get("layout")
+        rays: list[tuple[float, float, float, float]] = []   # heliostat -> hit
+        refl: list[tuple[float, float, float, float]] = []   # hit -> receiver
+        ghost: list[tuple[float, float, float, float]] = []  # dashed continuation
+
+        if layout == "axicon" and res.get("feasible"):
+            tip = res["tip_mm"] / 1000.0
+            ang = res["angle_deg"]
+            rim_z = res["rim_z_mm"] / 1000.0
+            top = max(top, rim_z + 6.0)
+
+            R = _np.array([field.R_min, field.R_max])
+            x_r, y_r, x_a, y_a, _s, _sp = DE.geometry_terms(R, res["tip_mm"], ang)
+            aim = (float(x_r) / 1000.0, (res["tip_mm"] + float(y_r)) / 1000.0)
+            x_lo = min(x_lo, aim[0] - 4.0)
+            top = max(top, aim[1] + 4.0)
+
+            # The cone flank, tip on the axis, rim at 15 m.
+            ax.plot([0.0, rim_r], [tip, rim_z], color=C_SEC, lw=3, zorder=5)
+            ax.annotate(f"cone flank, {ang:.1f}° half-angle",
+                        (rim_r * 0.55, tip + rim_r * 0.55 * _np.tan(_np.deg2rad(ang))),
+                        xytext=(6, 10), textcoords="offset points", fontsize=8,
+                        color=C_SEC)
+            ax.annotate(f"tip {tip:.1f} m", (0.0, tip), xytext=(-6, 2),
+                        textcoords="offset points", fontsize=8, color=C_SEC,
+                        ha="right")
+
+            for i, r0 in enumerate((r_in, r_out)):
+                hx, hz = float(x_a[i]) / 1000.0, (res["tip_mm"] + float(y_a[i])) / 1000.0
+                rays.append((r0, 0.0, hx, hz))
+                # Proven in design_eval: the aim point is the receiver mirrored
+                # in the flank, so the reflected ray goes exactly to F2.
+                refl.append((hx, hz, 0.0, f2))
+                ghost.append((hx, hz, aim[0], aim[1]))
+
+            ax.plot([aim[0]], [aim[1]], marker="*", ms=13, color=C_GHOST, zorder=6)
+            ax.annotate("aim image\n(the receiver reflected in the cone —\n"
+                        "every heliostat aims here)", (aim[0], aim[1]),
+                        xytext=(0, -12), textcoords="offset points", fontsize=8,
+                        color="#666666", ha="center", va="top")
+
+        elif layout == "cassegrain" and res.get("feasible"):
+            des = DE.close_design(res["rim_z_mm"], field.R_max, DE.F2_MM,
+                                  DE.RIM_RADIUS_MM, res["f1_mm"])
+            f1 = res["f1_mm"] / 1000.0
+            top = max(top, f1 + 5.0)
+
+            rr = _np.linspace(0.0, rim_r, 200)
+            ax.plot(rr, des.surface_z(rr * 1000.0) / 1000.0, color=C_SEC, lw=3,
+                    zorder=5)
+            ax.annotate(f"hyperboloid dish, K {res['K']:.2f}\n"
+                        f"{res['sag_mm']/1000:.2f} m deep, 15 m rim",
+                        (rim_r * 0.6, des.surface_z(rim_r * 600.0) / 1000.0),
+                        xytext=(8, -26), textcoords="offset points", fontsize=8,
+                        color=C_SEC)
+
+            o, d = DE.rays_to_f1(_np.array([field.R_min, field.R_max]),
+                                 _np.zeros(2), des)
+            _t, hit, _ok, _ = des.intersect(o, d)
+            for i, r0 in enumerate((r_in, r_out)):
+                hx = float(_np.hypot(hit[i, 0], hit[i, 1])) / 1000.0
+                hz = float(hit[i, 2]) / 1000.0
+                rays.append((r0, 0.0, hx, hz))
+                refl.append((hx, hz, 0.0, f2))
+                ghost.append((hx, hz, 0.0, f1))
+
+            ax.plot([0.0], [f1], marker="x", ms=10, mew=2, color=C_GHOST, zorder=6)
+            ax.annotate(f"F1, the prime focus at {f1:.1f} m\n"
+                        f"(the image the dish relays down)", (0.0, f1),
+                        xytext=(8, 6), textcoords="offset points", fontsize=8,
+                        color="#666666")
+
+        elif layout == "prime_focus":
+            f1 = res["f1_mm"] / 1000.0
+            top = max(top, f1 + 5.0)
+            for r0 in (r_in, r_out):
+                rays.append((r0, 0.0, 0.0, f1))
+            ax.plot([-ap, ap], [f1, f1], color="#b3261e", lw=5,
+                    solid_capstyle="butt", zorder=6)
+            ax.annotate(f"receiver, up at the focus, {f1:.1f} m\n"
+                        f"(nothing above the field but this)", (0.0, f1),
+                        xytext=(12, -14), textcoords="offset points", fontsize=8,
+                        color="#b3261e")
+            ax.annotate("no secondary mirror in this layout —\n"
+                        "the beams simply keep going to F1",
+                        (rim_r * 0.6, f1 * 0.55), fontsize=8, color=C_GHOST,
+                        style="italic")
+
+        for x0, z0, x1, z1 in rays:
+            ax.plot([x0, x1], [z0, z1], color=C_RAY, lw=1.4, zorder=3)
+        for x0, z0, x1, z1 in refl:
+            ax.plot([x0, x1], [z0, z1], color=C_REFL, lw=1.4, zorder=3)
+        for x0, z0, x1, z1 in ghost:
+            ax.plot([x0, x1], [z0, z1], color=C_GHOST, lw=0.9, ls=":", zorder=2)
+        if rays:
+            x0, z0, x1, z1 = rays[-1]
+            ax.annotate("beam up from the mirror",
+                        (0.55 * x0 + 0.45 * x1, 0.55 * z0 + 0.45 * z1),
+                        xytext=(0, 8), textcoords="offset points", fontsize=8,
+                        color=C_RAY, ha="center")
+        if refl:
+            x0, z0, x1, z1 = refl[-1]
+            ax.annotate("reflected down to the receiver",
+                        (0.5 * (x0 + x1), 0.5 * (z0 + z1)),
+                        xytext=(8, 0), textcoords="offset points", fontsize=8,
+                        color=C_REFL, va="center")
+
+        if not res.get("feasible"):
+            # Say why the picture is empty, in the picture -- an unexplained
+            # blank plot beside a red readout reads as a broken tab.
+            import textwrap as _tw
+
+            why = "\n".join(_tw.fill(n, 64) for n in res.get("notes", []))
+            ax.text(0.5, 0.62, "this shape does not work\n\n" + why,
+                    transform=ax.transAxes, ha="center", va="center",
+                    fontsize=9, color="#b3261e")
+
+        # -- the receiver aperture at z = 7 m --------------------------------
+        if layout == "prime_focus":
+            ax.plot([-ap, ap], [f2, f2], color=C_GHOST, lw=4,
+                    solid_capstyle="butt", zorder=5)
+            ax.annotate("existing receiver level, 7 m — empty in this layout",
+                        (ap, f2), xytext=(8, -3), textcoords="offset points",
+                        fontsize=8, color=C_GHOST)
+        else:
+            ax.plot([-ap, ap], [f2, f2], color="#b3261e", lw=5,
+                    solid_capstyle="butt", zorder=6)
+            ax.annotate(f"receiver aperture, {f2:.0f} m\n(±{ap*1000:,.0f} mm)",
+                        (ap, f2), xytext=(10, -2), textcoords="offset points",
+                        fontsize=8, color="#b3261e")
+
+        top += 4.0                      # headroom, so no label runs into the title
+        ax.axvline(0.0, color="#dddddd", lw=1.0, ls="--", zorder=0)
+        ax.annotate("tower axis", (0.0, top - 0.5), xytext=(4, -2),
+                    textcoords="offset points", fontsize=8, color="#bbbbbb",
+                    va="top")
+
+        ax.set_xlim(x_lo - 2.0, r_out * 1.06)
+        ax.set_ylim(-5.0, top)
+        ax.set_aspect("equal", adjustable="box")
+        ax.set_xlabel("distance from the tower axis (m)", fontsize=9)
+        ax.set_ylabel("height (m)", fontsize=9)
+        title = dict(self.DESIGN_LAYOUTS)[layout] if layout else "design"
+        ax.set_title(title, fontsize=10, pad=8)
+        fig.tight_layout()
+        self.canvases["Design"].draw_idle()
+
+    # -- exporting a model ----------------------------------------------
+    def _design_log(self, text: str) -> None:
+        self.txt_design_log.delete("1.0", "end")
+        self.txt_design_log.insert("1.0", text)
+        self.txt_design_log.see("end")
+
+    def _design_instant(self):
+        """``(date, hour)`` from the two entry boxes, or None after complaining."""
+        date = self.var_design_date.get().strip()
+        hour = self.var_design_hour.get().strip()
+        try:
+            _dt.date.fromisoformat(date)
+            float(hour)
+        except ValueError as exc:
+            self._design_log(f"date/hour: {exc}\n"
+                             f"expected YYYY-MM-DD and a decimal hour like 9.454")
+            return None
+        return date, hour
+
+    def _design_export_figure(self) -> None:
+        """25-heliostat model for the current design, at the given instant.
+
+        Runs the existing builder scripts as subprocesses rather than importing
+        them: they are argparse programs with their own verification and their
+        own refusals, and the point of this button is to get exactly what the
+        command line gets, including the refusal to overwrite.
+        """
+        res = self._design_result or {}
+        if not res.get("feasible"):
+            self._design_log("this design is not feasible — nothing to export.\n"
+                             "Move the sliders until the readout goes green.")
+            return
+        instant = self._design_instant()
+        if instant is None:
+            return
+        date, hour = instant
+
+        layout = res["layout"]
+        argv = [sys.executable, "scripts/build_figure_model.py",
+                "--date", date, "--hour", hour]
+        if layout == "axicon":
+            argv += ["--tip-height-mm", f"{res['tip_mm']:.1f}",
+                     "--axicon-angle-deg", f"{res['angle_deg']:g}"]
+        else:
+            argv += ["--secondary",
+                     "prime_focus" if layout == "prime_focus" else "cassegrain",
+                     "--focus-height-mm", f"{res['f1_mm']:.1f}"]
+
+        # For the cassegrain the figure model only carries the POINTING -- which
+        # is the shared-focus solve, identical to prime focus at the same F1 --
+        # so the dish itself is a second pass over the file the first one wrote.
+        # Hence a chain rather than one command.
+        chain = None
+        if layout == "cassegrain":
+            argv += ["--rim-height-mm", f"{res['rim_z_mm']:.1f}"]
+            chain = [sys.executable, "scripts/build_cassegrain_model.py",
+                     "--rim-z-mm", f"{res['rim_z_mm']:.1f}",
+                     "--f1-mm", f"{res['f1_mm']:.1f}"]
+        self._design_run([argv], chain_on_output=chain,
+                         chain_suffix=f"_dish{res.get('rim_z_mm', 0)/1000:g}")
+
+
+    def _design_export_cassegrain(self) -> None:
+        """Full-field cassegrain sweep model at the current sliders' geometry."""
+        res = self._design_result or {}
+        if res.get("layout") != "cassegrain" or not res.get("feasible"):
+            self._design_log("select a feasible Dish (cassegrain) design first.")
+            return
+        self._design_run([[sys.executable, "scripts/build_cassegrain_model.py",
+                           "--rim-z-mm", f"{res['rim_z_mm']:.1f}",
+                           "--f1-mm", f"{res['f1_mm']:.1f}"]])
+
+    def _design_run(self, commands, chain_on_output=None,
+                    chain_suffix: str = "_dish") -> None:
+        """Run builder scripts off the UI thread and report their own words back.
+
+        ``chain_on_output`` is a partial command line completed with
+        ``--base <first command's output> --out <that, tagged>`` -- the output
+        path is taken from the first script's own "wrote ..." line rather than
+        recomputed here, so the two can never disagree about the file name.
+        """
+        import subprocess
+
+        if self._design_proc_busy:
+            self._design_log("a model build from this tab is still running.")
+            return
+        self._design_proc_busy = True
+        for btn in (self.btn_design_figure, self.btn_design_full):
+            btn.config(state="disabled")
+        self._design_log("building…\n" + "\n".join(
+            format_command(c) for c in commands))
+        self._status("building a model (background, no licence seat)…")
+        cwd = str(self.cfg.repo_root)
+
+        def work():
+            chunks, rc, chained = [], 0, False
+            verdict = ""
+            try:
+                pending = list(commands)
+                while pending:
+                    argv = pending.pop(0)
+                    proc = subprocess.run(argv, cwd=cwd, capture_output=True,
+                                          text=True, errors="replace")
+                    out = proc.stdout or ""
+                    err = (proc.stderr or "").strip()
+                    chunks.append(f"$ {format_command(argv)}\n{out}"
+                                  + (f"\n[stderr]\n{err}\n" if err else ""))
+                    rc = proc.returncode
+                    # The verdict comes from STDOUT only. The builders load the
+                    # field file, which warns on stderr about the two coincident
+                    # heliostats every single time -- letting that be the last
+                    # line would report a known field-file quirk as the result of
+                    # the build.
+                    tail = [ln.strip() for ln in out.splitlines() if ln.strip()]
+                    said = [ln for ln in tail
+                            if ln.startswith(("wrote ", "refusing ", "PASS",
+                                              "FAIL", "cannot "))]
+                    if said or tail:
+                        verdict = (said or tail)[-1]
+                    if rc != 0:
+                        break
+                    if chain_on_output is not None and not chained and not pending:
+                        chained = True
+                        wrote = [ln for ln in out.splitlines()
+                                 if ln.startswith("wrote ")]
+                        if not wrote:
+                            chunks.append("cannot chain the dish onto it: the "
+                                          "builder printed no 'wrote <path>' line")
+                            rc = 1
+                            break
+                        base = Path(wrote[-1].split("wrote ", 1)[1]
+                                    .split("  ")[0].strip())
+                        pending.append(list(chain_on_output) + [
+                            "--base", str(base),
+                            "--out", str(base.with_name(base.stem + chain_suffix
+                                                        + base.suffix))])
+                self._jobs.put(("design_build", {"text": "\n".join(chunks),
+                                                 "rc": rc, "verdict": verdict}))
+            except Exception as exc:
+                self._jobs.put(("design_build",
+                                {"text": f"{type(exc).__name__}: {exc}",
+                                 "rc": 1, "verdict": f"{type(exc).__name__}: {exc}"}))
+
+        threading.Thread(target=work, daemon=True).start()
 
     def _build_panel(self) -> None:
         p = self.panel
@@ -2464,6 +3105,15 @@ class BeamdownGUI:
             name = self.book.tab(self.book.select(), "text")
         except tk.TclError:
             return
+        # The Design tab is not a view of the loaded run -- it evaluates
+        # geometry from config and the field file alone -- so it is deliberately
+        # outside the run-driven _dirty bookkeeping, which every _refresh_all
+        # would otherwise reset out from under it. It draws once, on first
+        # sight, and after that only when its own controls move.
+        if name == "Design":
+            if not self._design_drawn:
+                self._design_refresh()
+            return
         if name not in self._dirty:
             return
         self._dirty.discard(name)
@@ -3036,6 +3686,21 @@ class BeamdownGUI:
                     self._status("annual energy ready")
                     self._dirty.add("Energy")
                     self._redraw_current()
+                elif kind == "design_build":
+                    self._design_proc_busy = False
+                    self.btn_design_figure.config(state="normal")
+                    self.btn_design_full.config(
+                        state=("normal"
+                               if (self._design_result.get("layout") == "cassegrain"
+                                   and self._design_result.get("feasible"))
+                               else "disabled"))
+                    self._design_log(payload["text"])
+                    # The builder's last stdout line is its own verdict ("PASS
+                    # -- next: ...", "refusing to overwrite ... -- pass
+                    # --force"), so the status line quotes it rather than
+                    # paraphrasing it.
+                    self._status(payload.get("verdict")
+                                 or f"model build exited {payload['rc']}")
                 elif kind == "energy_fail":
                     if self._energy_job_key == payload["key"]:
                         self._energy_job_key = None

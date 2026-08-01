@@ -53,6 +53,9 @@ import numpy as np  # noqa: E402
 from build_prime_focus_model import StructuralSurprise, newline_of, xml_check  # noqa: E402
 from design_cassegrain import close_design, read_config, read_field_mm  # noqa: E402
 
+# The settled design, and the defaults of --rim-z-mm / --f1-mm. F2 and the rim
+# RADIUS are plant, not choice: the receiver is where it is and the 15 m rim is
+# the 30 m manufacturability cap, so neither is exposed as a flag.
 RIM_Z, F1_Z, F2_Z, RIM_R = 30000.0, 36000.0, 7000.0, 15000.0
 
 _SURF = "<variable name=\"{n}\" value=\"{v}\" is_active=\"0\""
@@ -88,17 +91,36 @@ def main(argv=None) -> int:
     p.add_argument("--out", type=Path,
                    default=REPO / "models" / "heliostat_field_cassegrain.optx")
     p.add_argument("--force", action="store_true")
+    p.add_argument("--rim-z-mm", type=float, default=RIM_Z,
+                   help=f"height of the {RIM_R:,.0f} mm rim circle, i.e. how high "
+                        f"the dish's edge hangs (default {RIM_Z:,.0f}, the settled "
+                        f"design)")
+    p.add_argument("--f1-mm", type=float, default=F1_Z,
+                   help=f"prime focus F1: the one point the whole field aims and "
+                        f"focuses at, which the dish relays to the receiver "
+                        f"(default {F1_Z:,.0f}, the settled design)")
     a = p.parse_args(argv)
 
-    # The certified design, recomputed -- not pasted.
+    # The design, recomputed from close_design -- never pasted -- so this builder
+    # cannot drift from beamdown.design_eval, which is what the GUI's Design tab
+    # shows. Non-default rim/F1 are exactly as certified: close_design refuses a
+    # geometry that does not close (F1 at or below the rim, degenerate conic).
     cfg = read_config(REPO / "config.toml")
     x_mm, y_mm = read_field_mm(REPO / cfg["positions_file"])
-    des = close_design(RIM_Z, float(np.hypot(x_mm, y_mm).max()), F2_Z, RIM_R, F1_Z)
+    rim_z, f1_z = float(a.rim_z_mm), float(a.f1_mm)
+    try:
+        des = close_design(rim_z, float(np.hypot(x_mm, y_mm).max()), F2_Z, RIM_R,
+                           f1_z)
+    except ValueError as exc:
+        print(f"cannot close the design at rim z {rim_z:,.0f}, F1 {f1_z:,.0f}: {exc}")
+        return 2
     K = -(des.c / des.a) ** 2
     R_v = des.b2 / des.a
     vertex = des.z_c + des.a
+    settled = (rim_z == RIM_Z and f1_z == F1_Z)
     print(f"design: vertex z {vertex:,.3f}  |R_v| {R_v:,.3f}  K {K:.9f}  "
-          f"rim {RIM_R:,.0f} at z {RIM_Z:,.0f}  F1 {F1_Z:,.0f}  F2 {F2_Z:,.0f}")
+          f"rim {RIM_R:,.0f} at z {rim_z:,.0f}  F1 {f1_z:,.0f}  F2 {F2_Z:,.0f}"
+          + ("" if settled else "   [NOT the settled 30,000/36,000 design]"))
 
     base_text = a.base.read_text(encoding="utf-8")
     ok, _, msg = xml_check(base_text)

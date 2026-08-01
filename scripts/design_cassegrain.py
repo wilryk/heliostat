@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 """Design calculator for a CASSEGRAIN (hyperboloid) beam-down secondary.
 
-Standalone: numpy + pandas only. It imports nothing from ``beamdown`` and nothing
-from ``quadoa``, reads only ``config.toml`` and the field position file, and
-writes no files -- so it is safe to run while a trace is in progress. Nothing
-here is written back into ``config.toml``; the lines the package would need are
-printed as a suggestion for the user to paste.
+Licence-free: numpy + pandas, plus :mod:`beamdown.design_eval` for the geometry
+itself. It imports nothing from ``quadoa`` and touches no package state beyond
+that one pure-math module, reads only ``config.toml`` and the field position
+file, and writes no files -- so it is safe to run while a trace is in progress.
+Nothing here is written back into ``config.toml``; the lines the package would
+need are printed as a suggestion for the user to paste.
+
+The conic closure itself (:class:`~beamdown.design_eval.Cassegrain`,
+:func:`~beamdown.design_eval.close_design`,
+:func:`~beamdown.design_eval.rays_to_f1`) lived in this file first and now lives
+in ``beamdown/design_eval.py``, so the GUI's Design tab and this calculator
+cannot drift apart. This script's own behaviour and printed output are
+unchanged; what follows describes the math wherever it is written down.
 
 
 The geometry
@@ -123,22 +131,27 @@ from __future__ import annotations
 
 import argparse
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
 
-RIM_RADIUS_MM = 15000.0          # same aperture as the axicon it replaces
-# The chosen design: the axicon's own rim height, 27000 + 15000*tan(20 deg), so the
-# replacement occupies the same rim circle in space as the cone it removes -- same
-# aperture AND same height, hence the same shading footprint on the field.
-DEFAULT_RIM_HEIGHT_MM = 32460.0
-# Trade sweep, plus the chosen rim height spliced in so it appears in the table.
-TRADE_RIM_HEIGHTS_MM = np.unique(
-    np.concatenate([np.arange(24000.0, 34001.0, 1000.0), [DEFAULT_RIM_HEIGHT_MM]])
+# The geometry, single-sourced. ``RIM_RADIUS_MM`` is the axicon's own aperture;
+# ``DEFAULT_RIM_HEIGHT_MM`` (32,460 = 27000 + 15000*tan(20 deg)) is the axicon's
+# own rim height, so the replacement occupies the same rim circle in space as the
+# cone it removes -- same aperture AND same height, hence the same shading
+# footprint on the field. ``TRADE_RIM_HEIGHTS_MM`` is the 24-34 m trade sweep
+# with that chosen height spliced in so it appears in the table.
+from beamdown.design_eval import (  # noqa: E402
+    DEFAULT_RIM_HEIGHT_MM,
+    RIM_RADIUS_MM,
+    TRADE_RIM_HEIGHTS_MM,
+    Cassegrain,
+    close_design,
+    rays_to_f1,
 )
 
 
@@ -200,211 +213,8 @@ def read_field_mm(path: Path) -> tuple[np.ndarray, np.ndarray]:
 
 
 # ----------------------------------------------------------------------------
-# the design itself
-# ----------------------------------------------------------------------------
-
-@dataclass(frozen=True)
-class Cassegrain:
-    """A closed hyperboloid secondary design. All lengths mm."""
-
-    z1: float            # upper (prime) focus height
-    z2: float            # lower focus = receiver height
-    rim_r: float         # rim radius
-    rim_z: float         # rim height
-    a: float             # semi-transverse axis
-    c: float             # half focus separation
-    z_c: float           # centre (midpoint of foci)
-    field_radius_mm: float
-    aperture_filled: bool
-
-    # -- derived conic quantities -------------------------------------------
-    @property
-    def b2(self) -> float:
-        return self.c ** 2 - self.a ** 2
-
-    @property
-    def b(self) -> float:
-        return float(np.sqrt(self.b2))
-
-    @property
-    def e(self) -> float:
-        return self.c / self.a
-
-    @property
-    def K(self) -> float:
-        return -self.e ** 2
-
-    @property
-    def R_v(self) -> float:
-        """Vertex radius of curvature, positive for the sag convention above."""
-        return self.b2 / self.a
-
-    @property
-    def vertex_z(self) -> float:
-        """Vertex of the USED sheet: the one enclosing F1, so centre + a."""
-        return self.z_c + self.a
-
-    @property
-    def sag_mm(self) -> float:
-        """Depth of the dish, vertex to rim."""
-        return self.rim_z - self.vertex_z
-
-    # -- surface, exactly -----------------------------------------------------
-    def sag_at(self, r):
-        """Sag above the vertex, algebraic hyperbola form."""
-        r = np.asarray(r, float)
-        return self.a * (np.sqrt(1.0 + r ** 2 / self.b2) - 1.0)
-
-    def sag_at_conic(self, r):
-        """Same sag via the standard conic formula -- a cross-check on K/R_v."""
-        r = np.asarray(r, float)
-        R, K = self.R_v, self.K
-        return r ** 2 / (R * (1.0 + np.sqrt(1.0 - (1.0 + K) * r ** 2 / R ** 2)))
-
-    def surface_z(self, r):
-        return self.vertex_z + self.sag_at(r)
-
-    def implicit(self, p):
-        """f(P) = (z-z_c)^2/a^2 - (x^2+y^2)/b^2 - 1 ; zero on the quadric."""
-        p = np.atleast_2d(np.asarray(p, float))
-        return ((p[:, 2] - self.z_c) ** 2 / self.a ** 2
-                - (p[:, 0] ** 2 + p[:, 1] ** 2) / self.b2 - 1.0)
-
-    def normal(self, p):
-        """Unit normal, oriented to point DOWN (out of the reflective underside).
-
-        Direction is irrelevant to the reflection formula ``d - 2(d.n)n`` but
-        fixing it makes the printed incidence angles unambiguous.
-        """
-        p = np.atleast_2d(np.asarray(p, float))
-        g = np.column_stack((
-            -2.0 * p[:, 0] / self.b2,
-            -2.0 * p[:, 1] / self.b2,
-            2.0 * (p[:, 2] - self.z_c) / self.a ** 2,
-        ))
-        g /= np.linalg.norm(g, axis=1, keepdims=True)
-        flip = g[:, 2] > 0.0
-        g[flip] *= -1.0
-        return g
-
-    @property
-    def F1(self) -> np.ndarray:
-        return np.array([0.0, 0.0, self.z1])
-
-    @property
-    def F2(self) -> np.ndarray:
-        return np.array([0.0, 0.0, self.z2])
-
-    # -- ray work -------------------------------------------------------------
-    def intersect(self, origins, dirs):
-        """Exact ray/quadric intersection on the USED (upper, F1) sheet.
-
-        Substituting P = O + t*d into ``implicit`` gives a quadratic in t. Both
-        roots are returned so the caller can see the other sheet, plus the root
-        selected as the physical hit: smallest t > 0 lying on the upper sheet
-        (``z > z_c``).
-
-        Returns ``(t_hit, hit_point, ok, t_roots)``.
-        """
-        o = np.atleast_2d(np.asarray(origins, float))
-        d = np.atleast_2d(np.asarray(dirs, float))
-        d = d / np.linalg.norm(d, axis=1, keepdims=True)
-
-        ia2, ib2 = 1.0 / self.a ** 2, 1.0 / self.b2
-        oz = o[:, 2] - self.z_c
-
-        A = d[:, 2] ** 2 * ia2 - (d[:, 0] ** 2 + d[:, 1] ** 2) * ib2
-        B = 2.0 * (oz * d[:, 2] * ia2 - (o[:, 0] * d[:, 0] + o[:, 1] * d[:, 1]) * ib2)
-        C = oz ** 2 * ia2 - (o[:, 0] ** 2 + o[:, 1] ** 2) * ib2 - 1.0
-
-        n = o.shape[0]
-        roots = np.full((n, 2), np.nan)
-        with np.errstate(invalid="ignore", divide="ignore"):
-            disc = B ** 2 - 4.0 * A * C
-            quad = (np.abs(A) > 1e-18) & (disc >= 0.0)
-            sq = np.sqrt(np.where(disc >= 0.0, disc, 0.0))
-            # numerically stable pair, then sorted
-            q = -0.5 * (B + np.sign(np.where(B == 0.0, 1.0, B)) * sq)
-            r1 = np.where(quad, q / A, np.nan)
-            r2 = np.where(quad & (np.abs(q) > 1e-30), C / q, np.nan)
-            lin = (np.abs(A) <= 1e-18) & (np.abs(B) > 1e-18)
-            r1 = np.where(lin, -C / B, r1)
-            roots[:, 0] = np.minimum(r1, r2)
-            roots[:, 1] = np.maximum(r1, r2)
-            roots[lin, 0] = r1[lin]
-
-        t_hit = np.full(n, np.nan)
-        for col in (0, 1):                    # smallest positive first
-            t = roots[:, col]
-            p = o + t[:, None] * d
-            good = np.isfinite(t) & (t > 1e-9) & (p[:, 2] > self.z_c)
-            take = good & ~np.isfinite(t_hit)
-            t_hit[take] = t[take]
-
-        hit = o + np.where(np.isfinite(t_hit), t_hit, 0.0)[:, None] * d
-        return t_hit, hit, np.isfinite(t_hit), roots
-
-    def reflect(self, dirs, points):
-        d = np.atleast_2d(np.asarray(dirs, float))
-        d = d / np.linalg.norm(d, axis=1, keepdims=True)
-        n = self.normal(points)
-        return d - 2.0 * np.sum(d * n, axis=1)[:, None] * n
-
-
-def close_design(rim_z: float,
-                 field_radius_mm: float,
-                 z2: float,
-                 rim_r: float = RIM_RADIUS_MM,
-                 z1: float | None = None) -> Cassegrain:
-    """Close the design. ``z1=None`` -> aperture fill; otherwise z1 is taken as given.
-
-    Step 2 of the closure (see module docstring): z1 = z_r * R_f / (R_f - r_rim).
-    Step 3: 2a = | |P-F1| - |P-F2| | at the rim point P.
-    """
-    filled = z1 is None
-    if filled:
-        if field_radius_mm <= rim_r:
-            raise ValueError(
-                f"field radius {field_radius_mm:.1f} mm must exceed the rim radius "
-                f"{rim_r:.1f} mm for aperture fill to have a solution"
-            )
-        z1 = rim_z * field_radius_mm / (field_radius_mm - rim_r)
-    z1 = float(z1)
-
-    if z1 <= rim_z:
-        raise ValueError(
-            f"F1 (z={z1:.1f}) must be above the rim (z={rim_z:.1f}): the reflector "
-            "has to intercept the bundle BELOW the prime focus"
-        )
-
-    P = np.array([rim_r, 0.0, rim_z])
-    d1 = float(np.linalg.norm(P - np.array([0.0, 0.0, z1])))
-    d2 = float(np.linalg.norm(P - np.array([0.0, 0.0, z2])))
-    a = abs(d1 - d2) / 2.0
-    c = (z1 - z2) / 2.0
-    if not (0.0 < a < c):
-        raise ValueError(f"degenerate conic: a={a:.3f}, c={c:.3f} (need 0 < a < c)")
-
-    return Cassegrain(
-        z1=z1, z2=float(z2), rim_r=float(rim_r), rim_z=float(rim_z),
-        a=a, c=c, z_c=(z1 + z2) / 2.0,
-        field_radius_mm=float(field_radius_mm), aperture_filled=filled,
-    )
-
-
-# ----------------------------------------------------------------------------
 # checks and diagnostics
 # ----------------------------------------------------------------------------
-
-def rays_to_f1(x_mm, y_mm, des: Cassegrain):
-    """Origins and unit directions of every heliostat's ray aimed at F1."""
-    o = np.column_stack((np.asarray(x_mm, float),
-                         np.asarray(y_mm, float),
-                         np.zeros(np.size(x_mm))))
-    d = des.F1[None, :] - o
-    d /= np.linalg.norm(d, axis=1, keepdims=True)
-    return o, d
-
 
 def coverage(x_mm, y_mm, des: Cassegrain) -> dict:
     """Does every real heliostat's beam land on the dish, inside the rim?

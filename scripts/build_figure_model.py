@@ -503,6 +503,22 @@ def main(argv=None) -> int:
                    help="override [geometry] focus_height_mm: F1 the whole "
                         "field aims and focuses at (e.g. 36000 = 9 m above "
                         "the axicon tip)")
+    p.add_argument("--rim-height-mm", type=float, default=None,
+                   help="override [geometry] secondary_rim_height_mm: the "
+                        "height of the cassegrain dish's rim circle. Required "
+                        "by --secondary cassegrain (validate_layout refuses "
+                        "without it) even though the POINTING does not depend "
+                        "on it -- the rim is the shading silhouette.")
+    p.add_argument("--tip-height-mm", type=float, default=None,
+                   help="override [geometry] secondary_height_mm: the axicon "
+                        "cone's tip height. The RECEIVER DOES NOT MOVE -- "
+                        "receiver_offset_mm is adjusted to hold it at the "
+                        "absolute height config gives it, which is what the "
+                        "design math (beamdown.design_eval) assumes.")
+    p.add_argument("--axicon-angle-deg", type=float, default=None,
+                   help="override [geometry] axicon_angle_deg: the cone's "
+                        "half-angle. Writes the model's axi_angle single_param "
+                        "too, so the exported cone matches the pointing solve.")
     p.add_argument("--base", type=Path, default=BASE)
     p.add_argument("--out", type=Path, default=None,
                    help="default models/figure_model_<n>cfg_<key>[_flat].optx")
@@ -527,11 +543,45 @@ def main(argv=None) -> int:
         if a.focus_height_mm is not None:
             object.__setattr__(cfg.geometry, "focus_height_mm",
                                float(a.focus_height_mm))
+        if a.rim_height_mm is not None:
+            object.__setattr__(cfg.geometry, "secondary_rim_height_mm",
+                               float(a.rim_height_mm))
         validate_layout(cfg)
-    elif a.focus_height_mm is not None:
-        print("--focus-height-mm without --secondary does nothing for the "
-              "axicon; refusing so the intent is explicit.")
+    elif a.focus_height_mm is not None or a.rim_height_mm is not None:
+        print("--focus-height-mm/--rim-height-mm without --secondary do nothing "
+              "for the axicon; refusing so the intent is explicit.")
         return 2
+
+    # Axicon shape overrides, the same mechanism for the same reason: mutate the
+    # loaded cfg rather than editing config.toml, whose VALUES a running sweep
+    # re-reads. These two are meaningful only for the axicon, which is why they
+    # refuse to combine with a non-axicon --secondary rather than being silently
+    # ignored by a strategy that never reads them.
+    if a.tip_height_mm is not None or a.axicon_angle_deg is not None:
+        if a.secondary not in (None, "axicon"):
+            print(f"--tip-height-mm/--axicon-angle-deg describe the cone, and "
+                  f"--secondary {a.secondary} has no cone; refusing so the "
+                  f"intent is explicit.")
+            return 2
+        # receiver_height_mm is a PROPERTY, secondary_height_mm + offset. Moving
+        # the tip without compensating the offset would drag the receiver up with
+        # it -- a different plant, not a different secondary -- and the geometry
+        # in beamdown.design_eval holds the receiver at its configured height.
+        keep_receiver = cfg.geometry.receiver_height_mm
+        if a.tip_height_mm is not None:
+            new_offset = keep_receiver - float(a.tip_height_mm)
+            object.__setattr__(cfg.geometry, "secondary_height_mm",
+                               float(a.tip_height_mm))
+            object.__setattr__(cfg.geometry, "receiver_offset_mm", new_offset)
+            print(f"  note: axicon tip -> {a.tip_height_mm:,.1f} mm; the receiver "
+                  f"is held at {keep_receiver:,.1f} mm, so rec_offset -> "
+                  f"{new_offset:,.1f}")
+        if a.axicon_angle_deg is not None:
+            object.__setattr__(cfg.geometry, "axicon_angle_deg",
+                               float(a.axicon_angle_deg))
+            print(f"  note: axicon half-angle -> {a.axicon_angle_deg:g} deg "
+                  f"(rim now {cfg.geometry.secondary_height_mm + cfg.geometry.axicon_aperture_radius_mm * np.tan(np.deg2rad(a.axicon_angle_deg)):,.1f} mm)")
+        validate_layout(cfg)
     date = _dt.date.fromisoformat(a.date)
 
     step, idx, provenance, sub, per_config, globals_, strategy = solve_instant(
@@ -545,6 +595,13 @@ def main(argv=None) -> int:
                                                                 a.secondary)
         fh = cfg.geometry.focus_height_mm
         layout_tag = f"_{short}" + (f"{fh:.0f}" if fh is not None else "")
+    # Every override that changes the optics earns a tag, for the same reason the
+    # layout does: two files built for the same instant with different geometry
+    # must not collide on one name.
+    if a.tip_height_mm is not None:
+        layout_tag += f"_tip{a.tip_height_mm:.0f}"
+    if a.axicon_angle_deg is not None:
+        layout_tag += f"_ang{a.axicon_angle_deg:g}"
     out = a.out or (REPO / "models" /
                     f"figure_model_{n}cfg_{step.key}{layout_tag}"
                     f"{'_flat' if a.flat else ''}.optx")
